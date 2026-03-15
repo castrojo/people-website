@@ -188,18 +188,26 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.section-link[data-tab]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const tab = btn.dataset.tab ?? 'everyone';
-        applyTab(tab);
-        // Swap summary banner
-        document.querySelectorAll<HTMLElement>('[data-tab-summary]').forEach(el => {
-          el.style.display = el.dataset.tabSummary === tab ? '' : 'none';
-        });
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]');
+
+    function activateTab(tab: string) {
+      buttons.forEach(b => b.classList.remove('active'));
+      const target = Array.from(buttons).find(b => b.dataset.tab === tab);
+      if (target) target.classList.add('active');
+      applyTab(tab);
+      document.querySelectorAll<HTMLElement>('[data-tab-summary]').forEach(el => {
+        el.style.display = el.dataset.tabSummary === tab ? '' : 'none';
       });
+      localStorage.setItem('active-tab', tab);
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => activateTab(btn.dataset.tab ?? 'everyone'));
     });
+
+    // Restore last active tab on load, falling back to 'everyone'.
+    const saved = localStorage.getItem('active-tab') ?? 'everyone';
+    activateTab(saved);
   });
 </script>
 
