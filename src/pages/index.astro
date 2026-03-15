@@ -1054,6 +1054,7 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   import { initFeedLoader } from '../lib/feed-loader';
   import { initMaintainerLoader } from '../lib/maintainer-loader';
   import { searchPeople, preloadSearchIndex } from '../lib/search';
+  import { fireConfetti } from '../lib/hero-confetti';
 
   const timelineFeed = document.getElementById('timeline-feed') as HTMLElement;
   const staticCount = parseInt(timelineFeed?.dataset.staticCount ?? '200', 10);
@@ -1187,6 +1188,12 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
       .filter(c => c.offsetParent !== null && c.style.display !== 'none');
 
   let focusedIdx = -1;
+
+  // Hero card confetti: click any hero card to trigger pinata explosion.
+  document.addEventListener('click', (e: MouseEvent) => {
+    const card = (e.target as Element)?.closest('.hero-card');
+    if (card) fireConfetti(card);
+  });
 
   function resetFocus() {
     document.querySelectorAll<HTMLElement>('.keyboard-focused')
