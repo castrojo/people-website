@@ -504,6 +504,7 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
 
     <!-- Timeline feed: recent-first, date-grouped (hidden for alpha tabs) -->
     <div id="timeline-feed" data-static-count={STATIC_COUNT} data-base-url={baseUrl.replace(/\/$/, '')}>
+      <h2 class="changelog-heading">Changelog</h2>
       {[...grouped.entries()].map(([date, dayEvents]) => (
         <section class="day-group" data-date={date}>
           <h2 class="day-header">{date}</h2>
@@ -904,6 +905,14 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   .made-with-love p { color: var(--color-text-secondary); font-size: 0.875rem; margin: 0; }
 
   .day-group { margin-bottom: 2rem; }
+  .changelog-heading {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-accent-emphasis);
+  }
   .day-header {
     font-size: 0.875rem;
     font-weight: 600;
