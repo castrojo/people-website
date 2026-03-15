@@ -82,10 +82,31 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
   </div>
 
   <div slot="sidebar">
+    <InfoBox
+      title="About"
+      description="Live activity feed for cncf/people — who's joining, leaving, or updating their profile in the CNCF community."
+      links={[
+        { text: 'RSS Feed', url: feedUrl, rss: true },
+        { text: 'cncf/people on GitHub', url: 'https://github.com/cncf/people', external: true },
+        { text: 'castrojo/people-website', url: 'https://github.com/castrojo/people-website', external: true },
+        { text: 'CNCF Releases (Firehose)', url: 'https://castrojo.github.io/firehose/', external: true },
+      ]}
+    />
+
     {banners.length > 0 && <KubeConBanner banners={banners} />}
 
+    <div class="stats">
+      <h2 class="sidebar-heading stats-heading">Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-value">{stats.total}</div><div class="stat-label">Total Events</div></div>
+        <div class="stat"><div class="stat-value" style="color:#166534">{stats.added}</div><div class="stat-label">Joined</div></div>
+        <div class="stat"><div class="stat-value" style="color:#991b1b">{stats.removed}</div><div class="stat-label">Left</div></div>
+        <div class="stat"><div class="stat-value" style="color:#1e40af">{stats.updated}</div><div class="stat-label">Updated</div></div>
+      </div>
+    </div>
+
     <div class="sidebar-section">
-      <h2 class="sidebar-heading">Filter</h2>
+      <h2 class="sidebar-heading">Filters</h2>
       <div class="filter-controls">
         <select id="type-filter" class="filter-select">
           <option value="">All events</option>
@@ -101,26 +122,9 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
       <p id="filter-count" class="filter-count"></p>
     </div>
 
-    <div class="sidebar-section">
-      <h2 class="sidebar-heading">Stats</h2>
-      <div class="stats-grid">
-        <div class="stat-item"><span class="stat-num">{stats.total}</span><span class="stat-lbl">Total</span></div>
-        <div class="stat-item"><span class="stat-num" style="color:#166534">{stats.added}</span><span class="stat-lbl">Joined</span></div>
-        <div class="stat-item"><span class="stat-num" style="color:#991b1b">{stats.removed}</span><span class="stat-lbl">Left</span></div>
-        <div class="stat-item"><span class="stat-num" style="color:#1e40af">{stats.updated}</span><span class="stat-lbl">Updated</span></div>
-      </div>
+    <div class="sidebar-section made-with-love">
+      <p>Made with <strong>&lt;3</strong> by your CNCF Projects Team</p>
     </div>
-
-    <InfoBox
-      title="About"
-      description="Live activity feed for cncf/people — who's joining, leaving, or updating their profile in the CNCF community."
-      links={[
-        { text: 'RSS Feed', url: feedUrl, rss: true },
-        { text: 'cncf/people on GitHub', url: 'https://github.com/cncf/people', external: true },
-        { text: 'castrojo/people-website', url: 'https://github.com/castrojo/people-website', external: true },
-        { text: 'CNCF Releases (Firehose)', url: 'https://castrojo.github.io/firehose/', external: true },
-      ]}
-    />
   </div>
 
   <div id="feed" class="feed">
@@ -182,19 +186,28 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
     min-height: 1.25rem;
   }
 
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.625rem;
-    background: var(--color-bg-secondary);
+  /* Stats box — matches firehose :global(.stats) pattern */
+  .stats {
+    background: var(--color-bg-default);
     border: 1px solid var(--color-border-default);
     border-radius: 6px;
-    text-align: center;
+    padding: 1.5rem;
   }
-  .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--color-accent-emphasis); line-height: 1; }
-  .stat-lbl { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stats-heading { margin-bottom: 1rem; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .stat {
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background: var(--color-bg-secondary);
+  }
+  .stat-value { font-size: 2rem; font-weight: 600; color: var(--color-accent-emphasis); line-height: 1; }
+  .stat-label { color: var(--color-text-secondary); font-size: 0.75rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Made with love box */
+  .made-with-love { text-align: center; }
+  .made-with-love p { color: var(--color-text-secondary); font-size: 0.875rem; margin: 0; }
 
   .day-group { margin-bottom: 2rem; }
   .day-header {
