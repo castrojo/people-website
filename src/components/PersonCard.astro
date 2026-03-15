@@ -1,4 +1,6 @@
 ---
+import { locationFlag } from '../lib/countryFlag';
+
 interface Category {
   name: string;
   color: string;
@@ -199,7 +201,7 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     {(programLogo || person.location) && (
       <div class="card-right">
         {programLogo && <img src={programLogo} alt={logoKey ?? ''} class="program-logo" loading="lazy" />}
-        {person.location && <span class="location-right">{person.location}</span>}
+        {person.location && <span class="location-right">{locationFlag(person.location)} {person.location}</span>}
       </div>
     )}
 

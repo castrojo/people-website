@@ -3,6 +3,8 @@
 // The first STATIC_COUNT cards are already in the DOM as server-rendered HTML.
 // This module fetches the rest and appends them in batches via IntersectionObserver.
 
+import { locationFlag } from './countryFlag';
+
 const BASE = (document.documentElement.dataset.base ?? '/people-website').replace(/\/$/, '');
 const DATA_URL = `${BASE}/data/changelog.json`;
 const BATCH_SIZE = 50;
@@ -95,7 +97,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const rightCol = (programLogo || p.location) ? `
     <div class="card-right">
       ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy">` : ''}
-      ${p.location ? `<span class="location-right">${esc(p.location)}</span>` : ''}
+      ${p.location ? `<span class="location-right">${esc(locationFlag(p.location))} ${esc(p.location)}</span>` : ''}
     </div>` : '';
 
   const socialLinks = [
