@@ -72,9 +72,14 @@ func (p RawPerson) GitHubHandle() string {
 }
 
 // ImageURL returns the full URL for the person's profile image.
+// Some entries in cncf/people use a full external URL in the image field
+// rather than just a filename — pass those through directly.
 func (p RawPerson) ImageURL() string {
 	if p.Image == "" {
 		return ""
+	}
+	if strings.HasPrefix(p.Image, "http://") || strings.HasPrefix(p.Image, "https://") {
+		return p.Image
 	}
 	return ImageBaseURL + p.Image
 }
