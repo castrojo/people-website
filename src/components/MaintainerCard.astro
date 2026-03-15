@@ -1,0 +1,340 @@
+---
+interface ProjectDetail {
+  name: string;
+  maturity: string;
+}
+
+interface SafeMaintainer {
+  name: string;
+  handle: string;
+  company?: string;
+  location?: string;
+  countryFlag?: string;
+  bio?: string;
+  projects: string[];
+  projectDetails?: ProjectDetail[];
+  maturity: string;
+  ownersUrl?: string;
+  logoUrl?: string;
+  yearsContributing?: number;
+  projectLogos?: Record<string, string>;
+}
+
+interface Props {
+  maintainer: SafeMaintainer;
+  projectLogos?: Record<string, string>;
+}
+
+const MATURITY_COLOR: Record<string, string> = {
+  'Graduated':  '#FFB300',
+  'Incubating': '#0086FF',
+  'Sandbox':    '#8b949e',
+};
+
+const { maintainer, projectLogos } = Astro.props;
+const accentColor = MATURITY_COLOR[maintainer.maturity] ?? '#8b949e';
+const profileUrl = `https://github.com/${maintainer.handle}`;
+const avatarUrl = `https://avatars.githubusercontent.com/${maintainer.handle}?s=128`;
+const currentYear = new Date().getFullYear();
+const base = (import.meta.env.BASE_URL ?? '/people-website').replace(/\/$/, '');
+const cncfLogoUrl = `${base}/program-logos/cncf.svg`;
+
+// Use projectDetails for per-project maturity coloring; fall back to projects list
+const chipProjects = (maintainer.projectDetails ?? maintainer.projects.map(p => ({ name: p, maturity: maintainer.maturity })));
+
+function resolveChipLogo(project: string, logos: Record<string, string> | undefined): string {
+  if (!logos) return '';
+  const key = project.toLowerCase();
+  if (logos[key]) return logos[key];
+  const colonIdx = key.indexOf(':');
+  if (colonIdx > 0) { const b = key.slice(0, colonIdx).trim(); if (logos[b]) return logos[b]; }
+  const parenIdx = key.indexOf('(');
+  if (parenIdx > 0) { const b = key.slice(0, parenIdx).trim(); if (logos[b]) return logos[b]; }
+  const parts = key.split(' ');
+  for (let n = parts.length - 1; n > 0; n--) { const c = parts.slice(0, n).join(' '); if (logos[c]) return logos[c]; }
+  return '';
+}
+---
+
+<article class="maintainer-card" style={`--card-accent: ${accentColor}`}>
+  <div class="card-accent-bar"></div>
+  <div class="card-body">
+    <a href={profileUrl} class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+      <img class="avatar" src={avatarUrl} width="64" height="64" alt={maintainer.name} loading="lazy" />
+    </a>
+    <div class="card-main">
+      <div class="card-identity-row">
+        <div class="identity-info">
+          <div class="name-row">
+            <a class="person-name" href={profileUrl} target="_blank" rel="noopener noreferrer">{maintainer.name}</a>
+            <a class="handle" href={profileUrl} target="_blank" rel="noopener noreferrer">@{maintainer.handle}</a>
+          </div>
+          {maintainer.company && (
+            <div class="company-row">
+              <span class="company-chip">{maintainer.company}</span>
+            </div>
+          )}
+          {maintainer.bio && (
+            <p class="bio">{maintainer.bio}</p>
+          )}
+          <div class="badges">
+            <span class="badge badge-category" style="background:#88888822; color:#888888; border-color:#88888844">Maintainer</span>
+          </div>
+        </div>
+        <div class="card-right">
+          {maintainer.logoUrl && (
+            <img class="program-logo" src={maintainer.logoUrl} alt="" aria-hidden="true" loading="lazy" />
+          )}
+          {(maintainer.countryFlag || maintainer.location) && (
+            <span class="location-right">{maintainer.countryFlag ?? ''} {maintainer.location ?? ''}</span>
+          )}
+        </div>
+      </div>
+      {(maintainer.yearsContributing ?? 0) > 0 && (
+        <div class="stats-row">
+          <span class="stat-chip">
+            <img src={cncfLogoUrl} class="stat-cncf-icon" alt="" aria-hidden="true" />
+            <span class="stat-val">Since {currentYear - maintainer.yearsContributing!} ({maintainer.yearsContributing}y)</span>
+          </span>
+        </div>
+      )}
+      <div class="projects-row">
+        {chipProjects.map(({ name: p, maturity: m }) => {
+          const chipColor = MATURITY_COLOR[m] ?? '#8b949e';
+          const chipLogo = resolveChipLogo(p, projectLogos);
+          return (
+            <span class="project-chip" style={`--chip-accent:${chipColor}; border-color:${chipColor}33; background:${chipColor}11`}>
+              {chipLogo && <img class="project-logo" src={chipLogo} onerror="this.style.display='none'" loading="lazy" alt="" />}
+              {p}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .maintainer-card {
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    margin-bottom: 1rem;
+  }
+  .maintainer-card:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-color: var(--card-accent);
+  }
+
+  .card-accent-bar {
+    height: 3px;
+    background: var(--card-accent);
+  }
+
+  .card-body {
+    padding: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .card-main { flex: 1; min-width: 0; }
+
+  .card-identity-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .identity-info { flex: 1; min-width: 0; }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    max-width: 120px;
+  }
+
+  .program-logo {
+    height: 48px;
+    width: auto;
+    opacity: 0.9;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+  }
+
+  .location-right {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .avatar-link { flex-shrink: 0; }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border-default);
+  }
+
+  .avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--card-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 2px solid var(--color-border-default);
+  }
+
+  .name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.375rem;
+  }
+
+  .person-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .person-name:hover { color: var(--color-text-link); }
+
+  .handle {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-family: ui-monospace, monospace;
+  }
+  .handle:hover { color: var(--color-text-link); }
+
+  .company-row {
+    margin: 0.2rem 0 0.3rem;
+  }
+  .company-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
+  }
+  a.company-chip-link {
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  a.company-chip-link:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .bio {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin: 0.25rem 0 0.375rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .badge-category { font-weight: 500; }
+
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    cursor: default;
+  }
+  .stat-val { font-weight: 600; color: var(--color-text-primary); }
+  .stat-cncf-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .projects-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+  }
+  .project-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.45rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+  .project-logo {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: grayscale(100%);
+    transition: filter 0.15s;
+  }
+  .project-chip:hover .project-logo {
+    filter: grayscale(0%);
+  }
+  .project-chip--more { opacity: 0.65; }
+</style>

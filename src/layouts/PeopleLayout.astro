@@ -75,6 +75,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <button class="section-link" data-tab="ambassadors">Ambassadors</button>
         <button class="section-link" data-tab="kubestronauts">Kubestronauts</button>
         <button class="section-link" data-tab="golden-kubestronauts">Golden Kubestronauts</button>
+        <button class="section-link" data-tab="maintainers">Maintainers</button>
         <button class="section-link" data-tab="toc">TOC</button>
         <button class="section-link" data-tab="tab">End User TAB</button>
         <button class="section-link" data-tab="governing-board">Governing Board</button>
@@ -124,27 +125,46 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     'staff':                'staff',
   };
 
-  const ALPHA_TABS = new Set(['toc', 'tab', 'governing-board', 'staff']);
+  const ALPHA_TABS = new Set(['toc', 'tab', 'governing-board', 'staff', 'maintainers']);
 
   function applyTab(tab: string) {
     const timelineFeed = document.getElementById('timeline-feed');
     const alphaFeeds = document.querySelectorAll<HTMLElement>('.alpha-feed');
     const memorialFeed = document.getElementById('memorial-feed');
+    const maintainerFeed = document.getElementById('maintainer-feed');
+    const maintainerSummary = document.getElementById('maintainer-summary');
+    const maintainerStats = document.getElementById('sidebar-maintainer-stats');
+    const heroesSection = document.getElementById('heroes-section');
+
+    const isMaintainersTab = tab === 'maintainers';
+    if (maintainerSummary) maintainerSummary.style.display = isMaintainersTab ? '' : 'none';
 
     if (tab === 'memorial') {
       if (timelineFeed) timelineFeed.style.display = 'none';
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
       if (memorialFeed) memorialFeed.style.display = '';
+      if (maintainerFeed) maintainerFeed.style.display = 'none';
+      if (heroesSection) heroesSection.style.display = 'none';
+    } else if (tab === 'maintainers') {
+      if (timelineFeed) timelineFeed.style.display = 'none';
+      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
+      if (memorialFeed) memorialFeed.style.display = 'none';
+      if (maintainerFeed) maintainerFeed.style.display = '';
+      if (heroesSection) heroesSection.style.display = 'none';
     } else if (ALPHA_TABS.has(tab)) {
       if (timelineFeed) timelineFeed.style.display = 'none';
       if (memorialFeed) memorialFeed.style.display = 'none';
+      if (maintainerFeed) maintainerFeed.style.display = 'none';
+      if (heroesSection) heroesSection.style.display = 'none';
       alphaFeeds.forEach(feed => {
         feed.style.display = feed.dataset.alphaTab === tab ? '' : 'none';
       });
     } else {
       if (memorialFeed) memorialFeed.style.display = 'none';
+      if (maintainerFeed) maintainerFeed.style.display = 'none';
       if (timelineFeed) timelineFeed.style.display = '';
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
+      if (heroesSection) heroesSection.style.display = tab === 'everyone' ? '' : 'none';
 
       const cards = timelineFeed?.querySelectorAll<HTMLElement>('.person-card') ?? [];
       const groups = timelineFeed?.querySelectorAll<HTMLElement>('.day-group') ?? [];

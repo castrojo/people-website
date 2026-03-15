@@ -1,0 +1,222 @@
+---
+interface HeroPerson {
+  name: string;
+  handle?: string;
+  github?: string;
+  imageUrl?: string;
+  avatarUrl?: string;
+  location?: string;
+  countryFlag?: string;
+  company?: string;
+}
+
+interface Props {
+  person: HeroPerson;
+  label: string;
+  categoryKey: string;
+  baseUrl: string;
+}
+
+const HERO_COLORS: Record<string, string> = {
+  'Ambassadors':         'var(--color-ambassador, #0086FF)',
+  'Kubestronaut':        'var(--color-kubestronaut, #FFB300)',
+  'Golden-Kubestronaut': 'var(--color-golden, #C9A000)',
+  'Maintainer':          '#4A90D9',
+};
+
+const HERO_SHADOW_COLORS: Record<string, string> = {
+  'Ambassadors':         '0, 134, 255',
+  'Kubestronaut':        '255, 179, 0',
+  'Golden-Kubestronaut': '201, 160, 0',
+  'Maintainer':          '74, 144, 217',
+};
+
+const HERO_LOGOS: Record<string, string> = {
+  'Ambassadors':         'program-logos/ambassador.svg',
+  'Kubestronaut':        'program-logos/kubestronaut.svg',
+  'Golden-Kubestronaut': 'program-logos/golden-kubestronaut.svg',
+  // Maintainer: project logo passed via person.imageUrl, handled below
+};
+
+const { person, label, categoryKey, baseUrl } = Astro.props;
+const color      = HERO_COLORS[categoryKey]       ?? 'var(--color-accent-emphasis)';
+const shadowRgb  = HERO_SHADOW_COLORS[categoryKey] ?? '0, 134, 255';
+// Maintainer cards: project logo (passed as person.imageUrl) shown top-right
+// All other cards: standard program logo SVG file
+const logoSrc = categoryKey === 'Maintainer'
+  ? (person.imageUrl ?? null)
+  : (HERO_LOGOS[categoryKey] ? `${baseUrl}${HERO_LOGOS[categoryKey]}` : null);
+const photo = categoryKey === 'Maintainer'
+  ? (person.avatarUrl || '')
+  : (person.avatarUrl || person.imageUrl || '');
+const profileUrl = person.github
+  ?? (person.handle ? `https://github.com/${person.handle}` : null);
+const handle     = person.handle ? `@${person.handle}` : '';
+---
+
+<div class="hero-card" style={`--hero-color:${color};--hero-shadow-rgb:${shadowRgb}`}>
+  <!-- category label top-left -->
+  <span class="hero-label">{label}</span>
+
+  <!-- program logo top-right -->
+  {logoSrc && <img class="hero-program-logo" src={logoSrc} alt="" aria-hidden="true" />}
+
+  <!-- full-bleed photo + gradient -->
+  <a
+    class="hero-photo-link"
+    href={profileUrl ?? '#'}
+    target="_blank"
+    rel="noopener noreferrer"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    {photo
+      ? <img class="hero-photo" src={photo} alt={person.name} loading="lazy" />
+      : <div class="hero-photo hero-photo-placeholder"></div>
+    }
+    <div class="hero-gradient" aria-hidden="true"></div>
+  </a>
+
+  <!-- text overlay at bottom -->
+  <div class="hero-info">
+    <a
+      class="hero-name"
+      href={profileUrl ?? '#'}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {person.countryFlag && <span class="hero-flag">{person.countryFlag}</span>}{person.name}
+    </a>
+    {handle && <span class="hero-handle">{handle}</span>}
+    {person.location && (
+      <span class="hero-location">{person.location}</span>
+    )}
+  </div>
+</div>
+
+<style>
+  .hero-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background: var(--color-bg-secondary);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline-color 0.2s ease;
+    outline: 2px solid transparent;
+    outline-offset: 3px;
+  }
+
+  .hero-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 28px rgba(var(--hero-shadow-rgb), 0.35);
+    outline-color: var(--hero-color);
+  }
+
+  /* category label */
+  .hero-label {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.7rem;
+    z-index: 3;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--hero-color);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+  }
+
+  /* program logo */
+  .hero-program-logo {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.7rem;
+    z-index: 3;
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
+  }
+
+  /* photo */
+  .hero-photo-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  .hero-photo-placeholder {
+    background: var(--color-bg-tertiary, #444);
+  }
+
+  /* gradient overlay — light vignette, just enough to keep text legible */
+  .hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.15) 22%,
+      rgba(0, 0, 0, 0.0) 40%
+    );
+  }
+
+  /* text info */
+  .hero-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 0.8rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .hero-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    line-height: 1.2;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero-name:hover {
+    text-decoration: underline;
+  }
+
+  .hero-flag {
+    margin-right: 0.3em;
+  }
+
+  .hero-handle {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: ui-monospace, monospace;
+  }
+
+  .hero-location {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.55);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.1rem;
+  }
+</style>

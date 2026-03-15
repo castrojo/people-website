@@ -41,7 +41,9 @@ func New(ctx context.Context, token string) *Client {
 // userQuery is the GraphQL query for user enrichment data.
 var userQuery struct {
 	User struct {
-		AvatarURL    string
+		AvatarURL string
+		Bio       string
+		Location  string
 		Repositories struct {
 			TotalCount int
 		} `graphql:"repositories(privacy: PUBLIC)"`
@@ -71,6 +73,8 @@ func (c *Client) Enrich(ctx context.Context, handle string, cache *apicache.Cach
 
 	stats := apicache.UserStats{
 		AvatarURL:     userQuery.User.AvatarURL,
+		Location:      userQuery.User.Location,
+		Bio:           userQuery.User.Bio,
 		Contributions: userQuery.User.ContributionsCollection.ContributionCalendar.TotalContributions,
 		PublicRepos:   userQuery.User.Repositories.TotalCount,
 	}
@@ -163,4 +167,51 @@ func (c *Client) EnrichCNCFYears(ctx context.Context, handle string, cache *apic
 	stats.YearsContributing = years
 	cache.Set(handle, stats)
 	fmt.Printf("  cncf years %s: %d (since %d)\n", handle, years, firstDate.Year())
+}
+
+// EnrichProfile fetches a GitHub user's profile via REST API and caches the result.
+// Uses AvatarURL as the "fetched" sentinel — if non-empty, profile is already cached.
+// Falls back to empty stats on error (non-fatal).
+func (c *Client) EnrichProfile(ctx context.Context, handle string, cache *apicache.Cache) apicache.UserStats {
+	if stats, ok := cache.Get(handle); ok && stats.AvatarURL != "" {
+		return stats // already enriched (by GraphQL or prior REST call)
+	}
+	url := fmt.Sprintf("https://api.github.com/users/%s", handle)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return apicache.UserStats{}
+	}
+	req.Header.Set("Accept", "application/vnd.github+json")
+	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
+	if c.token != "" {
+		req.Header.Set("Authorization", "Bearer "+c.token)
+	}
+	resp, err := c.httpClient.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		if resp != nil {
+			resp.Body.Close()
+		}
+		return apicache.UserStats{}
+	}
+	defer resp.Body.Close()
+	var u struct {
+		AvatarURL string `json:"avatar_url"`
+		Bio       string `json:"bio"`
+		Location  string `json:"location"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&u); err != nil {
+		return apicache.UserStats{}
+	}
+	// Merge with existing stats (preserve Contributions/YearsContributing if already set)
+	existing, _ := cache.Get(handle)
+	stats := apicache.UserStats{
+		AvatarURL:         u.AvatarURL,
+		Location:          u.Location,
+		Bio:               u.Bio,
+		Contributions:     existing.Contributions,
+		PublicRepos:       existing.PublicRepos,
+		YearsContributing: existing.YearsContributing,
+	}
+	cache.Set(handle, stats)
+	return stats
 }

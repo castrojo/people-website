@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -290,4 +291,35 @@ func WriteRSS(outDir string, events []models.Event) error {
 		return err
 	}
 	return os.WriteFile(filepath.Join(outDir, "feed.xml"), []byte(rss), 0o644)
+}
+
+// WriteMaintainers writes the deduplicated maintainer list to outDir/maintainers.json,
+// sorted by UpdatedAt descending so the most recently changed entries appear first.
+func WriteMaintainers(outDir string, maintainers []models.SafeMaintainer) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	sort.Slice(maintainers, func(i, j int) bool {
+		return maintainers[i].UpdatedAt.After(maintainers[j].UpdatedAt)
+	})
+	data, err := json.MarshalIndent(maintainers, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "maintainers.json"), data, 0o644)
+}
+
+// LoadMaintainers reads the existing maintainers.json from disk.
+// Returns an empty slice (not an error) if the file does not exist.
+func LoadMaintainers(outDir string) ([]models.SafeMaintainer, error) {
+	path := filepath.Join(outDir, "maintainers.json")
+	data, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	var m []models.SafeMaintainer
+	return m, json.Unmarshal(data, &m)
 }

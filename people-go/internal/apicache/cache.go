@@ -16,6 +16,8 @@ const (
 // UserStats holds enrichment data fetched from the GitHub API.
 type UserStats struct {
 	AvatarURL         string    `json:"avatarUrl"`
+	Location          string    `json:"location,omitempty"`
+	Bio               string    `json:"bio,omitempty"`
 	Contributions     int       `json:"contributions"`
 	PublicRepos       int       `json:"publicRepos"`
 	YearsContributing int       `json:"yearsContributing"`

@@ -55,6 +55,8 @@ jobs:
           ./people
           mkdir -p ../public/data
           cp ../src/data/changelog.json ../public/data/changelog.json
+          cp ../src/data/maintainers.json ../public/data/maintainers.json
+          cp ../src/data/landscape_logos.json ../public/data/landscape_logos.json 2>/dev/null || true
           ls -lh ../src/data/changelog.json
 
       - name: Save sync cache

@@ -20,6 +20,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache-dependency-path: people-go/go.sum
+
+      - name: Restore sync cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .sync-cache
+            src/data
+          key: sync-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: sync-cache-${{ runner.os }}-
+
+      - name: Generate data (with cache)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd people-go
+          go build -o people cmd/people/main.go
+          ./people
+
+      - name: Save sync cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .sync-cache
+            src/data
+          key: sync-cache-${{ runner.os }}-${{ github.run_id }}
+          retention-days: 90
+
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
@@ -33,6 +66,8 @@ jobs:
           context: .
           file: Containerfile
           push: true
+          build-args: |
+            SKIP_GO_SYNC=true
           tags: |
             ghcr.io/castrojo/people-website:latest
             ghcr.io/castrojo/people-website:${{ github.sha }}

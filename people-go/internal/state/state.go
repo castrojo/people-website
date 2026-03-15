@@ -17,9 +17,11 @@ const (
 
 // State tracks the last processed commit SHAs for both watched repos and when the sync ran.
 type State struct {
-	LastSHA      string    `json:"lastSha"`      // last processed SHA for cncf/people
-	LandscapeSHA string    `json:"landscapeSha"` // last processed SHA for cncf/landscape
-	UpdatedAt    time.Time `json:"updatedAt"`
+	LastSHA        string    `json:"lastSha"`        // last processed SHA for cncf/people
+	LandscapeSHA   string    `json:"landscapeSha"`   // last processed SHA for cncf/landscape
+	FoundationSHA  string    `json:"foundationSha"`  // last processed SHA for cncf/foundation project-maintainers.csv
+	FoundationETag string    `json:"foundationETag"` // ETag for conditional HTTP GET
+	UpdatedAt      time.Time `json:"updatedAt"`
 }
 
 // Manager handles loading and saving sync state to cacheDir.
