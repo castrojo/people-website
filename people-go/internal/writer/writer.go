@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 
+	"github.com/castrojo/people-website/people-go/internal/apicache"
 	"github.com/castrojo/people-website/people-go/internal/models"
 	"github.com/gorilla/feeds"
 )
@@ -322,4 +324,219 @@ func LoadMaintainers(outDir string) ([]models.SafeMaintainer, error) {
 	}
 	var m []models.SafeMaintainer
 	return m, json.Unmarshal(data, &m)
+}
+
+// WriteChangelogPages splits changelog events into fixed-size pages for lazy frontend loading.
+// Writes changelog-{n}.json (0-indexed) plus changelog-meta.json with counts.
+func WriteChangelogPages(outDir string, events []models.Event) error {
+	const pageSize = 500
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	totalPages := (len(events) + pageSize - 1) / pageSize
+	if totalPages == 0 {
+		totalPages = 1
+	}
+	for page := 0; page < totalPages; page++ {
+		start := page * pageSize
+		end := start + pageSize
+		if end > len(events) {
+			end = len(events)
+		}
+		pageEvents := events[start:end]
+		data, err := json.MarshalIndent(pageEvents, "", "  ")
+		if err != nil {
+			return fmt.Errorf("marshal changelog page %d: %w", page, err)
+		}
+		path := filepath.Join(outDir, fmt.Sprintf("changelog-%d.json", page))
+		if err := os.WriteFile(path, data, 0o644); err != nil {
+			return err
+		}
+	}
+	meta := map[string]int{
+		"totalEvents": len(events),
+		"totalPages":  totalPages,
+		"pageSize":    pageSize,
+	}
+	metaData, err := json.MarshalIndent(meta, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "changelog-meta.json"), metaData, 0o644)
+}
+
+// WritePeopleIndex writes a deduplicated snapshot of the current community to people-index.json.
+// One entry per unique person (by GitHub URL or name), latest state only, removed people excluded.
+// Regenerated on every run.
+func WritePeopleIndex(outDir string, events []models.Event) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	seen := make(map[string]struct{})
+	var people []models.SafePerson
+	for _, e := range events {
+		key := e.Person.GitHub
+		if key == "" {
+			key = e.Person.Name
+		}
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		if e.Type != models.EventRemoved {
+			people = append(people, e.Person)
+		}
+	}
+	data, err := json.MarshalIndent(people, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "people-index.json"), data, 0o644)
+}
+
+// HeroRotations is the output structure written to heroes.json.
+type HeroRotations struct {
+	GeneratedAt         time.Time               `json:"generatedAt"`
+	Ambassadors         []models.SafePerson     `json:"ambassadors"`
+	Kubestronauts       []models.SafePerson     `json:"kubestronauts"`
+	GoldenKubestronauts []models.SafePerson     `json:"goldenKubestronauts"`
+	Maintainers         []models.SafeMaintainer `json:"maintainers"`
+	CNCFLeadership      []models.SafePerson     `json:"cncfLeadership"`
+}
+
+// dailyPick selects n items from the slice using a deterministic daily rotation.
+// It shuffles the slice using today's UTC date as the random seed, then picks
+// n items starting at cursor = (dayOfYear * n) % len(items).
+// This ensures the same 4 people show all day, and the full list cycles before repeating.
+func dailyPick[T any](items []T, n int) []T {
+	if len(items) == 0 {
+		return nil
+	}
+	if n >= len(items) {
+		result := make([]T, len(items))
+		copy(result, items)
+		return result
+	}
+	now := time.Now().UTC()
+	seed := int64(now.Year()*10000 + int(now.Month())*100 + now.Day())
+	r := rand.New(rand.NewSource(seed))
+	shuffled := make([]T, len(items))
+	copy(shuffled, items)
+	r.Shuffle(len(shuffled), func(i, j int) { shuffled[i], shuffled[j] = shuffled[j], shuffled[i] })
+	cursor := (now.YearDay() * n) % len(shuffled)
+	result := make([]T, 0, n)
+	for len(result) < n {
+		result = append(result, shuffled[cursor%len(shuffled)])
+		cursor++
+	}
+	return result
+}
+
+// WriteHeroRotations writes the daily hero rotation to heroes.json.
+// leadershipHandles is a slice of GitHub handles for the fixed CNCF Leadership section.
+func WriteHeroRotations(outDir string, events []models.Event, maintainers []models.SafeMaintainer, leadershipHandles []string) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+
+	// Build per-category pools from deduplicated people index.
+	seen := make(map[string]struct{})
+	pools := map[string][]models.SafePerson{
+		"Ambassadors":         {},
+		"Kubestronaut":        {},
+		"Golden-Kubestronaut": {},
+	}
+	// Also build a lookup by handle for leadership resolution.
+	byHandle := map[string]models.SafePerson{}
+
+	for _, e := range events {
+		if e.Type == models.EventRemoved {
+			continue
+		}
+		key := e.Person.GitHub
+		if key == "" {
+			key = e.Person.Name
+		}
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		if e.Person.Handle != "" {
+			byHandle[e.Person.Handle] = e.Person
+		}
+		for _, cat := range e.Person.Category {
+			if _, ok := pools[cat]; ok {
+				pools[cat] = append(pools[cat], e.Person)
+			}
+		}
+	}
+
+	// Resolve CNCF Leadership from handles.
+	var leadership []models.SafePerson
+	for _, h := range leadershipHandles {
+		if p, ok := byHandle[h]; ok {
+			leadership = append(leadership, p)
+		}
+	}
+
+	rotations := HeroRotations{
+		GeneratedAt:         time.Now().UTC(),
+		Ambassadors:         dailyPick(pools["Ambassadors"], 4),
+		Kubestronauts:       dailyPick(pools["Kubestronaut"], 4),
+		GoldenKubestronauts: dailyPick(pools["Golden-Kubestronaut"], 4),
+		Maintainers:         dailyPick(maintainers, 4),
+		CNCFLeadership:      leadership,
+	}
+
+	data, err := json.MarshalIndent(rotations, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "heroes.json"), data, 0o644)
+}
+
+// BackfillFromCache patches Pronouns and Location into changelog.json events that are missing
+// them, using data from the GitHub API cache. Only updates fields that are currently empty.
+// Does not perform new API fetches — caller is responsible for pre-populating the cache.
+func BackfillFromCache(outDir string, cache *apicache.Cache) error {
+	outPath := filepath.Join(outDir, "changelog.json")
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+	var events []models.Event
+	if err := json.Unmarshal(raw, &events); err != nil {
+		return err
+	}
+	changed := false
+	for i, e := range events {
+		if e.Person.Handle == "" {
+			continue
+		}
+		stats, ok := cache.Get(e.Person.Handle)
+		if !ok {
+			continue
+		}
+		p := &events[i].Person
+		if p.Pronouns == "" && stats.Pronouns != "" {
+			p.Pronouns = stats.Pronouns
+			changed = true
+		}
+		if p.Location == "" && stats.Location != "" {
+			p.Location = stats.Location
+			p.CountryFlag = models.CountryFlag(stats.Location)
+			changed = true
+		}
+	}
+	if !changed {
+		return nil
+	}
+	data, err := json.MarshalIndent(events, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(outPath, data, 0o644)
 }

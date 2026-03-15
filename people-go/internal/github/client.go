@@ -2,12 +2,11 @@ package githubclient
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 
+	githubapi "github.com/google/go-github/v68/github"
 	"github.com/castrojo/people-website/people-go/internal/apicache"
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
@@ -23,6 +22,7 @@ var cncfOrgs = []string{
 type Client struct {
 	gql        *githubv4.Client
 	httpClient *http.Client
+	ghClient   *githubapi.Client
 	token      string
 }
 
@@ -35,7 +35,7 @@ func New(ctx context.Context, token string) *Client {
 	} else {
 		hc = &http.Client{}
 	}
-	return &Client{gql: githubv4.NewClient(hc), httpClient: hc, token: token}
+	return &Client{gql: githubv4.NewClient(hc), httpClient: hc, ghClient: githubapi.NewClient(hc), token: token}
 }
 
 // userQuery is the GraphQL query for user enrichment data.
@@ -44,6 +44,7 @@ var userQuery struct {
 		AvatarURL string
 		Bio       string
 		Location  string
+		Pronouns  string
 		Repositories struct {
 			TotalCount int
 		} `graphql:"repositories(privacy: PUBLIC)"`
@@ -75,6 +76,7 @@ func (c *Client) Enrich(ctx context.Context, handle string, cache *apicache.Cach
 		AvatarURL:     userQuery.User.AvatarURL,
 		Location:      userQuery.User.Location,
 		Bio:           userQuery.User.Bio,
+		Pronouns:      userQuery.User.Pronouns,
 		Contributions: userQuery.User.ContributionsCollection.ContributionCalendar.TotalContributions,
 		PublicRepos:   userQuery.User.Repositories.TotalCount,
 	}
@@ -93,66 +95,25 @@ func (c *Client) EnrichCNCFYears(ctx context.Context, handle string, cache *apic
 		stats = apicache.UserStats{}
 	}
 
-	// Build search query across key CNCF orgs
+	// Rate limit: search API is 30 req/min — keep sequential with sleep.
+	time.Sleep(2 * time.Second)
+
 	q := fmt.Sprintf("author:%s", handle)
 	for _, org := range cncfOrgs {
 		q += fmt.Sprintf("+org:%s", org)
 	}
 
-	type searchResult struct {
-		Items []struct {
-			Commit struct {
-				Author struct {
-					Date string `json:"date"`
-				} `json:"author"`
-			} `json:"commit"`
-		} `json:"items"`
+	opts := &githubapi.SearchOptions{
+		Sort:        "author-date",
+		Order:       "asc",
+		ListOptions: githubapi.ListOptions{PerPage: 1},
 	}
-
-	url := fmt.Sprintf(
-		"https://api.github.com/search/commits?q=%s&sort=author-date&order=asc&per_page=1",
-		q,
-	)
-
-	// Rate limit: authenticated search API is 30 req/min.
-	time.Sleep(2 * time.Second)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		fmt.Printf("warn: cncf years req %s: %v\n", handle, err)
-		return
-	}
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
-	if c.token != "" {
-		req.Header.Set("Authorization", "Bearer "+c.token)
-	}
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		fmt.Printf("warn: cncf years fetch %s: %v\n", handle, err)
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
+	result, _, err := c.ghClient.Search.Commits(ctx, q, opts)
+	if err != nil || result == nil || len(result.Commits) == 0 {
 		return
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-
-	var result searchResult
-	if err := json.Unmarshal(body, &result); err != nil || len(result.Items) == 0 {
-		return
-	}
-
-	firstDate, err := time.Parse(time.RFC3339, result.Items[0].Commit.Author.Date)
-	if err != nil {
-		return
-	}
+	firstDate := result.Commits[0].Commit.Author.GetDate().Time
 
 	// CNCF was founded in 2015 — cap the floor there
 	firstYear := firstDate.Year()
@@ -174,44 +135,36 @@ func (c *Client) EnrichCNCFYears(ctx context.Context, handle string, cache *apic
 // Falls back to empty stats on error (non-fatal).
 func (c *Client) EnrichProfile(ctx context.Context, handle string, cache *apicache.Cache) apicache.UserStats {
 	if stats, ok := cache.Get(handle); ok && stats.AvatarURL != "" {
-		return stats // already enriched (by GraphQL or prior REST call)
+		return stats
 	}
-	url := fmt.Sprintf("https://api.github.com/users/%s", handle)
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
+	user, _, err := c.ghClient.Users.Get(ctx, handle)
+	if err != nil || user == nil {
 		return apicache.UserStats{}
 	}
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
-	if c.token != "" {
-		req.Header.Set("Authorization", "Bearer "+c.token)
-	}
-	resp, err := c.httpClient.Do(req)
-	if err != nil || resp.StatusCode != http.StatusOK {
-		if resp != nil {
-			resp.Body.Close()
-		}
-		return apicache.UserStats{}
-	}
-	defer resp.Body.Close()
-	var u struct {
-		AvatarURL string `json:"avatar_url"`
-		Bio       string `json:"bio"`
-		Location  string `json:"location"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&u); err != nil {
-		return apicache.UserStats{}
-	}
-	// Merge with existing stats (preserve Contributions/YearsContributing if already set)
 	existing, _ := cache.Get(handle)
 	stats := apicache.UserStats{
-		AvatarURL:         u.AvatarURL,
-		Location:          u.Location,
-		Bio:               u.Bio,
+		AvatarURL:         derefString(user.AvatarURL),
+		Location:          derefString(user.Location),
+		Bio:               derefString(user.Bio),
 		Contributions:     existing.Contributions,
-		PublicRepos:       existing.PublicRepos,
+		PublicRepos:       derefInt(user.PublicRepos),
 		YearsContributing: existing.YearsContributing,
+		Pronouns:          existing.Pronouns,
 	}
 	cache.Set(handle, stats)
 	return stats
+}
+
+func derefString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
+func derefInt(n *int) int {
+	if n == nil {
+		return 0
+	}
+	return *n
 }

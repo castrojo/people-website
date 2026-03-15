@@ -18,6 +18,7 @@ type UserStats struct {
 	AvatarURL         string    `json:"avatarUrl"`
 	Location          string    `json:"location,omitempty"`
 	Bio               string    `json:"bio,omitempty"`
+	Pronouns          string    `json:"pronouns,omitempty"`
 	Contributions     int       `json:"contributions"`
 	PublicRepos       int       `json:"publicRepos"`
 	YearsContributing int       `json:"yearsContributing"`

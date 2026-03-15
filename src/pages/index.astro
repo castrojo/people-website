@@ -4,7 +4,6 @@ import { resolve } from 'node:path';
 
 import PeopleLayout from '../layouts/PeopleLayout.astro';
 import PersonCard from '../components/PersonCard.astro';
-import MemorialCard from '../components/MemorialCard.astro';
 import HeroCard from '../components/HeroCard.astro';
 import MaintainerCard from '../components/MaintainerCard.astro';
 import InfoBox from '../components/InfoBox.astro';
@@ -38,6 +37,27 @@ try {
   maintainerList = JSON.parse(readFileSync(maintainersPath, 'utf-8')) as SafeMaintainer[];
 } catch {
   // maintainers.json not yet generated — skip maintainers tab silently
+}
+
+// Load heroes rotation — generated daily by Go backend from WriteHeroRotations.
+// Falls back to empty if not yet generated (first build before Go has run).
+interface HeroRotations {
+  generatedAt?: string;
+  ambassadors: Person[];
+  kubestronauts: Person[];
+  goldenKubestronauts: Person[];
+  maintainers: SafeMaintainer[];
+  cncfLeadership: Person[];
+}
+let heroRotations: HeroRotations = {
+  ambassadors: [], kubestronauts: [], goldenKubestronauts: [],
+  maintainers: [], cncfLeadership: [],
+};
+try {
+  const heroesPath = resolve('./src/data/heroes.json');
+  heroRotations = JSON.parse(readFileSync(heroesPath, 'utf-8')) as HeroRotations;
+} catch {
+  // heroes.json not yet generated — fall back to empty (no hero rows shown)
 }
 
 interface Change {
@@ -226,66 +246,6 @@ const alphaFeeds = Object.fromEntries(
   Object.entries(ALPHA_TABS).map(([tab, fn]) => [tab, alphabeticalPeople(fn)])
 );
 
-// ── Heroes of the Day ──────────────────────────────────────────────────────
-// Three hero cards displayed daily: Ambassador, Kubestronaut, Golden Kubestronaut.
-// Each pool is sorted by a stable djb2 hash of the person's name so the daily
-// rotation appears random but every person in the pool gets a turn before any
-// repeat. dayIndex mod poolSize guarantees full coverage.
-
-const HERO_EXCLUDED_CATS = new Set([
-  'Staff', 'Governing Board', 'Technical Oversight Committee',
-  'End User TAB', 'Marketing Committee',
-]);
-
-function djb2(str: string): number {
-  let h = 5381;
-  for (let i = 0; i < str.length; i++) {
-    h = ((h << 5) + h + str.charCodeAt(i)) & 0x7fffffff;
-  }
-  return h;
-}
-
-const heroPools: Record<string, Person[]> = {
-  'Ambassadors': [],
-  'Kubestronaut': [],
-  'Golden-Kubestronaut': [],
-};
-
-{
-  const seen = new Set<string>();
-  for (const e of events) {
-    if (e.type !== 'added') continue;
-    const p = e.person;
-    const cats = p.category ?? [];
-    if (cats.some(c => HERO_EXCLUDED_CATS.has(c))) continue;
-    const badge = p.primaryBadge ?? '';
-    if (!(badge in heroPools)) continue;
-    const key = p.handle ?? p.name;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    heroPools[badge].push(p);
-  }
-  for (const pool of Object.values(heroPools)) {
-    pool.sort((a, b) => djb2(a.name) - djb2(b.name));
-  }
-}
-
-const heroDayIndex = Math.floor(Date.now() / 86_400_000);
-const heroAmbassador  = heroPools['Ambassadors'].length
-  ? heroPools['Ambassadors'][heroDayIndex % heroPools['Ambassadors'].length]
-  : null;
-const heroKubestronaut = heroPools['Kubestronaut'].length
-  ? heroPools['Kubestronaut'][heroDayIndex % heroPools['Kubestronaut'].length]
-  : null;
-const heroGolden = heroPools['Golden-Kubestronaut'].length
-  ? heroPools['Golden-Kubestronaut'][heroDayIndex % heroPools['Golden-Kubestronaut'].length]
-  : null;
-
-// Maintainer hero pool — sorted by djb2 hash for stable daily rotation.
-const maintainersSorted = [...maintainerList].sort((a, b) => djb2(a.name) - djb2(b.name));
-const heroMaintainer = maintainersSorted.length
-  ? maintainersSorted[heroDayIndex % maintainersSorted.length]
-  : null;
 
 // Sort by UpdatedAt descending (most recently changed first).
 const maintainerSorted = [...maintainerList].sort((a, b) => {
@@ -402,6 +362,12 @@ for (const m of maintainerList) {
   </Fragment>
 
   <div id="feed" class="feed">
+    <!-- Global search results overlay (shown when search query is non-empty) -->
+    <div id="search-results-overlay" class="search-results-overlay" style="display:none" aria-live="polite">
+      <div id="search-results-list" class="search-results-list"></div>
+      <button id="clear-search-btn" class="clear-search-btn" type="button">Clear search</button>
+    </div>
+
     <!-- Per-tab summary banners (shown/hidden by tab JS) -->
     {Object.entries(tabStats).map(([tab, s]) => (
       <div class="category-summary" data-tab-summary={tab} style={tab !== 'everyone' ? 'display:none' : ''}>
@@ -421,43 +387,36 @@ for (const m of maintainerList) {
       </div>
     )}
 
-    <!-- Heroes of the Day: one spotlight per role, rotating daily -->
-    {(heroAmbassador || heroKubestronaut || heroGolden || heroMaintainer) && (
-      <section id="heroes-section" class="heroes-section">
-        <h2 class="heroes-heading">Heroes of the Day</h2>
+    <!-- Per-tab hero rows: shown when the matching tab is active (managed by JS below) -->
+    {heroRotations.ambassadors.length > 0 && (
+      <section class="tab-heroes-section" data-tab-heroes="ambassadors" style="display:none">
+        <h2 class="tab-heroes-heading">Ambassadors of the Day</h2>
         <div class="heroes-grid">
-          {heroAmbassador && (
-            <HeroCard
-              person={heroAmbassador}
-              label="Ambassador"
-              categoryKey="Ambassadors"
-              baseUrl={baseUrl}
-            />
-          )}
-          {heroKubestronaut && (
-            <HeroCard
-              person={heroKubestronaut}
-              label="Kubestronaut"
-              categoryKey="Kubestronaut"
-              baseUrl={baseUrl}
-            />
-          )}
-          {heroGolden && (
-            <HeroCard
-              person={heroGolden}
-              label="Golden Kubestronaut"
-              categoryKey="Golden-Kubestronaut"
-              baseUrl={baseUrl}
-            />
-          )}
-          {heroMaintainer && (
-            <HeroCard
-              person={{ ...heroMaintainer, imageUrl: heroMaintainer.logoUrl, avatarUrl: `https://avatars.githubusercontent.com/${heroMaintainer.handle}` }}
-              label="Maintainer"
-              categoryKey="Maintainer"
-              baseUrl={baseUrl}
-            />
-          )}
+          {heroRotations.ambassadors.map(p => (
+            <HeroCard person={p} label="Ambassador" categoryKey="Ambassadors" baseUrl={baseUrl} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {heroRotations.kubestronauts.length > 0 && (
+      <section class="tab-heroes-section" data-tab-heroes="kubestronauts" style="display:none">
+        <h2 class="tab-heroes-heading">Kubestronauts of the Day</h2>
+        <div class="heroes-grid">
+          {heroRotations.kubestronauts.map(p => (
+            <HeroCard person={p} label="Kubestronaut" categoryKey="Kubestronaut" baseUrl={baseUrl} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {heroRotations.goldenKubestronauts.length > 0 && (
+      <section class="tab-heroes-section" data-tab-heroes="golden-kubestronauts" style="display:none">
+        <h2 class="tab-heroes-heading">Golden Kubestronauts of the Day</h2>
+        <div class="heroes-grid">
+          {heroRotations.goldenKubestronauts.map(p => (
+            <HeroCard person={p} label="Golden Kubestronaut" categoryKey="Golden-Kubestronaut" baseUrl={baseUrl} />
+          ))}
         </div>
       </section>
     )}
@@ -503,45 +462,83 @@ for (const m of maintainerList) {
       </div>
     ))}
 
+    <!-- CNCF Leadership heroes: shown as part of the staff alpha-feed -->
+    {heroRotations.cncfLeadership.length > 0 && (
+      <div class="alpha-feed" style="display:none" data-alpha-tab="staff">
+        <section class="tab-heroes-section">
+          <h2 class="tab-heroes-heading">CNCF Leadership</h2>
+          <div class="heroes-grid">
+            {heroRotations.cncfLeadership.map(p => (
+              <HeroCard person={p} label="CNCF Leadership" categoryKey="Staff" baseUrl={baseUrl} />
+            ))}
+          </div>
+        </section>
+      </div>
+    )}
+
     <!-- Memorial feed (hidden until Memorial tab is selected) -->
     <div id="memorial-feed" style="display:none">
       <p class="memorial-intro">In memory of members of our community who have passed. Their contributions continue to shape the CNCF ecosystem.</p>
-      {memorialList.map(person => (
-        <MemorialCard person={person} />
-      ))}
-    </div>
-
-    <!-- Maintainers feed (hidden until Maintainers tab is selected) -->
-    {maintainerAlpha.length > 0 && (
-      <div id="maintainer-feed" style="display:none" data-alpha-tab="maintainers">
-        {maintainerAlpha.slice(0, MAINTAINER_STATIC).map(m => (
-          <MaintainerCard
-            maintainer={m}
-            projectLogos={Object.fromEntries(
-              m.projects.map(p => [p, (landscapeLogosRaw as Record<string, string>)[p] ?? (landscapeLogosRaw as Record<string, string>)[p.toLowerCase()] ?? ''])
-            )}
+      <div class="memorial-heroes-grid">
+        {memorialList.map(person => (
+          <HeroCard
+            person={{
+              name: person.name,
+              handle: person.github ? person.github.replace('https://github.com/', '') : undefined,
+              github: person.github,
+              avatarUrl: person.avatar,
+              company: person.company,
+            }}
+            label={person.role ?? 'Community Member'}
+            categoryKey="Memorial"
+            baseUrl={baseUrl}
           />
         ))}
       </div>
-    )}
+    </div>
+
+    <!-- Maintainers feed (hidden until Maintainers tab is selected) -->
+    <div id="maintainer-feed" style="display:none" data-alpha-tab="maintainers">
+      {heroRotations.maintainers.length > 0 && (
+        <section class="tab-heroes-section">
+          <h2 class="tab-heroes-heading">Maintainers of the Day</h2>
+          <div class="heroes-grid">
+            {heroRotations.maintainers.map(m => (
+              <HeroCard
+                person={{ name: m.name, handle: m.handle, github: m.handle ? `https://github.com/${m.handle}` : undefined, avatarUrl: m.handle ? `https://avatars.githubusercontent.com/${m.handle}` : undefined, imageUrl: m.logoUrl, location: m.location, countryFlag: m.countryFlag, company: m.company }}
+                label="Maintainer"
+                categoryKey="Maintainer"
+                baseUrl={baseUrl}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+      {maintainerAlpha.slice(0, MAINTAINER_STATIC).map(m => (
+        <MaintainerCard
+          maintainer={m}
+          projectLogos={Object.fromEntries(
+            m.projects.map(p => [p, (landscapeLogosRaw as Record<string, string>)[p] ?? (landscapeLogosRaw as Record<string, string>)[p.toLowerCase()] ?? ''])
+          )}
+        />
+      ))}
+    </div>
   </div>
 </PeopleLayout>
 
 <style>
-  /* Heroes of the Day */
-  .heroes-section {
-    margin-bottom: 2rem;
+  /* Tab hero rows */
+  .tab-heroes-section {
+    margin-bottom: 1.5rem;
   }
 
-  .heroes-heading {
-    font-size: 0.8rem;
+  .tab-heroes-heading {
+    font-size: 1.1rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+    margin-bottom: 0.75rem;
     color: var(--color-text-secondary);
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--color-border-default);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   .heroes-grid {
@@ -670,11 +667,61 @@ for (const m of maintainerList) {
     border: 1px solid var(--color-border-default);
     border-radius: 8px;
   }
+
+  /* Memorial 4-column grid */
+  .memorial-heroes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    .memorial-heroes-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .memorial-heroes-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Global search overlay */
+  .search-results-overlay { padding: 1rem 0; }
+  .search-results-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    background: var(--color-bg-secondary);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-border-default);
+    transition: background 0.15s;
+  }
+  .search-result-item:hover { background: var(--color-bg-tertiary); }
+  .search-result-avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .search-result-info { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+  .search-result-name { font-weight: 600; font-size: 0.95rem; }
+  .search-result-handle { font-size: 0.75rem; color: var(--color-text-secondary); font-family: ui-monospace, monospace; }
+  .search-result-company { font-size: 0.8rem; color: var(--color-text-secondary); }
+  .search-result-cats { font-size: 0.72rem; color: var(--color-text-tertiary); }
+  .search-no-results { color: var(--color-text-secondary); font-style: italic; padding: 1rem 0; }
+  .clear-search-btn {
+    margin-top: 0.75rem;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .clear-search-btn:hover { background: var(--color-bg-tertiary); }
 </style>
 
 <script>
   import { initFeedLoader } from '../lib/feed-loader';
   import { initMaintainerLoader } from '../lib/maintainer-loader';
+  import { searchPeople, preloadSearchIndex } from '../lib/search';
 
   const timelineFeed = document.getElementById('timeline-feed') as HTMLElement;
   const staticCount = parseInt(timelineFeed?.dataset.staticCount ?? '200', 10);
@@ -682,6 +729,9 @@ for (const m of maintainerList) {
 
   // Expose base for feed-loader
   document.documentElement.dataset.base = baseUrl;
+
+  // Preload search index in background
+  preloadSearchIndex(import.meta.env.BASE_URL);
 
   // Fetch landscape logos once and kick off infinite scroll
   fetch(`${baseUrl}/data/landscape_logos.json`)
@@ -737,6 +787,77 @@ for (const m of maintainerList) {
   typeFilter?.addEventListener('change', applyFilters);
   catFilter?.addEventListener('change', applyFilters);
 
+  // ── Per-tab hero sections (ambassador/kubestronaut/golden) ─────────────
+  // Staff/maintainer/memorial heroes are inside their feed containers (auto show/hide).
+  // Ambassador/kubestronaut/golden-kubestronaut use [data-tab-heroes] + custom listener.
+  function updateTabHeroes(tab: string) {
+    document.querySelectorAll<HTMLElement>('[data-tab-heroes]').forEach(el => {
+      el.style.display = el.dataset.tabHeroes === tab ? '' : 'none';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        updateTabHeroes(btn.dataset.tab ?? 'everyone');
+      });
+    });
+  });
+
+  // ── Global search (queries all people via minisearch index) ───────────
+  let searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  searchInput?.removeEventListener('input', applyFilters);
+  searchInput?.addEventListener('input', async () => {
+    const q = searchInput.value.trim();
+    const overlay = document.getElementById('search-results-overlay')!;
+
+    if (!q) {
+      overlay.style.display = 'none';
+      // Re-trigger current active tab to restore proper feed state
+      document.querySelector<HTMLButtonElement>('.section-link.active')?.click();
+      applyFilters();
+      return;
+    }
+
+    // Hide main feed areas while showing search overlay
+    document.getElementById('timeline-feed')!.style.display = 'none';
+    document.querySelectorAll<HTMLElement>('.alpha-feed').forEach(el => { el.style.display = 'none'; });
+    const memFeed = document.getElementById('memorial-feed');
+    if (memFeed) memFeed.style.display = 'none';
+    const maintFeed = document.getElementById('maintainer-feed');
+    if (maintFeed) maintFeed.style.display = 'none';
+    document.querySelectorAll<HTMLElement>('[data-tab-heroes]').forEach(el => { el.style.display = 'none'; });
+    overlay.style.display = '';
+
+    if (searchTimeout) clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(async () => {
+      const results = await searchPeople(q, import.meta.env.BASE_URL);
+      const list = document.getElementById('search-results-list')!;
+      if (results.length === 0) {
+        list.innerHTML = '<p class="search-no-results">No people found matching your search.</p>';
+      } else {
+        list.innerHTML = results.map(p => `
+          <a class="search-result-item" href="${p.github ?? '#'}" target="_blank" rel="noopener noreferrer">
+            <img class="search-result-avatar" src="${p.avatarUrl || p.imageUrl || ''}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'" />
+            <div class="search-result-info">
+              <span class="search-result-name">${p.countryFlag ? p.countryFlag + ' ' : ''}${p.name}</span>
+              ${p.handle ? `<span class="search-result-handle">@${p.handle}</span>` : ''}
+              ${p.company ? `<span class="search-result-company">${p.company}</span>` : ''}
+              <span class="search-result-cats">${(p.category ?? []).slice(0, 2).join(' · ')}</span>
+            </div>
+          </a>
+        `).join('');
+      }
+    }, 200);
+  });
+
+  document.getElementById('clear-search-btn')?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    searchInput?.dispatchEvent(new Event('input'));
+    searchInput?.focus();
+  });
+
   // ── Vim-style card navigation ──────────────────────────────────────────
   const visibleCards = () =>
     Array.from(document.querySelectorAll<HTMLElement>('.person-card'))
@@ -756,13 +877,30 @@ for (const m of maintainerList) {
     const active = document.activeElement as HTMLElement;
     const inInput = active?.tagName === 'INPUT' || active?.tagName === 'SELECT';
 
-    if (!inInput) {
-      if (e.key === '/' || e.key === 's') { e.preventDefault(); searchInput?.focus(); }
-      if (e.key === 't') { (window as unknown as { toggleTheme?: () => void }).toggleTheme?.(); }
-      if (e.key === '?') {
-        document.getElementById('keyboard-help-modal')?.classList.add('visible');
-        document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+    // '/' and '?' work regardless of input focus
+    if (e.key === '/') { e.preventDefault(); searchInput?.focus(); return; }
+    if (e.key === '?') {
+      document.getElementById('keyboard-help-modal')?.classList.add('visible');
+      document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+      return;
+    }
+
+    if (e.key === 'Escape') {
+      document.getElementById('keyboard-help-modal')?.classList.remove('visible');
+      document.getElementById('keyboard-help-backdrop')?.classList.remove('visible');
+      if (searchInput && searchInput.value) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
       }
+      (document.activeElement as HTMLElement)?.blur();
+      visibleCards().forEach(c => c.classList.remove('keyboard-focused'));
+      focusedIdx = -1;
+      return;
+    }
+
+    if (!inInput) {
+      if (e.key === 's') { e.preventDefault(); searchInput?.focus(); }
+      if (e.key === 't') { (window as unknown as { toggleTheme?: () => void }).toggleTheme?.(); }
       if (e.key === 'j') { e.preventDefault(); focusCard(focusedIdx + 1); }
       if (e.key === 'k') { e.preventDefault(); focusCard(focusedIdx - 1); }
       if (e.key === 'h') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -774,11 +912,6 @@ for (const m of maintainerList) {
         const link = card?.querySelector<HTMLAnchorElement>('a[href]');
         if (link) { e.preventDefault(); window.open(link.href, '_blank', 'noopener'); }
       }
-    }
-    if (e.key === 'Escape') {
-      if (inInput) active.blur();
-      visibleCards().forEach(c => c.classList.remove('keyboard-focused'));
-      focusedIdx = -1;
     }
   });
 </script>
