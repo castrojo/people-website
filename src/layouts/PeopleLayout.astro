@@ -148,7 +148,12 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
       btn.addEventListener('click', () => {
         document.querySelectorAll('.section-link[data-tab]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        applyTab(btn.dataset.tab ?? 'everyone');
+        const tab = btn.dataset.tab ?? 'everyone';
+        applyTab(tab);
+        // Swap summary banner
+        document.querySelectorAll<HTMLElement>('[data-tab-summary]').forEach(el => {
+          el.style.display = el.dataset.tabSummary === tab ? '' : 'none';
+        });
       });
     });
   });

@@ -68,6 +68,35 @@ const stats = {
 };
 
 const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].sort();
+
+// Per-category summary stats for the info banners
+const TAB_CATEGORY_FILTER: Record<string, (cats: string[]) => boolean> = {
+  'everyone':            ()    => true,
+  'ambassadors':         cats  => cats.includes('Ambassadors'),
+  'kubestronauts':       cats  => cats.includes('Kubestronaut'),
+  'golden-kubestronauts': cats => cats.includes('Golden-Kubestronaut'),
+  'toc':                 cats  => cats.includes('Technical Oversight Committee'),
+  'tab':                 cats  => cats.includes('End User TAB'),
+  'staff':               cats  => cats.includes('Staff'),
+};
+
+function categoryStats(filterFn: (cats: string[]) => boolean) {
+  const people = events
+    .filter(e => filterFn(e.person.category ?? []))
+    .map(e => e.person);
+  const unique = new Map(people.map(p => [p.github ?? p.name, p]));
+  const ps = [...unique.values()];
+  const countries = new Set(
+    ps.map(p => (p.location ?? '').split(',').at(-1)?.trim() ?? '').filter(Boolean)
+  ).size;
+  const projects = new Set(ps.flatMap(p => p.projects ?? [])).size;
+  const orgs = new Set(ps.map(p => p.company ?? '').filter(Boolean)).size;
+  return { total: ps.length, countries, projects, orgs };
+}
+
+const tabStats = Object.fromEntries(
+  Object.entries(TAB_CATEGORY_FILTER).map(([tab, fn]) => [tab, categoryStats(fn)])
+);
 ---
 
 <PeopleLayout pageTitle="CNCF People" feedUrl={feedUrl}>
@@ -128,6 +157,18 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
   </Fragment>
 
   <div id="feed" class="feed">
+    <!-- Per-tab summary banners (shown/hidden by tab JS) -->
+    {Object.entries(tabStats).map(([tab, s]) => (
+      <div class="category-summary" data-tab-summary={tab} style={tab !== 'everyone' ? 'display:none' : ''}>
+        <span>
+          <strong>{s.total.toLocaleString()}</strong> {s.total === 1 ? 'individual' : 'individuals'}
+          {s.countries > 0 && <> across <strong>{s.countries}</strong> {s.countries === 1 ? 'country' : 'countries'}</>}
+          {s.projects > 0 && <>, working on <strong>{s.projects}</strong> {s.projects === 1 ? 'project' : 'projects'}</>}
+          {s.orgs > 0 && <>, representing <strong>{s.orgs}</strong> {s.orgs === 1 ? 'organization' : 'organizations'}</>}.
+        </span>
+      </div>
+    ))}
+
     {[...grouped.entries()].map(([date, dayEvents]) => (
       <section class="day-group" data-date={date}>
         <h2 class="day-header">{date}</h2>
@@ -152,6 +193,19 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
 </PeopleLayout>
 
 <style>
+  .category-summary {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-left: 3px solid var(--color-accent-emphasis);
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+  .category-summary strong { color: var(--color-text-primary); }
+
   .search-bar { width: 100%; }
   .search-input {
     width: 100%;
