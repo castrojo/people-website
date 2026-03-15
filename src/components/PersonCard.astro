@@ -80,7 +80,7 @@ const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month:
 const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC', timeZoneName: 'short' });
 ---
 
-<article class="person-card" data-id={id} data-type={type} data-category={primaryCategory.toLowerCase()} data-categories={person.category.map(c => c.toLowerCase()).join(' ')} style={`--card-accent: ${categoryInfo.color}`}>
+<article class="person-card" data-id={id} data-type={type} data-category={primaryCategory.toLowerCase()} data-categories={(person.category ?? []).map(c => c.toLowerCase()).join(' ')} style={`--card-accent: ${categoryInfo.color}`}>
   <div class="card-accent-bar"></div>
 
   <div class="card-body">
@@ -102,7 +102,7 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
         </div>
         <div class="badges">
           <span class={`badge ${typeBadgeClass}`}>{typeLabel}</span>
-          {person.category.map(cat => (
+          {(person.category ?? []).map(cat => (
             <span class="badge badge-category" style={`background: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}22; color: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}; border-color: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}44`}>
               {CATEGORY_MAP[cat]?.name ?? cat}
             </span>

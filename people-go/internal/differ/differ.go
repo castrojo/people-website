@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const firstRunCap = 500
+const firstRunCap = 5000
 
 // Compute returns the list of events representing the delta between
 // previous and current people maps. On first run (previous is empty),
