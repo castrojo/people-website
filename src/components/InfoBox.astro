@@ -18,6 +18,8 @@ const { title, description, links } = Astro.props;
 <div class="info-box">
   <h2 class="sidebar-heading">{title}</h2>
   {description && <p class="info-description">{description}</p>}
+  <slot name="description" />
+  <slot name="description" />
   <ul class="info-links">
     {links.map(link => (
       <li>
@@ -71,6 +73,14 @@ const { title, description, links } = Astro.props;
     font-size: 0.875rem;
     line-height: 1.5;
     margin-bottom: 1rem;
+  }
+
+  .info-description-link {
+    color: var(--color-cncf-blue);
+    text-decoration: underline;
+  }
+  .info-description-link:hover {
+    color: var(--color-text-primary);
   }
   
   .info-links {

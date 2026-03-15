@@ -278,15 +278,20 @@ for (const m of maintainerList) {
 
   <Fragment slot="sidebar">
     <InfoBox
-      title="About"
-      description="Live activity feed for cncf/people — who's joining, leaving, or updating their profile in the CNCF community."
+      title="Meet the Community"
       links={[
         { text: 'RSS Feed', url: feedUrl, rss: true },
         { text: 'cncf/people on GitHub', url: 'https://github.com/cncf/people', external: true },
         { text: 'castrojo/people-website', url: 'https://github.com/castrojo/people-website', external: true },
         { text: 'CNCF Releases (Firehose)', url: 'https://castrojo.github.io/firehose/', external: true },
       ]}
-    />
+    >
+      <p slot="description" class="info-description">
+        Our projects and organizations are built by people. We are a global community spanning {countries} {countries === 1 ? 'country' : 'countries'} across the globe.
+        <br /><br />
+        Ready to start your journey? Answer the call, <a href="https://contribute.cncf.io/contributors/getting-started/" target="_blank" rel="noopener noreferrer" class="info-description-link">get started today</a>.
+      </p>
+    </InfoBox>
 
     {banners.length > 0 && <KubeConBanner banners={banners} />}
 
