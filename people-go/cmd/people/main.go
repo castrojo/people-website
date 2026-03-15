@@ -89,6 +89,8 @@ func main() {
 			log.Printf("wrote landscape_logos.json (%d entries)", len(logos))
 			cached.LandscapeSHA = latestLandscapeSHA
 		}
+	} else {
+		log.Printf("cncf/landscape unchanged (%s) — skipping logo sync", shortSHA(latestLandscapeSHA))
 	}
 
 	// ── Sync maintainers (cncf/foundation project-maintainers.csv) ───────
@@ -144,6 +146,8 @@ func main() {
 			cached.FoundationSHA = latestFoundationSHA
 			cached.FoundationETag = newETag
 		}
+	} else {
+		log.Printf("cncf/foundation unchanged (%s) — skipping maintainers CSV sync", shortSHA(latestFoundationSHA))
 	}
 
 	// ── Sync people ───────────────────────────────────────────────────────
@@ -232,6 +236,9 @@ func main() {
 		if existingRaw, err2 := os.ReadFile(outDir + "/changelog.json"); err2 == nil {
 			var existingEvents []models.Event
 			if err2 := json.Unmarshal(existingRaw, &existingEvents); err2 == nil {
+				if err := writer.WriteChangelogPages(outDir, existingEvents); err != nil {
+					log.Printf("warn: write changelog pages: %v", err)
+				}
 				if err := writer.WritePeopleIndex(outDir, existingEvents); err != nil {
 					log.Printf("warn: write people index: %v", err)
 				}
