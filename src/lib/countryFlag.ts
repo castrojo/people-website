@@ -1,45 +1,22 @@
 // countryFlag.ts
-// Maps country name strings (as they appear in cncf/people location fields)
-// to ISO 3166-1 alpha-2 codes, then derives the flag emoji from those codes.
+// Converts the country portion of a freeform location string to a flag emoji.
+// Uses i18n-iso-countries for the name→ISO mapping (handles case, aliases,
+// many language variants). A small override map covers typos/French spellings
+// present in the cncf/people dataset.
 
-const COUNTRY_CODES: Record<string, string> = {
-  // Full names
-  'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'Argentina': 'AR',
-  'Armenia': 'AM', 'Australia': 'AU', 'Austria': 'AT', 'Azerbaijan': 'AZ',
-  'Bahrain': 'BH', 'Bangladesh': 'BD', 'Belarus': 'BY', 'Belgium': 'BE',
-  'Bolivia': 'BO', 'Bosnia and Herzegovina': 'BA', 'Brazil': 'BR',
-  'Bulgaria': 'BG', 'Canada': 'CA', 'Chile': 'CL', 'China': 'CN',
-  'Colombia': 'CO', 'Costa Rica': 'CR', 'Croatia': 'HR', 'Cyprus': 'CY',
-  'Czech Republic': 'CZ', 'Czechia': 'CZ', 'Denmark': 'DK',
-  'Dominican Republic': 'DO', 'Ecuador': 'EC', 'Egypt': 'EG',
-  'El Salvador': 'SV', 'Estonia': 'EE', 'Finland': 'FI', 'France': 'FR',
-  'Georgia': 'GE', 'Germany': 'DE', 'Greece': 'GR', 'Guatemala': 'GT',
-  'Hong Kong': 'HK', 'Hungary': 'HU', 'India': 'IN', 'Indonesia': 'ID',
-  'Iraq': 'IQ', 'Ireland': 'IE', 'Israel': 'IL', 'Italy': 'IT',
-  'Japan': 'JP', 'Jordan': 'JO', 'Kazakhstan': 'KZ', 'Kenya': 'KE',
-  'Kosovo': 'XK', 'Kuwait': 'KW', 'Latvia': 'LV', 'Lithuania': 'LT',
-  'Luxembourg': 'LU', 'Madagascar': 'MG', 'Malaysia': 'MY',
-  'Mexico': 'MX', 'Moldova': 'MD', 'Mongolia': 'MN', 'Morocco': 'MA',
-  'Mozambique': 'MZ', 'Myanmar': 'MM', 'Nepal': 'NP',
-  'Netherlands': 'NL', 'New Zealand': 'NZ', 'Nicaragua': 'NI',
-  'Nigeria': 'NG', 'Norway': 'NO', 'Pakistan': 'PK', 'Palestine': 'PS',
-  'Panama': 'PA', 'Paraguay': 'PY', 'Peru': 'PE', 'Philippines': 'PH',
-  'Poland': 'PL', 'Portugal': 'PT', 'Qatar': 'QA', 'Romania': 'RO',
-  'Russia': 'RU', 'Russian Federation': 'RU', 'Saudi Arabia': 'SA',
-  'Senegal': 'SN', 'Serbia': 'RS', 'Singapore': 'SG', 'Slovakia': 'SK',
-  'Slovenia': 'SI', 'South Africa': 'ZA', 'South Korea': 'KR',
-  'Spain': 'ES', 'Sri Lanka': 'LK', 'Sweden': 'SE', 'Switzerland': 'CH',
-  'Taiwan': 'TW', 'Thailand': 'TH', 'Tunisia': 'TN', 'Turkey': 'TR',
-  'Türkiye': 'TR', 'Uganda': 'UG', 'Ukraine': 'UA',
-  'United Arab Emirates': 'AE', 'United Arab Emirate': 'AE',
-  'United Kingdom': 'GB', 'United States': 'US', 'United States of America': 'US',
-  'Vietnam': 'VN', 'Zimbabwe': 'ZW',
-  // Common aliases / abbreviations
-  'USA': 'US', 'UK': 'GB', 'UAE': 'AE',
-  'Tunisie': 'TN',
+import countries from 'i18n-iso-countries';
+import en from 'i18n-iso-countries/langs/en.json';
+
+countries.registerLocale(en);
+
+// Overrides for entries the library doesn't cover (typos / non-English spellings)
+const OVERRIDES: Record<string, string> = {
+  'Tunisie':              'TN', // French spelling
+  'United Arab Emirate':  'AE', // singular typo in source data
+  'United of States':     'US', // typo in source data
 };
 
-/** Convert ISO 3166-1 alpha-2 code to flag emoji. */
+/** Convert ISO 3166-1 alpha-2 code to flag emoji via Regional Indicator Symbols. */
 function codeToFlag(code: string): string {
   return [...code.toUpperCase()]
     .map(c => String.fromCodePoint(c.charCodeAt(0) + 127397))
@@ -53,14 +30,11 @@ function codeToFlag(code: string): string {
 export function locationFlag(location: string): string {
   if (!location) return '';
   const raw = location.split(',').at(-1)?.trim() ?? '';
-  // Normalize: trim, collapse internal spaces, lowercase for lookup
-  const normalized = raw.replace(/\s+/g, ' ').trim();
-  const code =
-    COUNTRY_CODES[normalized] ??
-    COUNTRY_CODES[normalized.toUpperCase()] ??
-    // Case-insensitive fallback
-    Object.entries(COUNTRY_CODES).find(
-      ([k]) => k.toLowerCase() === normalized.toLowerCase()
-    )?.[1];
+  if (!raw) return '';
+
+  const override = OVERRIDES[raw] ?? OVERRIDES[raw.trim()];
+  if (override) return codeToFlag(override);
+
+  const code = countries.getAlpha2Code(raw, 'en');
   return code ? codeToFlag(code) : '';
 }

@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.0.4"
+    "astro": "^6.0.4",
+    "i18n-iso-countries": "^7.14.0"
   }
 }
