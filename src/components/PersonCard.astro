@@ -38,6 +38,7 @@ interface Person {
   bio?: string;
   pronouns?: string;
   company?: string;
+  companyLogoUrl?: string;
   location?: string;
   linkedin?: string;
   twitter?: string;
@@ -121,7 +122,13 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
           </div>
           {person.company && (
             <p class="meta-line">
-              <span class="meta-item">🏢 {person.company}</span>
+              <span class="meta-item company-meta">
+                {person.companyLogoUrl
+                  ? <img src={person.companyLogoUrl} alt="" class="company-logo" aria-hidden="true" loading="lazy" onerror="this.style.display='none'" />
+                  : <span aria-hidden="true">🏢</span>
+                }
+                {person.company}
+              </span>
             </p>
           )}
         </div>
@@ -360,6 +367,17 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     margin-top: 0.25rem;
   }
   .meta-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+  .company-meta { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .company-logo {
+    height: 16px;
+    width: auto;
+    max-width: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: grayscale(100%);
+    transition: filter 0.15s;
+  }
+  .company-meta:hover .company-logo { filter: grayscale(0%); }
 
   .bio {
     font-size: 0.8125rem;

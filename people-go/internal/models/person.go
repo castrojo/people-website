@@ -96,6 +96,7 @@ type SafePerson struct {
 	Bio        string   `json:"bio,omitempty"`
 	Pronouns   string   `json:"pronouns,omitempty"`
 	Company    string   `json:"company,omitempty"`
+	CompanyLogoURL string `json:"companyLogoUrl,omitempty"`
 	Location   string   `json:"location,omitempty"`
 	LinkedIn   string   `json:"linkedin,omitempty"`
 	Twitter    string   `json:"twitter,omitempty"`
@@ -123,6 +124,7 @@ func (p RawPerson) ToSafe() SafePerson {
 		Bio:           stripHTML(p.Bio),
 		Pronouns:      p.Pronouns,
 		Company:       p.Company,
+		CompanyLogoURL: p.CompanyLogoURL,
 		Location:      p.Location,
 		LinkedIn:      p.LinkedIn,
 		Twitter:       p.Twitter,
