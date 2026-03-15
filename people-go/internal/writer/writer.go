@@ -60,6 +60,39 @@ func WriteLandscapeLogos(outDir string, logos map[string]string) error {
 	return os.WriteFile(filepath.Join(outDir, "landscape_logos.json"), data, 0o644)
 }
 
+// PatchChangelog updates yearsContributing in existing changelog.json entries
+// for any handle present in the patches map. Only updates entries where the
+// value is currently 0 to avoid overwriting fresher event-level enrichment.
+func PatchChangelog(outDir string, patches map[string]int) error {
+	outPath := filepath.Join(outDir, "changelog.json")
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		return err
+	}
+	var events []models.Event
+	if err := json.Unmarshal(raw, &events); err != nil {
+		return err
+	}
+	changed := false
+	for i, e := range events {
+		if e.Person.Handle == "" || e.Person.YearsContributing > 0 {
+			continue
+		}
+		if years, ok := patches[e.Person.Handle]; ok && years > 0 {
+			events[i].Person.YearsContributing = years
+			changed = true
+		}
+	}
+	if !changed {
+		return nil
+	}
+	data, err := json.MarshalIndent(events, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(outPath, data, 0o644)
+}
+
 // WriteRSS generates an RSS feed from events and writes it to outDir/feed.xml.
 func WriteRSS(outDir string, events []models.Event) error {
 	if err := os.MkdirAll(outDir, 0o755); err != nil {

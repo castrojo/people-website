@@ -108,7 +108,7 @@ func main() {
 
 	// ── Compute delta ─────────────────────────────────────────────────────
 	now := time.Now().UTC()
-	isBootstrap := len(previous) == 0
+	_ = len(previous) == 0 // bootstrap detection reserved for future use
 	events := differ.Compute(previous, currentMap, now)
 	log.Printf("delta: %d events", len(events))
 
@@ -130,23 +130,63 @@ func main() {
 				continue
 			}
 			if e.Type == models.EventAdded || e.Type == models.EventUpdated {
+				// Force fresh fetch for updated people — don't serve 90-day-old data
+				if e.Type == models.EventUpdated {
+					apiCache.Invalidate(e.Person.Handle)
+				}
 				stats := ghClient.Enrich(ctx, e.Person.Handle, apiCache)
 				if stats.AvatarURL != "" {
 					events[i].Person.AvatarURL = stats.AvatarURL
 					events[i].Person.Contributions = stats.Contributions
 					events[i].Person.PublicRepos = stats.PublicRepos
 				}
-				// Only search CNCF contribution history on incremental runs
-				if !isBootstrap {
-					ghClient.EnrichCNCFYears(ctx, e.Person.Handle, apiCache)
-					if s, ok := apiCache.Get(e.Person.Handle); ok {
-						events[i].Person.YearsContributing = s.YearsContributing
-					}
+				// Always fetch CNCF years — not just incremental runs
+				ghClient.EnrichCNCFYears(ctx, e.Person.Handle, apiCache)
+				if s, ok := apiCache.Get(e.Person.Handle); ok {
+					events[i].Person.YearsContributing = s.YearsContributing
 				}
 				enriched++
 			}
 		}
 		log.Printf("enriched %d events", enriched)
+
+		// ── Backfill CNCF years for special categories (TOC, TAB, Staff, GB) ──
+		// These people accumulate via bootstrap and never get EventAdded again.
+		// On each run, enrich anyone in these categories still missing years.
+		backfillCategories := map[string]bool{
+			"TOC": true, "TAB": true, "Staff": true, "Governing Board": true,
+		}
+		patches := make(map[string]int)
+		for _, person := range currentMap {
+			safe := person.ToSafe()
+			if safe.Handle == "" {
+				continue
+			}
+			isSpecial := false
+			for _, cat := range safe.Category {
+				if backfillCategories[cat] {
+					isSpecial = true
+					break
+				}
+			}
+			if !isSpecial {
+				continue
+			}
+			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
+				patches[safe.Handle] = s.YearsContributing
+				continue // already cached
+			}
+			ghClient.EnrichCNCFYears(ctx, safe.Handle, apiCache)
+			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
+				patches[safe.Handle] = s.YearsContributing
+			}
+		}
+		if len(patches) > 0 {
+			log.Printf("backfilling years for %d special-category people", len(patches))
+			if err := writer.PatchChangelog(outDir, patches); err != nil {
+				log.Printf("warn: patch changelog years: %v", err)
+			}
+		}
 
 		if err := apiCache.Save(); err != nil {
 			log.Printf("warn: save api cache: %v", err)

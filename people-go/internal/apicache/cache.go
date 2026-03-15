@@ -60,6 +60,12 @@ func (c *Cache) Set(handle string, s UserStats) {
 	c.dirty = true
 }
 
+// Invalidate removes a cached entry, forcing re-fetch on next Get.
+func (c *Cache) Invalidate(handle string) {
+	delete(c.data, handle)
+	c.dirty = true
+}
+
 // Save writes the cache to disk only if it was modified.
 func (c *Cache) Save() error {
 	if !c.dirty {
