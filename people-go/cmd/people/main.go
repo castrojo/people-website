@@ -58,6 +58,12 @@ func main() {
 		if err := ensureChangelog(outDir); err != nil {
 			log.Fatalf("ensure changelog: %v", err)
 		}
+		if err := writer.BackfillPersonFields(outDir); err != nil {
+			log.Printf("warn: backfill person fields: %v", err)
+		}
+		if err := writer.WriteStats(outDir); err != nil {
+			log.Printf("warn: write stats.json: %v", err)
+		}
 		return
 	}
 
@@ -86,6 +92,12 @@ func main() {
 			UpdatedAt:    time.Now().UTC(),
 		}); err != nil {
 			log.Fatalf("save state: %v", err)
+		}
+		if err := writer.BackfillPersonFields(outDir); err != nil {
+			log.Printf("warn: backfill person fields: %v", err)
+		}
+		if err := writer.WriteStats(outDir); err != nil {
+			log.Printf("warn: write stats.json: %v", err)
 		}
 		return
 	}
@@ -117,6 +129,10 @@ func main() {
 		log.Fatalf("write changelog: %v", err)
 	}
 	log.Printf("wrote changelog.json (%d new events)", len(events))
+
+	if err := writer.BackfillPersonFields(outDir); err != nil {
+		log.Printf("warn: backfill person fields: %v", err)
+	}
 
 	if err := writer.WriteRSS(outDir, events); err != nil {
 		log.Printf("warn: write RSS: %v", err)

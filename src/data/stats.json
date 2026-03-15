@@ -1,0 +1,18 @@
+{
+  "total": 2000,
+  "added": 2000,
+  "removed": 0,
+  "updated": 0,
+  "countries": 118,
+  "companies": 977,
+  "categories": {
+    "Ambassadors": 183,
+    "End User TAB": 3,
+    "Golden-Kubestronaut": 204,
+    "Governing Board": 12,
+    "Kubestronaut": 1800,
+    "Marketing Committee": 1,
+    "Staff": 18,
+    "Technical Oversight Committee": 5
+  }
+}

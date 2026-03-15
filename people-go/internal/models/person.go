@@ -135,8 +135,8 @@ func (p RawPerson) ToSafe() SafePerson {
 		Company:             p.Company,
 		CompanyLandscapeURL: p.CompanyLandscapeURL,
 		Location:            p.Location,
-		CountryFlag:         countryFlag(p.Location),
-		PrimaryBadge:        primaryBadge(p.Category),
+		CountryFlag:         CountryFlag(p.Location),
+		PrimaryBadge:        PrimaryBadge(p.Category),
 		LinkedIn:      p.LinkedIn,
 		Twitter:       p.Twitter,
 		YouTube:       p.YouTube,
@@ -183,10 +183,10 @@ var countryOverrides = map[string]string{
 	"United of States":    "United States",        // typo in source data
 }
 
-// countryFlag derives a flag emoji from a freeform location string by
+// CountryFlag derives a flag emoji from a freeform location string by
 // extracting the last comma-separated segment (typically the country name)
-// and looking it up via biter777/countries.
-func countryFlag(location string) string {
+// and looking it up via biter777/countries. Exported so writer can backfill.
+func CountryFlag(location string) string {
 	if location == "" {
 		return ""
 	}
@@ -212,9 +212,9 @@ var logoPriority = []string{
 	"Staff",
 }
 
-// primaryBadge returns the highest-priority category badge key for a person.
-// Falls back to the first category if none match the priority list.
-func primaryBadge(cats []string) string {
+// PrimaryBadge returns the highest-priority category badge key for a person.
+// Exported so writer can backfill existing events. Falls back to first category.
+func PrimaryBadge(cats []string) string {
 	for _, prio := range logoPriority {
 		for _, c := range cats {
 			if c == prio {

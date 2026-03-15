@@ -90,6 +90,48 @@ func PatchChangelog(outDir string, patches map[string]int) error {
 	return os.WriteFile(outPath, data, 0o644)
 }
 
+// BackfillPersonFields patches existing changelog.json events that are missing
+// countryFlag or primaryBadge — fields added after the initial data was written.
+// Safe to call on every run; skips events that already have both fields set.
+func BackfillPersonFields(outDir string) error {
+	outPath := filepath.Join(outDir, "changelog.json")
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+	var events []models.Event
+	if err := json.Unmarshal(raw, &events); err != nil {
+		return err
+	}
+	changed := false
+	for i, e := range events {
+		p := &events[i].Person
+		if p.CountryFlag == "" && e.Person.Location != "" {
+			p.CountryFlag = models.CountryFlag(e.Person.Location)
+			if p.CountryFlag != "" {
+				changed = true
+			}
+		}
+		if p.PrimaryBadge == "" && len(e.Person.Category) > 0 {
+			p.PrimaryBadge = models.PrimaryBadge(e.Person.Category)
+			if p.PrimaryBadge != "" {
+				changed = true
+			}
+		}
+	}
+	if !changed {
+		return nil
+	}
+	data, err := json.MarshalIndent(events, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(outPath, data, 0o644)
+}
+
 // Stats holds aggregate community statistics derived from changelog.json.
 type Stats struct {
 	Total      int            `json:"total"`
