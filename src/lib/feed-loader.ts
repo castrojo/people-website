@@ -43,6 +43,7 @@ const GH_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentCo
 const LI_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`;
 const TW_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
 const YT_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`;
+const BSKY_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.204-.659-.299-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>`;
 const CERT_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`;
 
 function esc(s: string): string {
@@ -73,8 +74,8 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `
     <div class="stats-row">
       ${p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}
-      ${p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true">🟩</span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}
-      ${p.publicRepos ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true">📦</span><span class="stat-val">${p.publicRepos}</span><span class="stat-label">repos</span></span>` : ''}
+      ${p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect width="16" height="2" rx="1" y="0"/><rect width="16" height="2" rx="1" y="4"/><rect width="16" height="2" rx="1" y="8"/><rect width="10" height="2" rx="1" y="12"/></svg></span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}
+      ${p.publicRepos ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="14" height="14" rx="2"/><path d="M4 8h8M4 5h8M4 11h5"/></svg></span><span class="stat-val">${p.publicRepos}</span><span class="stat-label">repos</span></span>` : ''}
     </div>` : '';
 
   const projectsRow = (p.projects?.length) ? `
@@ -94,7 +95,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const rightCol = (programLogo || p.location) ? `
     <div class="card-right">
       ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy">` : ''}
-      ${p.location ? `<span class="location-right">📍 ${esc(p.location)}</span>` : ''}
+      ${p.location ? `<span class="location-right">${esc(p.location)}</span>` : ''}
     </div>` : '';
 
   const socialLinks = [
@@ -103,7 +104,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
     p.github        ? `<a href="${esc(p.github)}"        target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub"             aria-label="GitHub">${GH_ICON}</a>` : '',
     p.linkedin      ? `<a href="${esc(p.linkedin)}"      target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn"           aria-label="LinkedIn">${LI_ICON}</a>` : '',
     p.twitter       ? `<a href="${esc(p.twitter)}"       target="_blank" rel="noopener noreferrer" class="social-link" title="Twitter/X"          aria-label="Twitter">${TW_ICON}</a>` : '',
-    p.bluesky       ? `<a href="${esc(p.bluesky)}"       target="_blank" rel="noopener noreferrer" class="social-link" title="Bluesky"            aria-label="Bluesky">🦋</a>` : '',
+    p.bluesky       ? `<a href="${esc(p.bluesky)}"       target="_blank" rel="noopener noreferrer" class="social-link" title="Bluesky"            aria-label="Bluesky">${BSKY_ICON}</a>` : '',
   ].join('');
 
   return `<article class="person-card" data-id="${esc(e.id)}" data-type="${esc(e.type)}" data-category="${esc(primaryCat.toLowerCase())}" data-categories="${esc(cats.map(c=>c.toLowerCase()).join('|'))}" style="--card-accent:${catInfo.color}">
