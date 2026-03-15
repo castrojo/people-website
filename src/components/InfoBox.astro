@@ -74,11 +74,11 @@ const { title, description, links } = Astro.props;
     margin-bottom: 1rem;
   }
 
-  .info-description-link {
+  :global(.info-description-link) {
     color: var(--color-cncf-blue);
     text-decoration: underline;
   }
-  .info-description-link:hover {
+  :global(.info-description-link:hover) {
     color: var(--color-text-primary);
   }
   
