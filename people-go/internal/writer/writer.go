@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -394,6 +395,153 @@ func WritePeopleIndex(outDir string, events []models.Event) error {
 	return os.WriteFile(filepath.Join(outDir, "people-index.json"), data, 0o644)
 }
 
+// LeadershipEntry is the output format for toc.json, tab.json, gb.json, and marketing.json.
+type LeadershipEntry struct {
+	Handle string `json:"handle"`
+	Name   string `json:"name"`
+	Title  string `json:"title"`
+}
+
+// leadershipSortKey returns a numeric priority so Chair sorts before Vice Chair,
+// and both sort before all other titles.
+func leadershipSortKey(title string) int {
+	lower := strings.ToLower(title)
+	switch {
+	case strings.HasPrefix(lower, "chair"):
+		return 0
+	case strings.HasPrefix(lower, "vice"):
+		return 1
+	default:
+		return 2
+	}
+}
+
+// writeLeadershipJSON is the shared implementation for WriteTOC/WriteTAB/WriteGB/WriteMarketing.
+// It filters people by category, maps the role via roleFunc (empty → "Member"), sorts, and writes.
+func writeLeadershipJSON(outDir, filename, category string, people []models.RawPerson, roleFunc func(models.RawPerson) string) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	var entries []LeadershipEntry
+	for _, p := range people {
+		hasCat := false
+		for _, c := range p.Category {
+			if c == category {
+				hasCat = true
+				break
+			}
+		}
+		if !hasCat {
+			continue
+		}
+		handle := p.GitHubHandle()
+		if handle == "" {
+			log.Printf("warn: %s member %q has no GitHub handle", category, p.Name)
+		}
+		title := roleFunc(p)
+		if title == "" {
+			title = "Member"
+		}
+		entries = append(entries, LeadershipEntry{
+			Handle: handle,
+			Name:   p.Name,
+			Title:  title,
+		})
+	}
+	sort.Slice(entries, func(i, j int) bool {
+		ki, kj := leadershipSortKey(entries[i].Title), leadershipSortKey(entries[j].Title)
+		if ki != kj {
+			return ki < kj
+		}
+		return entries[i].Name < entries[j].Name
+	})
+	data, err := json.MarshalIndent(entries, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, filename), data, 0o644)
+}
+
+// WriteTOC generates toc.json from people in the "Technical Oversight Committee" category.
+func WriteTOC(outDir string, people []models.RawPerson) error {
+	return writeLeadershipJSON(outDir, "toc.json", "Technical Oversight Committee", people,
+		func(p models.RawPerson) string { return p.TOCRole })
+}
+
+// WriteTAB generates tab.json from people in the "End User TAB" category.
+func WriteTAB(outDir string, people []models.RawPerson) error {
+	return writeLeadershipJSON(outDir, "tab.json", "End User TAB", people,
+		func(p models.RawPerson) string { return p.TABRole })
+}
+
+// WriteGB generates gb.json from people in the "Governing Board" category.
+func WriteGB(outDir string, people []models.RawPerson) error {
+	return writeLeadershipJSON(outDir, "gb.json", "Governing Board", people,
+		func(p models.RawPerson) string { return p.GBRole })
+}
+
+// WriteMarketing generates marketing.json from people in the "Marketing Committee" category.
+// Marketing Committee has no dedicated role field — all members get "Member".
+func WriteMarketing(outDir string, people []models.RawPerson) error {
+	return writeLeadershipJSON(outDir, "marketing.json", "Marketing Committee", people,
+		func(p models.RawPerson) string { return "" })
+}
+
+// EmeritusEntry records a former CNCF community member.
+type EmeritusEntry struct {
+	Handle      string   `json:"handle"`
+	Name        string   `json:"name"`
+	Category    []string `json:"category"`
+	RemovedDate string   `json:"removedDate"`
+}
+
+// WriteEmeritusFromEvents appends newly removed people to people-emeritus.json.
+// It reads the existing file (treating a missing file as an empty list), deduplicates
+// by handle, skips anyone still present in activeHandles, and writes back.
+func WriteEmeritusFromEvents(outDir string, removed []models.Event, activeHandles map[string]bool) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	outPath := filepath.Join(outDir, "people-emeritus.json")
+
+	var existing []EmeritusEntry
+	if raw, err := os.ReadFile(outPath); err == nil {
+		_ = json.Unmarshal(raw, &existing)
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+
+	seen := make(map[string]bool, len(existing))
+	for _, e := range existing {
+		if e.Handle != "" {
+			seen[e.Handle] = true
+		}
+	}
+
+	for _, ev := range removed {
+		if ev.Type != models.EventRemoved {
+			continue
+		}
+		handle := ev.Person.Handle
+		if handle == "" || activeHandles[handle] || seen[handle] {
+			continue
+		}
+		seen[handle] = true
+		existing = append(existing, EmeritusEntry{
+			Handle:      handle,
+			Name:        ev.Person.Name,
+			Category:    ev.Person.Category,
+			RemovedDate: ev.Timestamp.Format("2006-01-02"),
+		})
+	}
+
+	data, err := json.MarshalIndent(existing, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(outPath, data, 0o644)
+}
+
 // HeroRotations is the output structure written to heroes.json.
 type HeroRotations struct {
 	GeneratedAt         time.Time               `json:"generatedAt"`
@@ -403,6 +551,7 @@ type HeroRotations struct {
 	GoldenKubestronauts []models.SafePerson     `json:"goldenKubestronauts"`
 	Maintainers         []models.SafeMaintainer `json:"maintainers"`
 	CNCFLeadership      []models.SafePerson     `json:"cncfLeadership"`
+	Emeritus            []models.SafePerson     `json:"emeritus"`
 }
 
 // dailyPick selects n items from the slice using a deterministic daily rotation.
@@ -529,6 +678,24 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 		}
 	}
 
+	// Build emeritus pool from people-emeritus.json (empty slice if file absent).
+	var emeritusPeople []models.SafePerson
+	if raw, err := os.ReadFile(filepath.Join(outDir, "people-emeritus.json")); err == nil {
+		var entries []EmeritusEntry
+		if json.Unmarshal(raw, &entries) == nil {
+			for _, e := range entries {
+				if e.Handle == "" {
+					continue
+				}
+				emeritusPeople = append(emeritusPeople, models.SafePerson{
+					Name:     e.Name,
+					Handle:   e.Handle,
+					Category: e.Category,
+				})
+			}
+		}
+	}
+
 	rotations := HeroRotations{
 		GeneratedAt:         time.Now().UTC(),
 		Everyone:            dailyPickDiverse(allPeople, 4),
@@ -537,6 +704,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 		GoldenKubestronauts: dailyPickDiverse(pools["Golden-Kubestronaut"], 4),
 		Maintainers:         dailyPick(maintainers, 4),
 		CNCFLeadership:      leadership,
+		Emeritus:            dailyPickDiverse(emeritusPeople, 4),
 	}
 
 	data, err := json.MarshalIndent(rotations, "", "  ")

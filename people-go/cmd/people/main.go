@@ -196,6 +196,32 @@ func main() {
 		if err := writer.WritePeopleIndex(outDir, events); err != nil {
 			log.Printf("warn: write people index: %v", err)
 		}
+
+		// Auto-generate leadership JSON files from live cncf/people data.
+		if err := writer.WriteTOC(outDir, people); err != nil {
+			log.Printf("warn: write toc.json: %v", err)
+		}
+		if err := writer.WriteTAB(outDir, people); err != nil {
+			log.Printf("warn: write tab.json: %v", err)
+		}
+		if err := writer.WriteGB(outDir, people); err != nil {
+			log.Printf("warn: write gb.json: %v", err)
+		}
+		if err := writer.WriteMarketing(outDir, people); err != nil {
+			log.Printf("warn: write marketing.json: %v", err)
+		}
+
+		// Append removed people to the emeritus list before writing hero rotations.
+		activeHandles := make(map[string]bool, len(currentMap))
+		for _, p := range currentMap {
+			if h := p.GitHubHandle(); h != "" {
+				activeHandles[h] = true
+			}
+		}
+		if err := writer.WriteEmeritusFromEvents(outDir, events, activeHandles); err != nil {
+			log.Printf("warn: write emeritus: %v", err)
+		}
+
 		leadershipHandles := loadLeadershipHandles(outDir)
 		heroMaintainers, _ := writer.LoadMaintainers(outDir)
 		if err := writer.WriteHeroRotations(outDir, events, heroMaintainers, leadershipHandles); err != nil {
