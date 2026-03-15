@@ -77,6 +77,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <button class="section-link" data-tab="golden-kubestronauts">Golden Kubestronauts</button>
         <button class="section-link" data-tab="toc">TOC</button>
         <button class="section-link" data-tab="tab">End User TAB</button>
+        <button class="section-link" data-tab="governing-board">Governing Board</button>
         <button class="section-link" data-tab="staff">Staff</button>
       </nav>
     </div>
@@ -118,10 +119,11 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     'golden-kubestronauts': 'golden-kubestronaut',
     'toc':                  'technical oversight committee',
     'tab':                  'end user tab',
+    'governing-board':      'governing board',
     'staff':                'staff',
   };
 
-  const ALPHA_TABS = new Set(['toc', 'tab', 'staff']);
+  const ALPHA_TABS = new Set(['toc', 'tab', 'governing-board', 'staff']);
 
   function applyTab(tab: string) {
     const timelineFeed = document.getElementById('timeline-feed');

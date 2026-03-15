@@ -83,6 +83,7 @@ const TAB_CATEGORY_FILTER: Record<string, (cats: string[]) => boolean> = {
   'golden-kubestronauts': cats => cats.includes('Golden-Kubestronaut'),
   'toc':                 cats  => cats.includes('Technical Oversight Committee'),
   'tab':                 cats  => cats.includes('End User TAB'),
+  'governing-board':     cats  => cats.includes('Governing Board'),
   'staff':               cats  => cats.includes('Staff'),
 };
 
@@ -106,9 +107,10 @@ const tabStats = Object.fromEntries(
 
 // Alphabetical tabs — deduplicated (most recent event per person), sorted by name
 const ALPHA_TABS: Record<string, (cats: string[]) => boolean> = {
-  'toc':   cats => cats.includes('Technical Oversight Committee'),
-  'tab':   cats => cats.includes('End User TAB'),
-  'staff': cats => cats.includes('Staff'),
+  'toc':             cats => cats.includes('Technical Oversight Committee'),
+  'tab':             cats => cats.includes('End User TAB'),
+  'governing-board': cats => cats.includes('Governing Board'),
+  'staff':           cats => cats.includes('Staff'),
 };
 
 function alphabeticalPeople(filterFn: (cats: string[]) => boolean): Event[] {
