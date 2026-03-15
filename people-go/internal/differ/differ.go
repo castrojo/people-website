@@ -9,11 +9,13 @@ import (
 	"github.com/google/uuid"
 )
 
-const firstRunCap = 5000
+// firstRunPeopleCap limits how many people are bootstrapped as "added" events
+// on the very first run (empty previous state). Each added person = one event.
+const firstRunPeopleCap = 5000
 
 // Compute returns the list of events representing the delta between
 // previous and current people maps. On first run (previous is empty),
-// events are capped at firstRunCap newest entries by insertion order.
+// people are capped at firstRunPeopleCap to avoid flooding the feed.
 func Compute(previous, current map[string]models.RawPerson, now time.Time) []models.Event {
 	var events []models.Event
 
@@ -30,9 +32,9 @@ func Compute(previous, current map[string]models.RawPerson, now time.Time) []mod
 		}
 	}
 
-	// Cap first-run flood
-	if len(previous) == 0 && len(added) > firstRunCap {
-		added = added[:firstRunCap]
+	// Cap first-run people flood
+	if len(previous) == 0 && len(added) > firstRunPeopleCap {
+		added = added[:firstRunPeopleCap]
 	}
 	events = append(events, added...)
 
