@@ -127,8 +127,8 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
                 {CATEGORY_MAP[cat]?.name ?? cat}
               </span>
             ))}
-          </div>
-      </div>
+          </div>{/* end identity-info */}
+        </div>{/* end card-identity */}
 
     {(person.contributions || person.publicRepos || person.yearsContributing) && (
       <div class="stats-row">
