@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"regexp"
 	"strings"
+
+	"github.com/biter777/countries"
 )
 
 const (
@@ -102,7 +104,9 @@ type SafePerson struct {
 	Pronouns   string   `json:"pronouns,omitempty"`
 	Company    string   `json:"company,omitempty"`
 	CompanyLandscapeURL string `json:"companyLandscapeUrl,omitempty"`
-	Location   string   `json:"location,omitempty"`
+	Location    string  `json:"location,omitempty"`
+	CountryFlag  string  `json:"countryFlag,omitempty"`
+	PrimaryBadge string  `json:"primaryBadge,omitempty"`
 	LinkedIn   string   `json:"linkedin,omitempty"`
 	Twitter    string   `json:"twitter,omitempty"`
 	YouTube    string   `json:"youtube,omitempty"`
@@ -131,6 +135,8 @@ func (p RawPerson) ToSafe() SafePerson {
 		Company:             p.Company,
 		CompanyLandscapeURL: p.CompanyLandscapeURL,
 		Location:            p.Location,
+		CountryFlag:         countryFlag(p.Location),
+		PrimaryBadge:        primaryBadge(p.Category),
 		LinkedIn:      p.LinkedIn,
 		Twitter:       p.Twitter,
 		YouTube:       p.YouTube,
@@ -167,5 +173,58 @@ func RawPeopleMap(people []RawPerson) map[string]RawPerson {
 		}
 	}
 	return m
+}
+
+// countryOverrides maps known typos/non-English spellings to their English equivalents
+// so countries.ByName can find them correctly.
+var countryOverrides = map[string]string{
+	"Tunisie":             "Tunisia",             // French spelling
+	"United Arab Emirate": "United Arab Emirates", // singular typo in source data
+	"United of States":    "United States",        // typo in source data
+}
+
+// countryFlag derives a flag emoji from a freeform location string by
+// extracting the last comma-separated segment (typically the country name)
+// and looking it up via biter777/countries.
+func countryFlag(location string) string {
+	if location == "" {
+		return ""
+	}
+	parts := strings.Split(location, ",")
+	raw := strings.TrimSpace(parts[len(parts)-1])
+	if name, ok := countryOverrides[raw]; ok {
+		raw = name
+	}
+	c := countries.ByName(raw)
+	if c == countries.Unknown {
+		return ""
+	}
+	return c.Emoji()
+}
+
+// logoPriority defines the badge resolution order — first match wins.
+var logoPriority = []string{
+	"Golden-Kubestronaut",
+	"Kubestronaut",
+	"Ambassadors",
+	"Technical Oversight Committee",
+	"End User TAB",
+	"Staff",
+}
+
+// primaryBadge returns the highest-priority category badge key for a person.
+// Falls back to the first category if none match the priority list.
+func primaryBadge(cats []string) string {
+	for _, prio := range logoPriority {
+		for _, c := range cats {
+			if c == prio {
+				return prio
+			}
+		}
+	}
+	if len(cats) > 0 {
+		return cats[0]
+	}
+	return ""
 }
 

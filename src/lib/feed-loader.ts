@@ -3,8 +3,6 @@
 // The first STATIC_COUNT cards are already in the DOM as server-rendered HTML.
 // This module fetches the rest and appends them in batches via IntersectionObserver.
 
-import { locationFlag } from './countryFlag';
-
 const BASE = (document.documentElement.dataset.base ?? '/people-website').replace(/\/$/, '');
 const DATA_URL = `${BASE}/data/changelog.json`;
 const BATCH_SIZE = 50;
@@ -16,7 +14,12 @@ interface Person {
   location?: string; linkedin?: string; twitter?: string; youtube?: string;
   website?: string; bluesky?: string; mastodon?: string; certDirectory?: string;
   category: string[]; projects?: string[];
-  avatarUrl?: string; contributions?: number; publicRepos?: number; yearsContributing?: number;
+  avatarUrl?: string;
+  contributions?: number;
+  publicRepos?: number;
+  yearsContributing?: number;
+  countryFlag?: string;
+  primaryBadge?: string;
 }
 interface Event { id: string; type: string; timestamp: string; person: Person; changes?: Change[]; }
 
@@ -31,7 +34,6 @@ const CATEGORY_MAP: Record<string, { name: string; color: string }> = {
   'Marketing Committee':           { name: 'Marketing Committee',  color: 'var(--color-board, #E65100)' },
 };
 
-const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
 const PROGRAM_LOGOS: Record<string, string> = {
   'Kubestronaut':                  `${BASE}/program-logos/kubestronaut.svg`,
   'Golden-Kubestronaut':           `${BASE}/program-logos/golden-kubestronaut.svg`,
@@ -58,9 +60,9 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const profileUrl = p.github || (p.handle ? `https://github.com/${p.handle}` : '#');
   const cats = p.category ?? [];
   const primaryCat = cats[0] ?? '';
-  const accentKey = LOGO_PRIORITY.find(c => cats.includes(c)) ?? primaryCat;
+  const accentKey = p.primaryBadge ?? primaryCat;
   const catInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCat] ?? { name: primaryCat, color: '#888' };
-  const logoKey = LOGO_PRIORITY.find(c => cats.includes(c));
+  const logoKey = (p.primaryBadge && PROGRAM_LOGOS[p.primaryBadge]) ? p.primaryBadge : undefined;
   const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '';
   const typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
   const date = new Date(e.timestamp);
@@ -97,7 +99,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const rightCol = (programLogo || p.location) ? `
     <div class="card-right">
       ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy">` : ''}
-      ${p.location ? `<span class="location-right">${esc(locationFlag(p.location))} ${esc(p.location)}</span>` : ''}
+      ${p.location ? `<span class="location-right">${esc(p.countryFlag ?? '')} ${esc(p.location)}</span>` : ''}
     </div>` : '';
 
   const socialLinks = [
@@ -152,7 +154,7 @@ function dateHeader(ts: string): string {
   return new Date(ts).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
 }
 
-export async function initFeedLoader(staticCount: number, landscapeLogos: Record<string, string>) {
+export async function initFeedLoader(staticCount: number, landscapeLogos: Record<string, string>, onBatchLoaded?: () => void) {
   const feed = document.getElementById('timeline-feed');
   if (!feed) return;
 
@@ -189,6 +191,7 @@ export async function initFeedLoader(staticCount: number, landscapeLogos: Record
     }
 
     loading = false;
+    onBatchLoaded?.();
     if (done) observer.disconnect();
   }
 

@@ -1,4 +1,7 @@
 ---
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import PeopleLayout from '../layouts/PeopleLayout.astro';
 import PersonCard from '../components/PersonCard.astro';
 import MemorialCard from '../components/MemorialCard.astro';
@@ -39,6 +42,8 @@ interface Person {
   contributions?: number;
   followers?: number;
   publicRepos?: number;
+  countryFlag?: string;
+  primaryBadge?: string;
 }
 
 interface Event {
@@ -72,14 +77,6 @@ const feedUrl = `${baseUrl}feed.xml`;
 
 const banners = await getActiveBanners();
 
-// Deduplicate people: newest event per person is the canonical state
-const uniquePeople = new Map<string, Person>();
-for (const e of events) {
-  const key = e.person.github ?? e.person.name;
-  if (!uniquePeople.has(key)) uniquePeople.set(key, e.person);
-}
-const peopleList = [...uniquePeople.values()];
-
 const CATEGORY_ORDER = [
   'Kubestronaut',
   'Golden-Kubestronaut',
@@ -101,29 +98,50 @@ const CATEGORY_LABELS: Record<string, string> = {
   'Marketing Committee':           'Marketing Committee',
 };
 
-const categoryCounts = Object.fromEntries(
-  CATEGORY_ORDER.map(cat => [
-    cat,
-    peopleList.filter(p => (p.category ?? []).includes(cat)).length,
-  ])
-);
+interface SiteStats {
+  total: number;
+  added: number;
+  removed: number;
+  updated: number;
+  countries: number;
+  companies: number;
+  categories: Record<string, number>;
+}
 
-const countries = new Set(
-  peopleList
-    .map(p => (p.location ?? '').split(',').at(-1)?.trim() ?? '')
-    .filter(Boolean)
-).size;
-
-const companies = new Set(
-  peopleList.map(p => p.company?.trim() ?? '').filter(Boolean)
-).size;
-
-const stats = {
-  total: peopleList.length,
-  added: events.filter(e => e.type === 'added').length,
-  removed: events.filter(e => e.type === 'removed').length,
-  updated: events.filter(e => e.type === 'updated').length,
+let siteStats: SiteStats = {
+  total: 0, added: 0, removed: 0, updated: 0,
+  countries: 0, companies: 0, categories: {},
 };
+try {
+  const statsPath = resolve('./src/data/stats.json');
+  siteStats = JSON.parse(readFileSync(statsPath, 'utf-8')) as SiteStats;
+} catch {
+  // stats.json not yet generated — fall back to computing from events
+  const uniquePeople = new Map<string, Person>();
+  for (const e of events) {
+    const key = e.person.github ?? e.person.name;
+    if (!uniquePeople.has(key)) uniquePeople.set(key, e.person);
+  }
+  const peopleList = [...uniquePeople.values()];
+  const countrySet = new Set(peopleList.map(p => (p.location ?? '').split(',').at(-1)?.trim() ?? '').filter(Boolean));
+  const companySet = new Set(peopleList.map(p => p.company?.trim() ?? '').filter(Boolean));
+  siteStats = {
+    total: peopleList.length,
+    added: events.filter(e => e.type === 'added').length,
+    removed: events.filter(e => e.type === 'removed').length,
+    updated: events.filter(e => e.type === 'updated').length,
+    countries: countrySet.size,
+    companies: companySet.size,
+    categories: Object.fromEntries(
+      CATEGORY_ORDER.map(cat => [cat, peopleList.filter(p => (p.category ?? []).includes(cat)).length])
+    ),
+  };
+}
+
+const categoryCounts = siteStats.categories;
+const stats = { total: siteStats.total, added: siteStats.added, removed: siteStats.removed, updated: siteStats.updated };
+const countries = siteStats.countries;
+const companies = siteStats.companies;
 
 const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].sort();
 
@@ -443,8 +461,8 @@ const alphaFeeds = Object.fromEntries(
   // Fetch landscape logos once and kick off infinite scroll
   fetch(`${baseUrl}/data/landscape_logos.json`)
     .then(r => r.json())
-    .then((logos: Record<string, string>) => initFeedLoader(staticCount, logos))
-    .catch(() => initFeedLoader(staticCount, {}));
+    .then((logos: Record<string, string>) => initFeedLoader(staticCount, logos, applyFilters))
+    .catch(() => initFeedLoader(staticCount, {}, applyFilters));
 
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;

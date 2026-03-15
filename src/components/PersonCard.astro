@@ -1,6 +1,4 @@
 ---
-import { locationFlag } from '../lib/countryFlag';
-
 interface Category {
   name: string;
   color: string;
@@ -55,6 +53,8 @@ interface Person {
   contributions?: number;
   publicRepos?: number;
   yearsContributing?: number;
+  countryFlag?: string;
+  primaryBadge?: string;
 }
 
 interface Props {
@@ -78,12 +78,11 @@ const avatarSrc = person.avatarUrl || person.imageUrl || '';
 const profileUrl = person.github || (person.handle ? `https://github.com/${person.handle}` : '#');
 const primaryCategory = person.category?.[0] ?? '';
 
-// Use highest-prestige category for accent color and logo
-const LOGO_PRIORITY = ['Golden-Kubestronaut', 'Kubestronaut', 'Ambassadors', 'Technical Oversight Committee', 'End User TAB', 'Staff'];
-const accentKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat)) ?? primaryCategory;
+// Use pre-computed primaryBadge from backend if available, otherwise fall back to category scan
+const accentKey = person.primaryBadge ?? primaryCategory;
 const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 
-const logoKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat));
+const logoKey = (person.primaryBadge && PROGRAM_LOGOS[person.primaryBadge]) ? person.primaryBadge : undefined;
 const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
 const typeLabel = { added: '+ Joined', removed: '− Left', updated: '✎ Updated' }[type];
@@ -201,7 +200,7 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     {(programLogo || person.location) && (
       <div class="card-right">
         {programLogo && <img src={programLogo} alt={logoKey ?? ''} class="program-logo" loading="lazy" />}
-        {person.location && <span class="location-right">{locationFlag(person.location)} {person.location}</span>}
+        {person.location && <span class="location-right">{person.countryFlag ?? ''} {person.location}</span>}
       </div>
     )}
 

@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/biter777/countries v1.7.5 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

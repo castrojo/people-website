@@ -122,6 +122,10 @@ func main() {
 		log.Printf("warn: write RSS: %v", err)
 	}
 
+	if err := writer.WriteStats(outDir); err != nil {
+		log.Printf("warn: write stats.json: %v", err)
+	}
+
 	// ── Save state ────────────────────────────────────────────────────────
 	if err := stateMgr.SavePrevious(currentMap); err != nil {
 		log.Fatalf("save previous: %v", err)
