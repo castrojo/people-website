@@ -36,26 +36,64 @@ func main() {
 		log.Fatalf("load state: %v", err)
 	}
 
-	// ── Fetch latest SHA ──────────────────────────────────────────────────
 	fc := fetcher.New(ctx, token)
-	latestSHA, err := fc.LatestSHA(ctx)
+
+	// ── Check both upstreams independently ────────────────────────────────
+	latestPeopleSHA, err := fc.LatestSHA(ctx)
 	if err != nil {
-		log.Fatalf("latest SHA: %v", err)
+		log.Fatalf("latest people SHA: %v", err)
+	}
+	latestLandscapeSHA, err := fc.LatestLandscapeSHA(ctx)
+	if err != nil {
+		log.Printf("warn: latest landscape SHA: %v — skipping landscape sync", err)
+		latestLandscapeSHA = cached.LandscapeSHA // treat as unchanged on error
 	}
 
-	if cached.LastSHA == latestSHA {
-		log.Printf("no changes since %s — nothing to do", cached.LastSHA[:8])
-		// Still write empty changelog if it doesn't exist yet
+	syncPeople := latestPeopleSHA != cached.LastSHA
+	syncLandscape := latestLandscapeSHA != cached.LandscapeSHA
+
+	if !syncPeople && !syncLandscape {
+		log.Printf("no changes in cncf/people (%s) or cncf/landscape (%s) — nothing to do",
+			shortSHA(latestPeopleSHA), shortSHA(latestLandscapeSHA))
 		if err := ensureChangelog(outDir); err != nil {
 			log.Fatalf("ensure changelog: %v", err)
 		}
 		return
 	}
 
-	log.Printf("new commits detected: %s → %s", shortSHA(cached.LastSHA), latestSHA[:8])
+	// ── Sync landscape logos ──────────────────────────────────────────────
+	if syncLandscape {
+		log.Printf("cncf/landscape updated: %s → %s — syncing logos",
+			shortSHA(cached.LandscapeSHA), shortSHA(latestLandscapeSHA))
+		logos, err := fc.FetchLandscapeLogos(ctx)
+		if err != nil {
+			log.Printf("warn: fetch landscape logos: %v — keeping existing landscape_logos.json", err)
+		} else {
+			if err := writer.WriteLandscapeLogos(outDir, logos); err != nil {
+				log.Fatalf("write landscape_logos.json: %v", err)
+			}
+			log.Printf("wrote landscape_logos.json (%d entries)", len(logos))
+			cached.LandscapeSHA = latestLandscapeSHA
+		}
+	}
+
+	// ── Sync people ───────────────────────────────────────────────────────
+	if !syncPeople {
+		log.Printf("cncf/people unchanged (%s) — skipping people sync", shortSHA(latestPeopleSHA))
+		if err := stateMgr.SaveState(state.State{
+			LastSHA:      cached.LastSHA,
+			LandscapeSHA: cached.LandscapeSHA,
+			UpdatedAt:    time.Now().UTC(),
+		}); err != nil {
+			log.Fatalf("save state: %v", err)
+		}
+		return
+	}
+
+	log.Printf("cncf/people updated: %s → %s", shortSHA(cached.LastSHA), shortSHA(latestPeopleSHA))
 
 	// ── Fetch people.json ─────────────────────────────────────────────────
-	people, err := fc.FetchPeople(ctx, latestSHA)
+	people, err := fc.FetchPeople(ctx, latestPeopleSHA)
 	if err != nil {
 		log.Fatalf("fetch people: %v", err)
 	}
@@ -133,10 +171,14 @@ func main() {
 	if err := stateMgr.SavePrevious(currentMap); err != nil {
 		log.Fatalf("save previous: %v", err)
 	}
-	if err := stateMgr.SaveState(state.State{LastSHA: latestSHA, UpdatedAt: now}); err != nil {
+	if err := stateMgr.SaveState(state.State{
+		LastSHA:      latestPeopleSHA,
+		LandscapeSHA: cached.LandscapeSHA, // already updated above if synced
+		UpdatedAt:    now,
+	}); err != nil {
 		log.Fatalf("save state: %v", err)
 	}
-	log.Printf("done — state saved at SHA %s", latestSHA[:8])
+	log.Printf("done — people SHA %s, landscape SHA %s", shortSHA(latestPeopleSHA), shortSHA(cached.LandscapeSHA))
 }
 
 func shortSHA(sha string) string {

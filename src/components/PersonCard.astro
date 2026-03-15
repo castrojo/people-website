@@ -56,22 +56,15 @@ interface Props {
   timestamp: string;
   person: Person;
   changes?: Change[];
+  landscapeLogos?: Record<string, string>;
 }
 
-const { id, type, timestamp, person, changes = [] } = Astro.props;
+const { id, type, timestamp, person, changes = [], landscapeLogos = {} } = Astro.props;
 
-// Convert a project name to a landscape.cncf.io logo slug
-function projectSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[()]/g, '')        // strip parens
-    .replace(/[^a-z0-9\s-]/g, '') // strip other special chars
-    .trim()
-    .replace(/\s+/g, '-');       // spaces → hyphens
-}
-
+// Resolve a project name to its logo URL using the landscape map.
+// Tries exact match first, then lowercase. Falls back to empty string (image hidden by onerror).
 function projectLogoUrl(name: string): string {
-  return `https://landscape.cncf.io/logos/${projectSlug(name)}.svg`;
+  return landscapeLogos[name] ?? landscapeLogos[name.toLowerCase()] ?? '';
 }
 
 const avatarSrc = person.avatarUrl || person.imageUrl || '';

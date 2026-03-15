@@ -6,6 +6,7 @@ import KubeConBanner from '../components/KubeConBanner.astro';
 import { getActiveBanners } from '../lib/banners';
 
 import changelogRaw from '../data/changelog.json';
+import landscapeLogosRaw from '../data/landscape_logos.json';
 
 interface Change {
   field: string;
@@ -42,6 +43,7 @@ interface Event {
 }
 
 const events = changelogRaw as Event[];
+const landscapeLogos = landscapeLogosRaw as Record<string, string>;
 
 function dateHeader(ts: string): string {
   const d = new Date(ts);
@@ -179,6 +181,7 @@ const tabStats = Object.fromEntries(
             timestamp={event.timestamp}
             person={event.person}
             changes={event.changes}
+            landscapeLogos={landscapeLogos}
           />
         ))}
       </section>

@@ -47,6 +47,19 @@ func WriteChangelog(outDir string, newEvents []models.Event) error {
 	return os.WriteFile(outPath, data, 0o644)
 }
 
+// WriteLandscapeLogos writes a normalized project-name → logo-URL map to
+// outDir/landscape_logos.json for use by Astro at build time.
+func WriteLandscapeLogos(outDir string, logos map[string]string) error {
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(logos, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "landscape_logos.json"), data, 0o644)
+}
+
 // WriteRSS generates an RSS feed from events and writes it to outDir/feed.xml.
 func WriteRSS(outDir string, events []models.Event) error {
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
