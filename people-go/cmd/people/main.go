@@ -112,88 +112,7 @@ func main() {
 	events := differ.Compute(previous, currentMap, now)
 	log.Printf("delta: %d events", len(events))
 
-	// ── Enrich with GitHub API ────────────────────────────────────────────
-	// Only enrich people who have a valid GitHub handle.
-	// Cap at 50 enrichments per run to avoid hitting rate limits.
-	// CNCF years search (1 extra REST call per person) is skipped on bootstrap
-	// to avoid hammering the API for thousands of people on first import.
-	if token != "" && len(events) > 0 {
-		apiCache, err := apicache.Load(cacheDir)
-		if err != nil {
-			log.Printf("warn: load api cache: %v", err)
-		}
-
-		ghClient := githubclient.New(ctx, token)
-		enriched := 0
-		for i, e := range events {
-			if e.Person.Handle == "" {
-				continue
-			}
-			if e.Type == models.EventAdded || e.Type == models.EventUpdated {
-				// Force fresh fetch for updated people — don't serve 90-day-old data
-				if e.Type == models.EventUpdated {
-					apiCache.Invalidate(e.Person.Handle)
-				}
-				stats := ghClient.Enrich(ctx, e.Person.Handle, apiCache)
-				if stats.AvatarURL != "" {
-					events[i].Person.AvatarURL = stats.AvatarURL
-					events[i].Person.Contributions = stats.Contributions
-					events[i].Person.PublicRepos = stats.PublicRepos
-				}
-				// Always fetch CNCF years — not just incremental runs
-				ghClient.EnrichCNCFYears(ctx, e.Person.Handle, apiCache)
-				if s, ok := apiCache.Get(e.Person.Handle); ok {
-					events[i].Person.YearsContributing = s.YearsContributing
-				}
-				enriched++
-			}
-		}
-		log.Printf("enriched %d events", enriched)
-
-		// ── Backfill CNCF years for special categories (TOC, TAB, Staff, GB) ──
-		// These people accumulate via bootstrap and never get EventAdded again.
-		// On each run, enrich anyone in these categories still missing years.
-		backfillCategories := map[string]bool{
-			"TOC": true, "TAB": true, "Staff": true, "Governing Board": true,
-		}
-		patches := make(map[string]int)
-		for _, person := range currentMap {
-			safe := person.ToSafe()
-			if safe.Handle == "" {
-				continue
-			}
-			isSpecial := false
-			for _, cat := range safe.Category {
-				if backfillCategories[cat] {
-					isSpecial = true
-					break
-				}
-			}
-			if !isSpecial {
-				continue
-			}
-			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
-				patches[safe.Handle] = s.YearsContributing
-				continue // already cached
-			}
-			ghClient.EnrichCNCFYears(ctx, safe.Handle, apiCache)
-			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
-				patches[safe.Handle] = s.YearsContributing
-			}
-		}
-		if len(patches) > 0 {
-			log.Printf("backfilling years for %d special-category people", len(patches))
-			if err := writer.PatchChangelog(outDir, patches); err != nil {
-				log.Printf("warn: patch changelog years: %v", err)
-			}
-		}
-
-		if err := apiCache.Save(); err != nil {
-			log.Printf("warn: save api cache: %v", err)
-		}
-	}
-
-	// ── Write outputs ─────────────────────────────────────────────────────
+	// ── Write outputs (before enrichment so a partial run always saves events) ──
 	if err := writer.WriteChangelog(outDir, events); err != nil {
 		log.Fatalf("write changelog: %v", err)
 	}
@@ -215,6 +134,86 @@ func main() {
 		log.Fatalf("save state: %v", err)
 	}
 	log.Printf("done — people SHA %s, landscape SHA %s", shortSHA(latestPeopleSHA), shortSHA(cached.LandscapeSHA))
+
+	// ── Enrich with GitHub API ────────────────────────────────────────────
+	// Capped at 50 per run so rate limits are never hit and the job always
+	// finishes quickly. The api cache (7-day TTL) carries enrichment forward
+	// across runs, so the full community is gradually enriched over time.
+	if token != "" && len(events) > 0 {
+		apiCache, err := apicache.Load(cacheDir)
+		if err != nil {
+			log.Printf("warn: load api cache: %v", err)
+		}
+
+		const enrichCap = 50
+		ghClient := githubclient.New(ctx, token)
+		enriched := 0
+		for i, e := range events {
+			if enriched >= enrichCap {
+				break
+			}
+			if e.Person.Handle == "" {
+				continue
+			}
+			if e.Type == models.EventAdded || e.Type == models.EventUpdated {
+				if e.Type == models.EventUpdated {
+					apiCache.Invalidate(e.Person.Handle)
+				}
+				stats := ghClient.Enrich(ctx, e.Person.Handle, apiCache)
+				if stats.AvatarURL != "" {
+					events[i].Person.AvatarURL = stats.AvatarURL
+					events[i].Person.Contributions = stats.Contributions
+					events[i].Person.PublicRepos = stats.PublicRepos
+				}
+				ghClient.EnrichCNCFYears(ctx, e.Person.Handle, apiCache)
+				if s, ok := apiCache.Get(e.Person.Handle); ok {
+					events[i].Person.YearsContributing = s.YearsContributing
+				}
+				enriched++
+			}
+		}
+		log.Printf("enriched %d people (cap %d per run)", enriched, enrichCap)
+
+		// ── Backfill CNCF years for special categories (TOC, TAB, Staff, GB) ──
+		backfillCategories := map[string]bool{
+			"TOC": true, "TAB": true, "Staff": true, "Governing Board": true,
+		}
+		patches := make(map[string]int)
+		for _, person := range currentMap {
+			safe := person.ToSafe()
+			if safe.Handle == "" {
+				continue
+			}
+			isSpecial := false
+			for _, cat := range safe.Category {
+				if backfillCategories[cat] {
+					isSpecial = true
+					break
+				}
+			}
+			if !isSpecial {
+				continue
+			}
+			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
+				patches[safe.Handle] = s.YearsContributing
+				continue
+			}
+			ghClient.EnrichCNCFYears(ctx, safe.Handle, apiCache)
+			if s, ok := apiCache.Get(safe.Handle); ok && s.YearsContributing > 0 {
+				patches[safe.Handle] = s.YearsContributing
+			}
+		}
+		if len(patches) > 0 {
+			log.Printf("backfilling years for %d special-category people", len(patches))
+			if err := writer.PatchChangelog(outDir, patches); err != nil {
+				log.Printf("warn: patch changelog years: %v", err)
+			}
+		}
+
+		if err := apiCache.Save(); err != nil {
+			log.Printf("warn: save api cache: %v", err)
+		}
+	}
 }
 
 func shortSHA(sha string) string {
