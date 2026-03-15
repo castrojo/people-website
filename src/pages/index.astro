@@ -401,6 +401,21 @@ const alphaFeeds = Object.fromEntries(
   typeFilter?.addEventListener('change', applyFilters);
   catFilter?.addEventListener('change', applyFilters);
 
+  // ── Vim-style card navigation ──────────────────────────────────────────
+  const visibleCards = () =>
+    Array.from(document.querySelectorAll<HTMLElement>('.person-card'))
+      .filter(c => c.style.display !== 'none');
+
+  let focusedIdx = -1;
+
+  function focusCard(idx: number) {
+    const all = visibleCards();
+    if (all.length === 0) return;
+    focusedIdx = Math.max(0, Math.min(idx, all.length - 1));
+    all.forEach((c, i) => c.classList.toggle('keyboard-focused', i === focusedIdx));
+    all[focusedIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
   document.addEventListener('keydown', (e: KeyboardEvent) => {
     const active = document.activeElement as HTMLElement;
     const inInput = active?.tagName === 'INPUT' || active?.tagName === 'SELECT';
@@ -412,7 +427,29 @@ const alphaFeeds = Object.fromEntries(
         document.getElementById('keyboard-help-modal')?.classList.add('visible');
         document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
       }
+      if (e.key === 'j') { e.preventDefault(); focusCard(focusedIdx + 1); }
+      if (e.key === 'k') { e.preventDefault(); focusCard(focusedIdx - 1); }
+      if (e.key === 'h') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      if (e.key === ' ' && !e.shiftKey) { e.preventDefault(); window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' }); }
+      if (e.key === ' ' &&  e.shiftKey) { e.preventDefault(); window.scrollBy({ top: -window.innerHeight * 0.85, behavior: 'smooth' }); }
+      if (e.key === 'o' || e.key === 'Enter') {
+        const all = visibleCards();
+        const card = all[focusedIdx];
+        const link = card?.querySelector<HTMLAnchorElement>('a[href]');
+        if (link) { e.preventDefault(); window.open(link.href, '_blank', 'noopener'); }
+      }
     }
-    if (e.key === 'Escape' && inInput) active.blur();
+    if (e.key === 'Escape') {
+      if (inInput) active.blur();
+      visibleCards().forEach(c => c.classList.remove('keyboard-focused'));
+      focusedIdx = -1;
+    }
   });
 </script>
+
+<style is:global>
+  .person-card.keyboard-focused {
+    outline: 2px solid var(--color-accent-emphasis);
+    outline-offset: 2px;
+  }
+</style>
