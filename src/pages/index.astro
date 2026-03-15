@@ -291,34 +291,12 @@ for (const m of maintainerList) {
   maintainerByMaturity[mat] = (maintainerByMaturity[mat] ?? 0) + 1;
 }
 
-// Emeritus grouped list (computed in frontmatter to avoid TypeScript generics in JSX)
-const EMERITUS_GROUP_ORDER = ['TOC Alumni', 'TAB Alumni', 'Ambassador Alumni', 'Governing Board Alumni', 'Staff Alumni', 'Other Alumni'];
-const EMERITUS_CAT_MAP: Record<string, string> = {
-  'Technical Oversight Committee': 'TOC Alumni',
-  'End User TAB':                  'TAB Alumni',
-  'Ambassadors':                   'Ambassador Alumni',
-  'Governing Board':               'Governing Board Alumni',
-  'Staff':                         'Staff Alumni',
-};
-function emeritusGroupName(cats: string[]): string {
-  for (const cat of (cats ?? [])) {
-    if (EMERITUS_CAT_MAP[cat]) return EMERITUS_CAT_MAP[cat];
-  }
-  return 'Other Alumni';
-}
-const emeritusGrouped: Record<string, EmeritusMember[]> = {};
-for (const g of EMERITUS_GROUP_ORDER) emeritusGrouped[g] = [];
-for (const e of emeritusMembers) {
-  emeritusGrouped[emeritusGroupName(e.category ?? [])].push(e);
-}
-for (const g of EMERITUS_GROUP_ORDER) {
-  emeritusGrouped[g].sort((a, b) => {
-    const aDate = a.removedDate ? new Date(a.removedDate).getTime() : 0;
-    const bDate = b.removedDate ? new Date(b.removedDate).getTime() : 0;
-    return bDate - aDate;
-  });
-}
-const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g].length > 0);
+// Emeritus flat list sorted by most recent removal date
+const emeritusSorted = [...emeritusMembers].sort((a, b) => {
+  const aDate = a.removedDate ? new Date(a.removedDate).getTime() : 0;
+  const bDate = b.removedDate ? new Date(b.removedDate).getTime() : 0;
+  return bDate - aDate;
+});
 ---
 
 <PeopleLayout pageTitle="CNCF People" feedUrl={feedUrl}>
@@ -406,7 +384,7 @@ const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g]
         <select id="type-filter" class="filter-select">
           <option value="">All people</option>
           <option value="added">Joined</option>
-          <option value="removed">Left</option>
+          <option value="removed">Emeritus</option>
           <option value="updated">Updated</option>
         </select>
         <select id="category-filter" class="filter-select">
@@ -746,21 +724,16 @@ const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g]
           </div>
         </section>
       )}
-      {emeritusActiveGroups.map(g => (
-        <div class="emeritus-group">
-          <h3 class="emeritus-group-heading">{g}</h3>
-          {emeritusGrouped[g].map(e => e.handle
-            ? <PersonCard
-                id={`emeritus-${e.handle}`}
-                type="removed"
-                timestamp={e.removedDate ?? ''}
-                person={{ name: e.name, handle: e.handle, github: `https://github.com/${e.handle}`, avatarUrl: `https://avatars.githubusercontent.com/${e.handle}`, category: e.category ?? [] }}
-                landscapeLogos={landscapeLogos}
-              />
-            : <div class="emeritus-name-row">{e.name}</div>
-          )}
-        </div>
-      ))}
+      {emeritusSorted.map(e => e.handle
+        ? <PersonCard
+            id={`emeritus-${e.handle}`}
+            type="removed"
+            timestamp={e.removedDate ?? ''}
+            person={{ name: e.name, handle: e.handle, github: `https://github.com/${e.handle}`, avatarUrl: `https://avatars.githubusercontent.com/${e.handle}`, category: e.category ?? [] }}
+            landscapeLogos={landscapeLogos}
+          />
+        : <div class="emeritus-name-row">{e.name}</div>
+      )}
     </div>
 
     <!-- Maintainers feed (hidden until Maintainers tab is selected) -->
