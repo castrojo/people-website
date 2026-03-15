@@ -81,7 +81,7 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
     />
   </div>
 
-  <div slot="sidebar">
+  <Fragment slot="sidebar">
     <InfoBox
       title="About"
       description="Live activity feed for cncf/people — who's joining, leaving, or updating their profile in the CNCF community."
@@ -125,7 +125,7 @@ const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].so
     <div class="sidebar-section made-with-love">
       <p>Made with <strong>&lt;3</strong> by your CNCF Projects Team</p>
     </div>
-  </div>
+  </Fragment>
 
   <div id="feed" class="feed">
     {[...grouped.entries()].map(([date, dayEvents]) => (
