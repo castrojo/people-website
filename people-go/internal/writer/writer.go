@@ -698,13 +698,13 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 
 	rotations := HeroRotations{
 		GeneratedAt:         time.Now().UTC(),
-		Everyone:            dailyPickDiverse(allPeople, 4),
-		Ambassadors:         dailyPickDiverse(pools["Ambassadors"], 4),
+		Everyone:            dailyPickDiverse(allPeople, 8),
+		Ambassadors:         dailyPickDiverse(pools["Ambassadors"], 8),
 		Kubestronauts:       dailyPickDiverse(pools["Kubestronaut"], 4),
 		GoldenKubestronauts: dailyPickDiverse(pools["Golden-Kubestronaut"], 4),
-		Maintainers:         dailyPick(maintainers, 4),
+		Maintainers:         dailyPick(maintainers, 8),
 		CNCFLeadership:      leadership,
-		Emeritus:            dailyPickDiverse(emeritusPeople, 4),
+		Emeritus:            dailyPickDiverse(emeritusPeople, 8),
 	}
 
 	data, err := json.MarshalIndent(rotations, "", "  ")
