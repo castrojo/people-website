@@ -546,9 +546,10 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 	return os.WriteFile(filepath.Join(outDir, "heroes.json"), data, 0o644)
 }
 
-// BackfillFromCache patches Pronouns and Location into changelog.json events that are missing
-// them, using data from the GitHub API cache. Only updates fields that are currently empty.
-// Does not perform new API fetches — caller is responsible for pre-populating the cache.
+// BackfillFromCache patches Pronouns, Location, and YearsContributing into changelog.json
+// events that are missing them, using data from the GitHub API cache. Only updates fields
+// that are currently empty/zero. Does not perform new API fetches — caller is responsible
+// for pre-populating the cache.
 func BackfillFromCache(outDir string, cache *apicache.Cache) error {
 	outPath := filepath.Join(outDir, "changelog.json")
 	raw, err := os.ReadFile(outPath)
@@ -579,6 +580,10 @@ func BackfillFromCache(outDir string, cache *apicache.Cache) error {
 		if p.Location == "" && stats.Location != "" {
 			p.Location = stats.Location
 			p.CountryFlag = models.CountryFlag(stats.Location)
+			changed = true
+		}
+		if p.YearsContributing == 0 && stats.YearsContributing > 0 {
+			p.YearsContributing = stats.YearsContributing
 			changed = true
 		}
 	}
