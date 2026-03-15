@@ -1,0 +1,14 @@
+[
+  {"handle": "rochaporto",          "name": "Ricardo Rocha",       "title": "TAB Chair"},
+  {"handle": "jrsapi",              "name": "Joseph Sandoval",     "title": "TAB Vice-Chair"},
+  {"handle": "alolita",             "name": "Alolita Sharma",      "title": "TAB Member"},
+  {"handle": "ma-cvs",              "name": "Michael Amundson",    "title": "TAB Member"},
+  {"handle": "hblixt",              "name": "Henrik Blixt",        "title": "TAB Member"},
+  {"handle": "KentaTada",           "name": "Kenta Tada",          "title": "TAB Member"},
+  {"handle": "michael-bowen-sc",    "name": "Mike Bowen",          "title": "TAB Member"},
+  {"handle": "abebars",             "name": "Ahmed Bebars",        "title": "TAB Member"},
+  {"handle": "kgamanji",            "name": "Katie Gamanji",       "title": "TAB Member"},
+  {"handle": "chadbeaudin",         "name": "Chad Beaudin",        "title": "TAB Member"},
+  {"handle": "aparna-subramanian",  "name": "Aparna Subramanian",  "title": "TAB Member"},
+  {"handle": "ride808",             "name": "ride808",             "title": "TAB Member"}
+]
