@@ -544,6 +544,23 @@ for (const m of maintainerList) {
       )}
     </div>
 
+    <!-- CNCF Leadership heroes: rendered directly from leadership.json (not via heroRotations) -->
+    <div class="alpha-feed" style="display:none" data-alpha-tab="staff">
+      <section class="tab-heroes-section">
+        <h2 class="tab-heroes-heading">CNCF Leadership</h2>
+        <div class="heroes-grid">
+          {leadershipMembers.map(m => (
+            <HeroCard
+              person={{ name: m.name, handle: m.handle, github: `https://github.com/${m.handle}`, avatarUrl: `https://avatars.githubusercontent.com/${m.handle}` }}
+              label={m.title}
+              categoryKey="Staff"
+              baseUrl={baseUrl}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
+
     <!-- Alpha feeds: deduplicated, alphabetical (shown only for governing-board/staff tabs) -->
     {Object.entries(alphaFeeds).map(([tab, tabEvents]) => (
       <div id={`alpha-feed-${tab}`} class="alpha-feed" style="display:none" data-alpha-tab={tab}>
@@ -559,8 +576,6 @@ for (const m of maintainerList) {
         ))}
       </div>
     ))}
-
-    <!-- TOC hero display -->
     <div class="alpha-feed" style="display:none" data-alpha-tab="toc">
       <section class="tab-heroes-section">
         <h2 class="tab-heroes-heading">Technical Oversight Committee</h2>
@@ -617,23 +632,6 @@ for (const m of maintainerList) {
                 <span class="staff-support-handle">@{m.handle}</span>
               </div>
             </a>
-          ))}
-        </div>
-      </section>
-    </div>
-
-    <!-- CNCF Leadership heroes: rendered directly from leadership.json (not via heroRotations) -->
-    <div class="alpha-feed" style="display:none" data-alpha-tab="staff">
-      <section class="tab-heroes-section">
-        <h2 class="tab-heroes-heading">CNCF Leadership</h2>
-        <div class="heroes-grid">
-          {leadershipMembers.map(m => (
-            <HeroCard
-              person={{ name: m.name, handle: m.handle, github: `https://github.com/${m.handle}`, avatarUrl: `https://avatars.githubusercontent.com/${m.handle}` }}
-              label={m.title}
-              categoryKey="Staff"
-              baseUrl={baseUrl}
-            />
           ))}
         </div>
       </section>
