@@ -72,8 +72,54 @@ const feedUrl = `${baseUrl}feed.xml`;
 
 const banners = await getActiveBanners();
 
+// Deduplicate people: newest event per person is the canonical state
+const uniquePeople = new Map<string, Person>();
+for (const e of events) {
+  const key = e.person.github ?? e.person.name;
+  if (!uniquePeople.has(key)) uniquePeople.set(key, e.person);
+}
+const peopleList = [...uniquePeople.values()];
+
+const CATEGORY_ORDER = [
+  'Kubestronaut',
+  'Golden-Kubestronaut',
+  'Ambassadors',
+  'Technical Oversight Committee',
+  'End User TAB',
+  'Governing Board',
+  'Staff',
+  'Marketing Committee',
+];
+const CATEGORY_LABELS: Record<string, string> = {
+  'Kubestronaut':                  'Kubestronauts',
+  'Golden-Kubestronaut':           'Golden Kubestronauts',
+  'Ambassadors':                   'Ambassadors',
+  'Technical Oversight Committee': 'TOC Members',
+  'End User TAB':                  'End User TAB',
+  'Governing Board':               'Governing Board',
+  'Staff':                         'Staff',
+  'Marketing Committee':           'Marketing Committee',
+};
+
+const categoryCounts = Object.fromEntries(
+  CATEGORY_ORDER.map(cat => [
+    cat,
+    peopleList.filter(p => (p.category ?? []).includes(cat)).length,
+  ])
+);
+
+const countries = new Set(
+  peopleList
+    .map(p => (p.location ?? '').split(',').at(-1)?.trim() ?? '')
+    .filter(Boolean)
+).size;
+
+const companies = new Set(
+  peopleList.map(p => p.company?.trim() ?? '').filter(Boolean)
+).size;
+
 const stats = {
-  total: events.length,
+  total: peopleList.length,
   added: events.filter(e => e.type === 'added').length,
   removed: events.filter(e => e.type === 'removed').length,
   updated: events.filter(e => e.type === 'updated').length,
@@ -162,12 +208,28 @@ const alphaFeeds = Object.fromEntries(
     {banners.length > 0 && <KubeConBanner banners={banners} />}
 
     <div class="stats">
-      <h2 class="sidebar-heading stats-heading">Statistics</h2>
-      <div class="stats-grid">
-        <div class="stat"><div class="stat-value">{stats.total}</div><div class="stat-label">Total People</div></div>
-        <div class="stat"><div class="stat-value" style="color:#166534">{stats.added}</div><div class="stat-label">Joined</div></div>
-        <div class="stat"><div class="stat-value" style="color:#991b1b">{stats.removed}</div><div class="stat-label">Left</div></div>
-        <div class="stat"><div class="stat-value" style="color:#1e40af">{stats.updated}</div><div class="stat-label">Updated</div></div>
+      <h2 class="sidebar-heading stats-heading">Community</h2>
+      <div class="stats-list">
+        <div class="stat-row stat-row-total">
+          <span class="stat-row-label">Total People</span>
+          <span class="stat-row-value">{stats.total.toLocaleString()}</span>
+        </div>
+        <div class="stat-row-divider"></div>
+        {CATEGORY_ORDER.filter(cat => categoryCounts[cat] > 0).map(cat => (
+          <div class="stat-row">
+            <span class="stat-row-label">{CATEGORY_LABELS[cat]}</span>
+            <span class="stat-row-value">{categoryCounts[cat].toLocaleString()}</span>
+          </div>
+        ))}
+        <div class="stat-row-divider"></div>
+        <div class="stat-row">
+          <span class="stat-row-label">🌍 Countries</span>
+          <span class="stat-row-value">{countries.toLocaleString()}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-row-label">🏢 Organizations</span>
+          <span class="stat-row-value">{companies.toLocaleString()}</span>
+        </div>
       </div>
     </div>
 
@@ -316,24 +378,31 @@ const alphaFeeds = Object.fromEntries(
     min-height: 1.25rem;
   }
 
-  /* Stats box — matches firehose :global(.stats) pattern */
+  /* Stats box */
   .stats {
     background: var(--color-bg-default);
     border: 1px solid var(--color-border-default);
     border-radius: 6px;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
   }
-  .stats-heading { margin-bottom: 1rem; }
-  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-  .stat {
-    padding: 0.75rem;
-    text-align: center;
-    border: 1px solid var(--color-border-default);
-    border-radius: 6px;
-    background: var(--color-bg-secondary);
+  .stats-heading { margin-bottom: 0.75rem; }
+  .stats-list { display: flex; flex-direction: column; gap: 0; }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+    font-size: 0.875rem;
   }
-  .stat-value { font-size: 2rem; font-weight: 600; color: var(--color-accent-emphasis); line-height: 1; }
-  .stat-label { color: var(--color-text-secondary); font-size: 0.75rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-row-total {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .stat-row-label { color: var(--color-text-secondary); }
+  .stat-row-total .stat-row-label { color: var(--color-text-primary); }
+  .stat-row-value { font-weight: 600; color: var(--color-accent-emphasis); font-variant-numeric: tabular-nums; }
+  .stat-row-total .stat-row-value { font-size: 1.25rem; }
+  .stat-row-divider { height: 1px; background: var(--color-border-default); margin: 0.4rem 0; }
 
   /* Made with love box */
   .made-with-love { text-align: center; }
