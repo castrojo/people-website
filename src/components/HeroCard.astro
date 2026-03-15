@@ -74,31 +74,19 @@ const handle     = person.handle ? `@${person.handle}` : '';
   {logoSrc && <img class="hero-program-logo" src={logoSrc} alt="" aria-hidden="true" />}
 
   <!-- full-bleed photo + gradient -->
-  <a
-    class="hero-photo-link"
-    href={profileUrl ?? '#'}
-    target="_blank"
-    rel="noopener noreferrer"
-    tabindex="-1"
-    aria-hidden="true"
-  >
+  <div class="hero-photo-wrap" aria-hidden="true">
     {photo
       ? <img class="hero-photo" src={photo} alt={person.name} loading="lazy" />
       : <div class="hero-photo hero-photo-placeholder"></div>
     }
     <div class="hero-gradient" aria-hidden="true"></div>
-  </a>
+  </div>
 
   <!-- text overlay at bottom -->
   <div class="hero-info">
-    <a
-      class="hero-name"
-      href={profileUrl ?? '#'}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <span class="hero-name">
       {person.countryFlag && <span class="hero-flag">{person.countryFlag}</span>}{person.name}
-    </a>
+    </span>
     {handle && <span class="hero-handle">{handle}</span>}
     {person.location && (
       <span class="hero-location">{person.location}</span>
@@ -117,12 +105,22 @@ const handle     = person.handle ? `@${person.handle}` : '';
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline-color 0.2s ease;
     outline: 2px solid transparent;
     outline-offset: 3px;
+    cursor: pointer;
+    user-select: none;
   }
 
   .hero-card:hover {
     transform: scale(1.03);
     box-shadow: 0 8px 28px rgba(var(--hero-shadow-rgb), 0.35);
     outline-color: var(--hero-color);
+  }
+
+  /* Press/click animation */
+  .hero-card:active,
+  .hero-card.pressing {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(var(--hero-shadow-rgb), 0.25);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
 
   /* category label */
@@ -155,7 +153,7 @@ const handle     = person.handle ? `@${person.handle}` : '';
   }
 
   /* photo */
-  .hero-photo-link {
+  .hero-photo-wrap {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -203,13 +201,8 @@ const handle     = person.handle ? `@${person.handle}` : '';
     font-size: 1.15rem;
     font-weight: 700;
     color: #fff;
-    text-decoration: none;
     line-height: 1.2;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6);
-  }
-
-  .hero-name:hover {
-    text-decoration: underline;
   }
 
   .hero-flag {

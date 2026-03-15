@@ -1098,6 +1098,9 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   document.addEventListener('click', (e: MouseEvent) => {
     const card = (e.target as Element)?.closest('.hero-card');
     if (card) {
+      e.preventDefault();
+      card.classList.add('pressing');
+      setTimeout(() => card.classList.remove('pressing'), 200);
       import('../lib/hero-confetti').then(({ fireConfetti }) => fireConfetti(card));
     }
   });
