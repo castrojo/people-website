@@ -1,25 +1,18 @@
-name: Build and Deploy to GitHub Pages
+name: Backfill People (TEMPORARY)
+# TODO: Disable this workflow once all 3,747 people appear on the site.
+# Check progress at: https://castrojo.github.io/people-website/
+# When done: Settings → Actions → Workflows → disable this workflow.
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    # Daily at 7 AM UTC
-    - cron: "0 7 * * *"
+    - cron: "0 * * * *"  # hourly until backfill is complete
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
-  build:
+  backfill:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -31,12 +24,6 @@ jobs:
           go-version: '1.26'
           cache-dependency-path: people-go/go.sum
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '25'
-          cache: 'npm'
-
       - name: Restore sync cache
         uses: actions/cache/restore@v4
         with:
@@ -46,14 +33,13 @@ jobs:
           key: sync-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: sync-cache-${{ runner.os }}-
 
-      - name: Build Go pipeline (sync people data)
+      - name: Sync people data
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd people-go
           go build -o people cmd/people/main.go
           ./people
-          ls -lh ../src/data/changelog.json
 
       - name: Save sync cache
         if: always()
@@ -64,25 +50,3 @@ jobs:
             src/data
           key: sync-cache-${{ runner.os }}-${{ github.run_id }}
           retention-days: 90
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build site
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

@@ -12,10 +12,9 @@ import (
 	"github.com/gorilla/feeds"
 )
 
-const maxEvents = 2000
-
-// WriteChangelog prepends newEvents to the existing changelog.json,
-// capping the total at maxEvents. outDir is typically "../src/data".
+// WriteChangelog prepends newEvents to the existing changelog.json.
+// There is no cap — all events are retained so the full community is visible.
+// outDir is typically "../src/data".
 func WriteChangelog(outDir string, newEvents []models.Event) error {
 	if err := os.MkdirAll(outDir, 0o755); err != nil {
 		return err
@@ -34,11 +33,8 @@ func WriteChangelog(outDir string, newEvents []models.Event) error {
 		}
 	}
 
-	// Prepend new events
+	// Prepend new events — no size cap, retain full history
 	combined := append(newEvents, existing...)
-	if len(combined) > maxEvents {
-		combined = combined[:maxEvents]
-	}
 
 	data, err := json.MarshalIndent(combined, "", "  ")
 	if err != nil {
