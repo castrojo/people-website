@@ -45,14 +45,14 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <div class="header-left">
           <div class="logo-title">
             <span class="cncf-logo-wrapper" aria-hidden="true">
-              <CNCFLogoColor class="logo-light" width={40} height={40} />
-              <CNCFLogoWhite class="logo-dark" width={40} height={40} />
+              <CNCFLogoColor class="logo-light" width={56} height={56} />
+              <CNCFLogoWhite class="logo-dark" width={56} height={56} />
             </span>
-            <div>
+            <div class="title-block">
               <h1 class="site-title">
                 <a href={baseUrl} id="home-link" class="home-link">CNCF People</a>
               </h1>
-              <p class="site-subtitle">Curators of the invisible garden ...</p>
+              <p class="site-subtitle" id="rotating-slogan" aria-live="polite">Curators of the invisible garden ...</p>
             </div>
           </div>
           <div class="search-wrapper">
@@ -110,6 +110,25 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 </html>
 
 <script>
+  // Rotating slogans — add new entries here to expand the rotation.
+  const SLOGANS = [
+    "Curators of the invisible garden ...",
+    "Be the one who moves, not the one who is moved",
+  ];
+
+  const slogan = document.getElementById('rotating-slogan');
+  if (slogan && SLOGANS.length > 1) {
+    let idx = 0;
+    setInterval(() => {
+      slogan.classList.add('fade');
+      setTimeout(() => {
+        idx = (idx + 1) % SLOGANS.length;
+        slogan.textContent = SLOGANS[idx];
+        slogan.classList.remove('fade');
+      }, 500);
+    }, 6000);
+  }
+
   document.getElementById('help-button')?.addEventListener('click', () => {
     document.getElementById('keyboard-help-modal')?.classList.add('visible');
     document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
@@ -294,18 +313,35 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     flex: 1;
   }
 
-  .logo-title { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .logo-title { display: flex; align-items: center; gap: 0.875rem; }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Constrain block height to match logo so text fills it neatly */
+    height: 56px;
+    gap: 0;
+  }
 
   .search-wrapper { flex: 1; max-width: 600px; }
 
   .header-actions { display: flex; gap: 0.5rem; align-items: center; }
 
-  .site-title { font-size: 2rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .site-title { font-size: 1.5rem; font-weight: 700; margin: 0; line-height: 1.1; }
 
   .home-link { color: var(--color-text-primary); text-decoration: none; transition: color 0.2s; }
   .home-link:hover { color: var(--color-text-link); }
 
-  .site-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+  .site-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    margin: 0;
+    line-height: 1.3;
+    font-style: italic;
+    transition: opacity 0.5s ease;
+  }
+  .site-subtitle.fade { opacity: 0; }
 
   /* Section / category tab nav */
   .section-nav {
@@ -345,13 +381,12 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   .cncf-logo-wrapper {
     display: flex;
     flex-shrink: 0;
-    align-self: flex-start;
-    margin-top: calc((2rem * 1.6 - 40px) / 2);
+    align-items: center;
   }
   .cncf-logo-wrapper .logo-dark { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
-  .cncf-logo-wrapper svg { width: 40px; height: 40px; }
+  .cncf-logo-wrapper svg { width: 56px; height: 56px; }
 
   .keyboard-help-button {
     background: var(--color-bg-secondary);
