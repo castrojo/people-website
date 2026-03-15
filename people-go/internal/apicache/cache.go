@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 )
 
@@ -26,7 +27,9 @@ type UserStats struct {
 }
 
 // Cache stores per-user API results with a TTL to avoid re-fetching.
+// All methods are safe for concurrent use.
 type Cache struct {
+	mu    sync.RWMutex
 	path  string
 	data  map[string]UserStats
 	dirty bool
@@ -49,6 +52,8 @@ func Load(cacheDir string) (*Cache, error) {
 
 // Get returns cached stats for a handle if present and not expired.
 func (c *Cache) Get(handle string) (UserStats, bool) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	s, ok := c.data[handle]
 	if !ok || time.Since(s.FetchedAt) > ttl {
 		return UserStats{}, false
@@ -59,18 +64,24 @@ func (c *Cache) Get(handle string) (UserStats, bool) {
 // Set stores stats for a handle and marks the cache dirty.
 func (c *Cache) Set(handle string, s UserStats) {
 	s.FetchedAt = time.Now()
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	c.data[handle] = s
 	c.dirty = true
 }
 
 // Invalidate removes a cached entry, forcing re-fetch on next Get.
 func (c *Cache) Invalidate(handle string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	delete(c.data, handle)
 	c.dirty = true
 }
 
 // Save writes the cache to disk only if it was modified.
 func (c *Cache) Save() error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if !c.dirty {
 		return nil
 	}
@@ -78,5 +89,6 @@ func (c *Cache) Save() error {
 	if err != nil {
 		return err
 	}
+	c.dirty = false
 	return os.WriteFile(c.path, data, 0o644)
 }
