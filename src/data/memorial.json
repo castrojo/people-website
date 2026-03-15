@@ -1,14 +1,110 @@
 [
-  { "name": "Bradley Childs",    "slug": "bradley-childs",    "url": "https://github.com/cncf/memorials/blob/main/bradley-childs.md" },
-  { "name": "Carolyn Van Slyck", "slug": "carolyn-van-slyck", "url": "https://github.com/cncf/memorials/blob/main/carolyn-van-slyck.md" },
-  { "name": "Cody Crudgington",  "slug": "cody-crudgington",  "url": "https://github.com/cncf/memorials/blob/main/cody-crudgington.md" },
-  { "name": "Dan Kohn",          "slug": "dan-kohn",          "url": "https://github.com/cncf/memorials/blob/main/dan-kohn.md" },
-  { "name": "Gal Navon",         "slug": "gal-navon",         "url": "https://github.com/cncf/memorials/blob/main/gal-navon.md" },
-  { "name": "Han Kang",          "slug": "han-kang",          "url": "https://github.com/cncf/memorials/blob/main/han-kang.md" },
-  { "name": "Ido Hubara",        "slug": "ido-hubara",        "url": "https://github.com/cncf/memorials/blob/main/ido-hubara.md" },
-  { "name": "Kris Nóva",        "slug": "kris-nova",         "url": "https://github.com/cncf/memorials/blob/main/kris-n%C3%B3va.md" },
-  { "name": "Peeyush Gupta",     "slug": "peeyush-gupta",     "url": "https://github.com/cncf/memorials/blob/main/peeyush-gupta.md" },
-  { "name": "Rodolfo Martinez",  "slug": "rodolfo-martinez",  "url": "https://github.com/cncf/memorials/blob/main/rodolfo-martinez.md" },
-  { "name": "Roee Negri",        "slug": "roee-negri",        "url": "https://github.com/cncf/memorials/blob/main/roee-negri.md" },
-  { "name": "Sefi Genis",        "slug": "sefi-genis",        "url": "https://github.com/cncf/memorials/blob/main/sefi-genis.md" }
+  {
+    "name": "Bradley Childs",
+    "slug": "bradley-childs",
+    "url": "https://github.com/cncf/memorials/blob/main/bradley-childs.md",
+    "github": "https://github.com/childsb",
+    "avatar": "https://avatars.githubusercontent.com/u/722782?v=4",
+    "role": "Kubernetes SIG Storage Co-Chair",
+    "company": "Red Hat"
+  },
+  {
+    "name": "Carolyn Van Slyck",
+    "slug": "carolyn-van-slyck",
+    "url": "https://github.com/cncf/memorials/blob/main/carolyn-van-slyck.md",
+    "github": "https://github.com/carolynvs",
+    "avatar": "https://avatars.githubusercontent.com/u/1368985?v=4",
+    "role": "Principal Software Engineer, Porter co-creator",
+    "company": "Microsoft"
+  },
+  {
+    "name": "Cody Crudgington",
+    "slug": "cody-crudgington",
+    "url": "https://github.com/cncf/memorials/blob/main/cody-crudgington.md",
+    "github": null,
+    "avatar": null,
+    "role": "Kubernetes Community Organizer",
+    "company": "Sysdig"
+  },
+  {
+    "name": "Dan Kohn",
+    "slug": "dan-kohn",
+    "url": "https://github.com/cncf/memorials/blob/main/dan-kohn.md",
+    "github": "https://github.com/dankohn",
+    "avatar": "https://avatars.githubusercontent.com/u/3083270?v=4",
+    "role": "Founding Executive Director",
+    "company": "CNCF"
+  },
+  {
+    "name": "Gal Navon",
+    "slug": "gal-navon",
+    "url": "https://github.com/cncf/memorials/blob/main/gal-navon.md",
+    "github": "https://github.com/galnavon",
+    "avatar": "https://raw.githubusercontent.com/cncf/memorials/main/gal-navon-assets/Gal.jpeg",
+    "role": "Cloud Native Engineer",
+    "company": "Melio Payments"
+  },
+  {
+    "name": "Han Kang",
+    "slug": "han-kang",
+    "url": "https://github.com/cncf/memorials/blob/main/han-kang.md",
+    "github": "https://github.com/logicalhan",
+    "avatar": "https://avatars.githubusercontent.com/u/704877?v=4",
+    "role": "Kubernetes SIG Instrumentation Co-Chair",
+    "company": "CoreWeave"
+  },
+  {
+    "name": "Ido Hubara",
+    "slug": "ido-hubara",
+    "url": "https://github.com/cncf/memorials/blob/main/ido-hubara.md",
+    "github": "https://github.com/idohubara",
+    "avatar": "https://avatars.githubusercontent.com/u/124885857?v=4",
+    "role": "Cloud Native Engineer",
+    "company": null
+  },
+  {
+    "name": "Kris Nóva",
+    "slug": "kris-nova",
+    "url": "https://nivenly.org/memorials/krisnova/",
+    "github": "https://github.com/krisnova",
+    "avatar": "https://avatars.githubusercontent.com/u/13757818?v=4",
+    "role": "Author · Engineer · Founder of Nivenly Foundation",
+    "company": "GitHub"
+  },
+  {
+    "name": "Peeyush Gupta",
+    "slug": "peeyush-gupta",
+    "url": "https://github.com/cncf/memorials/blob/main/peeyush-gupta.md",
+    "github": "https://github.com/Peeyush-gupta",
+    "avatar": "https://avatars.githubusercontent.com/u/35984077?v=4",
+    "role": "Kubernetes SIG Contributor Experience",
+    "company": null
+  },
+  {
+    "name": "Rodolfo Martínez Vega",
+    "slug": "rodolfo-martinez",
+    "url": "https://github.com/cncf/memorials/blob/main/rodolfo-martinez.md",
+    "github": "https://github.com/ramrodo",
+    "avatar": "https://raw.githubusercontent.com/cncf/memorials/main/ramrodo-assets/ramrodo-memorial.jpg",
+    "role": "CNCF Ambassador · Kubernetes Release Team",
+    "company": "Lyft"
+  },
+  {
+    "name": "Roee Negri",
+    "slug": "roee-negri",
+    "url": "https://github.com/cncf/memorials/blob/main/roee-negri.md",
+    "github": "https://github.com/roeenegri",
+    "avatar": "https://avatars.githubusercontent.com/u/80165872?v=4",
+    "role": "Cloud Native Engineer",
+    "company": null
+  },
+  {
+    "name": "Sefi Genis",
+    "slug": "sefi-genis",
+    "url": "https://github.com/cncf/memorials/blob/main/sefi-genis.md",
+    "github": null,
+    "avatar": null,
+    "role": "Cloud Native Community Leader",
+    "company": "TLV Community"
+  }
 ]
