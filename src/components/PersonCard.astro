@@ -63,7 +63,10 @@ const profileUrl = person.github || (person.handle ? `https://github.com/${perso
 const primaryCategory = person.category?.[0] ?? '';
 const categoryInfo = CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 
-const programLogo = PROGRAM_LOGOS[primaryCategory] ?? null;
+// Prefer highest-prestige logo if person has multiple categories
+const LOGO_PRIORITY = ['Golden-Kubestronaut', 'Kubestronaut', 'Ambassadors', 'Staff'];
+const logoKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat));
+const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
 const typeLabel = { added: '+ Joined', removed: '− Left', updated: '✎ Updated' }[type];
 const typeBadgeClass = `badge-${type}`;
