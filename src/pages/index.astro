@@ -248,12 +248,14 @@ const TAB_STAFF: Record<string, StaffMember[]> = {
   'toc': [
     { handle: 'mrbobbytables',  name: 'Bob Killen'       },
     { handle: 'riaankleinhans', name: 'Riaan Kleinhans'  },
+    { handle: 'idvoretskyi',    name: 'Ihor Dvoretskyi'  },
     { handle: 'krook',          name: 'Daniel Krook'     },
     { handle: 'jeefy',          name: 'Jay Tihema'       },
     { handle: 'nate-double-u',  name: 'Nate Waddington'  },
   ],
   'tab': [
     { handle: 'mrbobbytables',  name: 'Bob Killen'       },
+    { handle: 'idvoretskyi',    name: 'Ihor Dvoretskyi'  },
     { handle: 'castrojo',       name: 'Jorge Castro'     },
     { handle: 'taylorwaggoner', name: 'Taylor Waggoner'  },
     { handle: 'joannalee333',   name: 'Joanna Lee'       },
@@ -691,14 +693,16 @@ for (const m of maintainerList) {
           ))}
         </div>
       </section>
-      {maintainerAlpha.slice(0, MAINTAINER_STATIC).map(m => (
-        <MaintainerCard
-          maintainer={m}
-          projectLogos={Object.fromEntries(
-            m.projects.map(p => [p, (landscapeLogosRaw as Record<string, string>)[p] ?? (landscapeLogosRaw as Record<string, string>)[p.toLowerCase()] ?? ''])
-          )}
-        />
-      ))}
+      <div class="maintainer-list-section">
+        {maintainerAlpha.slice(0, MAINTAINER_STATIC).map(m => (
+          <MaintainerCard
+            maintainer={m}
+            projectLogos={Object.fromEntries(
+              m.projects.map(p => [p, (landscapeLogosRaw as Record<string, string>)[p] ?? (landscapeLogosRaw as Record<string, string>)[p.toLowerCase()] ?? ''])
+            )}
+          />
+        ))}
+      </div>
     </div>
   </div>
 </PeopleLayout>
@@ -896,6 +900,11 @@ for (const m of maintainerList) {
 
   /* Staff support section (TOC / TAB pages) */
   .staff-support-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-default);
+  }
+  .maintainer-list-section {
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--color-border-default);
