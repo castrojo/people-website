@@ -64,6 +64,22 @@
     "removedDate": "2025-09-30"
   },
   {
+    "handle": "namkyu1999",
+    "name": "Namkyu Park",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2025-09-30"
+  },
+  {
+    "handle": "ramrodo",
+    "name": "Rodolfo Martinez Vega",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2025-09-30"
+  },
+  {
     "handle": "mitul3737",
     "name": "Shahriyar Al Mustakim Mitul",
     "category": [
@@ -94,6 +110,14 @@
       "Kubestronaut"
     ],
     "removedDate": "2025-07-28"
+  },
+  {
+    "handle": "ankurk99",
+    "name": "Ankur Kothiwal",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2025-06-30"
   },
   {
     "handle": "bdougie",
@@ -152,6 +176,14 @@
     "removedDate": "2025-03-31"
   },
   {
+    "handle": "liamrandall",
+    "name": "Liam Randall",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2025-03-31"
+  },
+  {
     "handle": "bavarianbidi",
     "name": "Mario Constanti",
     "category": [
@@ -184,6 +216,14 @@
     "removedDate": "2024-10-31"
   },
   {
+    "handle": "olblak",
+    "name": "Olivier Vernin",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-10-31"
+  },
+  {
     "handle": "sanchita-07",
     "name": "SANCHITA MISHRA",
     "category": [
@@ -208,10 +248,26 @@
     "removedDate": "2024-10-31"
   },
   {
+    "handle": "xunzhuo",
+    "name": "Xunzhuo Liu",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-10-31"
+  },
+  {
     "handle": "iliyan-s-petkov?tab=repositories",
     "name": "Iliyan Petkov",
     "category": [
       "Kubestronaut"
+    ],
+    "removedDate": "2024-09-30"
+  },
+  {
+    "handle": "tomwilkie",
+    "name": "Tom Wilkie",
+    "category": [
+      "Governing Board"
     ],
     "removedDate": "2024-09-30"
   },
@@ -222,6 +278,14 @@
       "Kubestronaut"
     ],
     "removedDate": "2024-08-30"
+  },
+  {
+    "handle": "nezdolik",
+    "name": "Kateryna Nezdolii",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-07-30"
   },
   {
     "handle": "chadha93",
@@ -262,8 +326,24 @@
     "removedDate": "2024-04-30"
   },
   {
+    "handle": "alexsjones",
+    "name": "Alex Jones",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
     "handle": "misskecupbung",
     "name": "Ananda Dwi Rahmawati",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
+    "handle": "charleszheng44",
+    "name": "Chao Zheng",
     "category": [
       "Ambassadors"
     ],
@@ -274,6 +354,22 @@
     "name": "Charley Mann",
     "category": [
       "Staff"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
+    "handle": "davidphirsch",
+    "name": "David Hirsch",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
+    "handle": "divya-mohan0209",
+    "name": "Divya Mohan",
+    "category": [
+      "Ambassadors"
     ],
     "removedDate": "2024-04-30"
   },
@@ -310,6 +406,14 @@
     "removedDate": "2024-04-30"
   },
   {
+    "handle": "roidelapluie",
+    "name": "Julien Pivotto",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
     "handle": "lachlan-white",
     "name": "Lachlan White",
     "category": [
@@ -328,6 +432,14 @@
   {
     "handle": "lukemwila",
     "name": "Lukonde Mwila",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
+    "handle": "l0rd",
+    "name": "Mario Loriedo",
     "category": [
       "Ambassadors"
     ],
@@ -406,8 +518,48 @@
     "removedDate": "2024-04-30"
   },
   {
+    "handle": "salaxander",
+    "name": "Xander Grzywinski",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2024-04-30"
+  },
+  {
+    "handle": "tdmanv",
+    "name": "Thomas (Tom) Manville",
+    "category": [
+      "Governing Board"
+    ],
+    "removedDate": "2024-03-25"
+  },
+  {
+    "handle": "puerco",
+    "name": "Adolfo Garc\u00eda Veytia",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2023-10-30"
+  },
+  {
     "handle": "rettori",
     "name": "Dio Rettori",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2023-10-30"
+  },
+  {
+    "handle": "rainbowmango",
+    "name": "Hongcai Ren",
+    "category": [
+      "Ambassadors"
+    ],
+    "removedDate": "2023-10-30"
+  },
+  {
+    "handle": "wonderflow",
+    "name": "Jianbo Sun",
     "category": [
       "Ambassadors"
     ],
@@ -492,6 +644,18 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "animeshsingh",
+    "name": "Animesh Singh",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "thisisnotapril",
+    "name": "April Kyle Nassi",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "arapulido",
     "name": "Ara Pulido",
     "category": [],
@@ -504,8 +668,20 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "bwplotka",
+    "name": "Bart\u0142omiej P\u0142otka",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "jbaruch",
     "name": "Baruch Sadogursky",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "bassam",
+    "name": "Bassam Tabbara",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -534,6 +710,12 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "blixtra",
+    "name": "Chris K\u00fchl",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "chrisz100",
     "name": "Christian Jantz",
     "category": [],
@@ -548,6 +730,12 @@
   {
     "handle": "clintkitson?direction=desc&sort=stars&tab=stars",
     "name": "Clinton Kitson",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "craigbox",
+    "name": "Craig Box",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -570,6 +758,12 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "duglin",
+    "name": "Doug Davis",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "rapenchukd",
     "name": "Drew Rapenchuk",
     "category": [],
@@ -582,6 +776,18 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "edlee2121",
+    "name": "Ed Lee",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "edsiper",
+    "name": "Eduardo Silva",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "lykosteng",
     "name": "Eileen Teng",
     "category": [],
@@ -590,6 +796,12 @@
   {
     "handle": "fabxc",
     "name": "Fabian Reinartz",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "csatarigergely",
+    "name": "Gergely Csat\u00e1ri",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -702,6 +914,18 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "johnhillegass",
+    "name": "John Hillegass",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "jkjell",
+    "name": "John Kjell",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "adersberger",
     "name": "Josef Adersberger",
     "category": [],
@@ -720,14 +944,32 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "juliusv",
+    "name": "Julius Volz",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "m1093782566",
     "name": "Jun Du",
     "category": [],
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "justincappos",
+    "name": "Justin Cappos",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "cimomo",
     "name": "Kai Chen",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "katcosgrove",
+    "name": "Kat Cosgrove",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -774,6 +1016,12 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "markpeek",
+    "name": "Mark Peek",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "baldwinspc",
     "name": "Matt Baldwin",
     "category": [],
@@ -806,6 +1054,12 @@
   {
     "handle": "muemich",
     "name": "Michael Mueller",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "michellen",
+    "name": "Michelle Noorali",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -900,6 +1154,18 @@
     "removedDate": "2023-04-29"
   },
   {
+    "handle": "saad-ali",
+    "name": "Saad Ali",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "heavypackets",
+    "name": "Sabree Blackmon",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
     "handle": "srampal",
     "name": "Sanjeev Rampal",
     "category": [],
@@ -932,6 +1198,12 @@
   {
     "handle": "shillasaebi",
     "name": "Shilla Saebi",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "sids-b",
+    "name": "Siddharth Bhadri",
     "category": [],
     "removedDate": "2023-04-29"
   },
@@ -998,6 +1270,24 @@
   {
     "handle": "treelin",
     "name": "Xiaocui (Tree) Lin",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "dingyin",
+    "name": "Yin Ding",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "yongtang",
+    "name": "Yong Tang",
+    "category": [],
+    "removedDate": "2023-04-29"
+  },
+  {
+    "handle": "yurishkuro",
+    "name": "Yuri Shkuro",
     "category": [],
     "removedDate": "2023-04-29"
   },

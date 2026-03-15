@@ -707,17 +707,17 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
       </div>
     </div>
 
-    <!-- Alumni / Emeritus feed -->
+    <!-- Contributors Emeritus feed -->
     <div class="alpha-feed" style="display:none" data-alpha-tab="emeritus">
       {(heroRotations.emeritus ?? []).length > 0 && (
         <section class="tab-heroes-section">
-          <h2 class="tab-heroes-heading">Community Alumni</h2>
+          <h2 class="tab-heroes-heading">Contributors Emeritus</h2>
           <div class="heroes-grid">
             {(heroRotations.emeritus ?? []).map(m => (
               <HeroCard
                 person={{ name: m.name, handle: m.handle, github: m.handle ? `https://github.com/${m.handle}` : undefined, avatarUrl: m.handle ? `https://avatars.githubusercontent.com/${m.handle}` : undefined }}
                 label="Legend"
-                categoryKey="Alumni"
+                categoryKey="Emeritus"
                 baseUrl={baseUrl}
               />
             ))}
@@ -1019,7 +1019,7 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   .staff-support-name  { font-size: 0.875rem; font-weight: 600; }
   .staff-support-handle { font-size: 0.75rem; color: var(--color-text-secondary); }
 
-  /* Emeritus / Alumni tab */
+  /* Contributors Emeritus tab */
   .emeritus-group { margin-bottom: 2rem; }
   .emeritus-group-heading {
     font-size: 0.875rem;

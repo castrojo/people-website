@@ -87,7 +87,7 @@ const accentKey = person.primaryBadge || LOGO_PRIORITY.find(c => person.category
 const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
-const typeLabel = { added: '+ Joined', removed: '− Left', updated: '✎ Updated' }[type];
+const typeLabel = { added: '+ Joined', removed: 'Emeritus', updated: '✎ Updated' }[type];
 const typeBadgeClass = `badge-${type}`;
 
 const date = new Date(timestamp);
