@@ -8,18 +8,20 @@ const CATEGORY_MAP: Record<string, Category> = {
   'Kubestronaut': { name: 'Kubestronaut', color: 'var(--color-kubestronaut, #D62293)' },
   'Golden-Kubestronaut': { name: '⭐ Golden Kubestronaut', color: 'var(--color-golden, #D4AF37)' },
   'Ambassadors': { name: 'Ambassador', color: 'var(--color-ambassador, #0086FF)' },
+  'Technical Oversight Committee': { name: 'TOC', color: 'var(--color-toc, #D62293)' },
+  'End User TAB': { name: 'End User TAB', color: 'var(--color-tab, #D62293)' },
   'Staff': { name: 'Staff', color: 'var(--color-staff, #00A86B)' },
-  'TOC': { name: 'TOC', color: 'var(--color-toc, #D62293)' },
-  'End User TAB': { name: 'End User TAB', color: 'var(--color-tab, #7B2FBE)' },
   'Governing Board': { name: 'Governing Board', color: 'var(--color-board, #E65100)' },
   'Marketing Committee': { name: 'Marketing Committee', color: 'var(--color-board, #E65100)' },
 };
 
 const PROGRAM_LOGOS: Record<string, string> = {
-  'Kubestronaut':        '/people-website/program-logos/kubestronaut.svg',
-  'Golden-Kubestronaut': '/people-website/program-logos/golden-kubestronaut.svg',
-  'Ambassadors':         '/people-website/program-logos/ambassador.svg',
-  'Staff':               '/people-website/program-logos/cncf.svg',
+  'Kubestronaut':                  '/people-website/program-logos/kubestronaut.svg',
+  'Golden-Kubestronaut':           '/people-website/program-logos/golden-kubestronaut.svg',
+  'Ambassadors':                   '/people-website/program-logos/ambassador.svg',
+  'Technical Oversight Committee': '/people-website/program-logos/cncf.svg',
+  'End User TAB':                  '/people-website/program-logos/cncf.svg',
+  'Staff':                         '/people-website/program-logos/cncf.svg',
 };
 
 interface Change {
@@ -63,7 +65,7 @@ const profileUrl = person.github || (person.handle ? `https://github.com/${perso
 const primaryCategory = person.category?.[0] ?? '';
 
 // Use highest-prestige category for accent color and logo
-const LOGO_PRIORITY = ['Golden-Kubestronaut', 'Kubestronaut', 'Ambassadors', 'Staff'];
+const LOGO_PRIORITY = ['Golden-Kubestronaut', 'Kubestronaut', 'Ambassadors', 'Technical Oversight Committee', 'End User TAB', 'Staff'];
 const accentKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat)) ?? primaryCategory;
 const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 
