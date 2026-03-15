@@ -136,6 +136,11 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     const maintainerStats = document.getElementById('sidebar-maintainer-stats');
     const heroesSection = document.getElementById('heroes-section');
 
+    // Show/hide per-tab hero sections (data-tab-heroes) — handles page load restore too.
+    document.querySelectorAll<HTMLElement>('[data-tab-heroes]').forEach(el => {
+      el.style.display = el.dataset.tabHeroes === tab ? '' : 'none';
+    });
+
     const isMaintainersTab = tab === 'maintainers';
     if (maintainerSummary) maintainerSummary.style.display = isMaintainersTab ? '' : 'none';
 
