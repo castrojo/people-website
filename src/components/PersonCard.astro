@@ -38,7 +38,7 @@ interface Person {
   bio?: string;
   pronouns?: string;
   company?: string;
-  companyLogoUrl?: string;
+  companyLandscapeUrl?: string;
   location?: string;
   linkedin?: string;
   twitter?: string;
@@ -111,6 +111,14 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
             {person.handle && <a href={profileUrl} target="_blank" rel="noopener noreferrer" class="handle">@{person.handle}</a>}
             {person.pronouns && <span class="pronouns">({person.pronouns})</span>}
           </div>
+          {person.company && (
+            <div class="company-row">
+              {person.companyLandscapeUrl
+                ? <a href={person.companyLandscapeUrl} target="_blank" rel="noopener noreferrer" class="company-chip company-chip-link">{person.company}</a>
+                : <span class="company-chip">{person.company}</span>
+              }
+            </div>
+          )}
           {person.bio && <p class="bio">{person.bio}</p>}
           <div class="badges">
             <span class={`badge ${typeBadgeClass}`}>{typeLabel}</span>
@@ -120,18 +128,6 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
               </span>
             ))}
           </div>
-          {person.company && (
-            <p class="meta-line">
-              <span class="meta-item company-meta">
-                {person.companyLogoUrl
-                  ? <img src={person.companyLogoUrl} alt="" class="company-logo" aria-hidden="true" loading="lazy" onerror="this.style.display='none'" />
-                  : <span aria-hidden="true">🏢</span>
-                }
-                {person.company}
-              </span>
-            </p>
-          )}
-        </div>
       </div>
 
     {(person.contributions || person.publicRepos || person.yearsContributing) && (
@@ -358,26 +354,33 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
   [data-theme="dark"] .badge-updated  { background: #1e3a8a44; color: #93c5fd; border-color: #1e40af; }
   .badge-category { font-weight: 500; }
 
-  .meta-line {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-    margin-top: 0.25rem;
+  .company-row {
+    margin: 0.2rem 0 0.3rem;
   }
-  .meta-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
-  .company-meta { display: inline-flex; align-items: center; gap: 0.35rem; }
-  .company-logo {
-    height: 16px;
-    width: auto;
-    max-width: 48px;
-    object-fit: contain;
-    flex-shrink: 0;
-    filter: grayscale(100%);
-    transition: filter 0.15s;
+  .company-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
   }
-  .company-meta:hover .company-logo { filter: grayscale(0%); }
+  a.company-chip-link {
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  a.company-chip-link:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
 
   .bio {
     font-size: 0.8125rem;
