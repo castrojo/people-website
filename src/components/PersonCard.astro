@@ -5,8 +5,8 @@ interface Category {
 }
 
 const CATEGORY_MAP: Record<string, Category> = {
-  'Kubestronaut': { name: 'Kubestronaut', color: 'var(--color-kubestronaut, #FFB300)' },
-  'Golden-Kubestronaut': { name: '⭐ Golden Kubestronaut', color: 'var(--color-golden, #C9A000)' },
+  'Kubestronaut': { name: 'Kubestronaut', color: 'var(--color-kubestronaut, #D62293)' },
+  'Golden-Kubestronaut': { name: '⭐ Golden Kubestronaut', color: 'var(--color-golden, #D4AF37)' },
   'Ambassadors': { name: 'Ambassador', color: 'var(--color-ambassador, #0086FF)' },
   'Staff': { name: 'Staff', color: 'var(--color-staff, #00A86B)' },
   'TOC': { name: 'TOC', color: 'var(--color-toc, #D62293)' },
@@ -61,10 +61,12 @@ const { id, type, timestamp, person, changes = [] } = Astro.props;
 const avatarSrc = person.avatarUrl || person.imageUrl || '';
 const profileUrl = person.github || (person.handle ? `https://github.com/${person.handle}` : '#');
 const primaryCategory = person.category?.[0] ?? '';
-const categoryInfo = CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 
-// Prefer highest-prestige logo if person has multiple categories
+// Use highest-prestige category for accent color and logo
 const LOGO_PRIORITY = ['Golden-Kubestronaut', 'Kubestronaut', 'Ambassadors', 'Staff'];
+const accentKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat)) ?? primaryCategory;
+const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
+
 const logoKey = LOGO_PRIORITY.find(cat => person.category?.includes(cat));
 const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
