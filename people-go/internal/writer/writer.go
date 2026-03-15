@@ -433,6 +433,53 @@ func dailyPick[T any](items []T, n int) []T {
 	return result
 }
 
+// isSheHerTheyThem returns true when the person's pronouns indicate she/her or they/them.
+// Uses a simple substring match so variants like "she/they" or "they/them" both match.
+func isSheHerTheyThem(p models.SafePerson) bool {
+	pr := strings.ToLower(strings.TrimSpace(p.Pronouns))
+	return strings.Contains(pr, "she") || strings.Contains(pr, "they")
+}
+
+// dailyPickDiverse picks n SafePersons, guaranteeing ≥1 she/her or they/them person
+// when the pool contains any. It partitions the pool into two mutually exclusive
+// buckets, picks 1 from the diverse bucket (using the same date seed for determinism),
+// then picks n-1 from the rest. If rest has fewer than n-1 people it overflows into the
+// remaining diverse pool. Falls back to dailyPick when no qualifying people exist or n≤1.
+func dailyPickDiverse(items []models.SafePerson, n int) []models.SafePerson {
+	if len(items) == 0 || n == 0 {
+		return []models.SafePerson{}
+	}
+
+	var diverse, rest []models.SafePerson
+	for _, p := range items {
+		if isSheHerTheyThem(p) {
+			diverse = append(diverse, p)
+		} else {
+			rest = append(rest, p)
+		}
+	}
+
+	// No qualifying people or trivial pick — use standard rotation
+	if len(diverse) == 0 || n <= 1 {
+		return dailyPick(items, n)
+	}
+
+	// Slot 0: one person from the diverse bucket (guaranteed)
+	result := dailyPick(diverse, 1)
+	picked := result[0]
+
+	// Slots 1..n-1: fill from rest, then overflow into remaining diverse
+	remaining := make([]models.SafePerson, 0, len(rest)+len(diverse)-1)
+	remaining = append(remaining, rest...)
+	for _, p := range diverse {
+		if p.Handle != picked.Handle || p.Name != picked.Name {
+			remaining = append(remaining, p)
+		}
+	}
+	result = append(result, dailyPick(remaining, n-1)...)
+	return result
+}
+
 // WriteHeroRotations writes the daily hero rotation to heroes.json.
 // leadershipHandles is a slice of GitHub handles for the fixed CNCF Leadership section.
 func WriteHeroRotations(outDir string, events []models.Event, maintainers []models.SafeMaintainer, leadershipHandles []string) error {
@@ -484,10 +531,10 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 
 	rotations := HeroRotations{
 		GeneratedAt:         time.Now().UTC(),
-		Everyone:            dailyPick(allPeople, 4),
-		Ambassadors:         dailyPick(pools["Ambassadors"], 4),
-		Kubestronauts:       dailyPick(pools["Kubestronaut"], 4),
-		GoldenKubestronauts: dailyPick(pools["Golden-Kubestronaut"], 4),
+		Everyone:            dailyPickDiverse(allPeople, 4),
+		Ambassadors:         dailyPickDiverse(pools["Ambassadors"], 4),
+		Kubestronauts:       dailyPickDiverse(pools["Kubestronaut"], 4),
+		GoldenKubestronauts: dailyPickDiverse(pools["Golden-Kubestronaut"], 4),
 		Maintainers:         dailyPick(maintainers, 4),
 		CNCFLeadership:      leadership,
 	}
