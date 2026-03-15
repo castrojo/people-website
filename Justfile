@@ -15,6 +15,8 @@ serve:
 build:
     npm ci
     cd people-go && go build -o people cmd/people/main.go && ./people
+    mkdir -p public/data
+    cp src/data/changelog.json public/data/changelog.json
     npm run build
 
 # Build the container image

@@ -49,7 +49,10 @@ interface Event {
   changes?: Change[];
 }
 
+const STATIC_COUNT = 200;
+
 const events = changelogRaw as Event[];
+const staticEvents = events.slice(0, STATIC_COUNT);
 const landscapeLogos = landscapeLogosRaw as Record<string, string>;
 
 function dateHeader(ts: string): string {
@@ -58,7 +61,7 @@ function dateHeader(ts: string): string {
 }
 
 const grouped: Map<string, Event[]> = new Map();
-for (const e of events) {
+for (const e of staticEvents) {
   const key = dateHeader(e.timestamp);
   if (!grouped.has(key)) grouped.set(key, []);
   grouped.get(key)!.push(e);
@@ -204,7 +207,7 @@ const alphaFeeds = Object.fromEntries(
     ))}
 
     <!-- Timeline feed: recent-first, date-grouped (hidden for alpha tabs) -->
-    <div id="timeline-feed">
+    <div id="timeline-feed" data-static-count={STATIC_COUNT} data-base-url={baseUrl.replace(/\/$/, '')}>
       {[...grouped.entries()].map(([date, dayEvents]) => (
         <section class="day-group" data-date={date}>
           <h2 class="day-header">{date}</h2>
@@ -221,7 +224,7 @@ const alphaFeeds = Object.fromEntries(
         </section>
       ))}
 
-      {events.length === 0 && (
+      {staticEvents.length === 0 && (
         <div class="empty-state">
           <p>No activity yet — check back after the first daily sync.</p>
         </div>
@@ -359,16 +362,33 @@ const alphaFeeds = Object.fromEntries(
 </style>
 
 <script>
+  import { initFeedLoader } from '../lib/feed-loader';
+
+  const timelineFeed = document.getElementById('timeline-feed') as HTMLElement;
+  const staticCount = parseInt(timelineFeed?.dataset.staticCount ?? '200', 10);
+  const baseUrl = timelineFeed?.dataset.baseUrl ?? '/people-website';
+
+  // Expose base for feed-loader
+  document.documentElement.dataset.base = baseUrl;
+
+  // Fetch landscape logos once and kick off infinite scroll
+  fetch(`${baseUrl}/data/landscape_logos.json`)
+    .then(r => r.json())
+    .then((logos: Record<string, string>) => initFeedLoader(staticCount, logos))
+    .catch(() => initFeedLoader(staticCount, {}));
+
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;
   const catFilter   = document.getElementById('category-filter') as HTMLSelectElement;
   const filterCount = document.getElementById('filter-count');
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.person-card'));
 
   function applyFilters() {
     const query = searchInput?.value.toLowerCase() ?? '';
     const type  = typeFilter?.value ?? '';
     const cat   = catFilter?.value ?? '';
+
+    // Re-query each time to include dynamically loaded cards
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#timeline-feed .person-card'));
 
     let visible = 0;
     for (const card of cards) {

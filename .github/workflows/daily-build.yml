@@ -53,6 +53,8 @@ jobs:
           cd people-go
           go build -o people cmd/people/main.go
           ./people
+          mkdir -p ../public/data
+          cp ../src/data/changelog.json ../public/data/changelog.json
           ls -lh ../src/data/changelog.json
 
       - name: Save sync cache
