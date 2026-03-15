@@ -414,6 +414,11 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     height: 16px;
     object-fit: contain;
     flex-shrink: 0;
+    filter: grayscale(100%);
+    transition: filter 0.15s;
+  }
+  .project-chip:hover .project-logo {
+    filter: grayscale(0%);
   }
 
   .changes-details { margin-top: 0.75rem; }
