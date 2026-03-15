@@ -84,9 +84,10 @@ const handle     = person.handle ? `@${person.handle}` : '';
 
   <!-- text overlay at bottom -->
   <div class="hero-info">
-    <span class="hero-name">
-      {person.countryFlag && <span class="hero-flag">{person.countryFlag}</span>}{person.name}
-    </span>
+    {profileUrl
+      ? <a class="hero-name" href={profileUrl} target="_blank" rel="noopener noreferrer">{person.countryFlag && <span class="hero-flag">{person.countryFlag}</span>}{person.name}</a>
+      : <span class="hero-name">{person.countryFlag && <span class="hero-flag">{person.countryFlag}</span>}{person.name}</span>
+    }
     {handle && <span class="hero-handle">{handle}</span>}
     {person.location && (
       <span class="hero-location">{person.location}</span>
@@ -203,7 +204,10 @@ const handle     = person.handle ? `@${person.handle}` : '';
     color: #fff;
     line-height: 1.2;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    pointer-events: auto;
   }
+  a.hero-name:hover { text-decoration: underline; }
 
   .hero-flag {
     margin-right: 0.3em;
