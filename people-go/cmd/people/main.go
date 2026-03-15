@@ -145,7 +145,7 @@ func main() {
 			log.Printf("warn: load api cache: %v", err)
 		}
 
-		const enrichCap = 50
+		const enrichCap = 200
 		ghClient := githubclient.New(ctx, token)
 		enriched := 0
 		for i, e := range events {
