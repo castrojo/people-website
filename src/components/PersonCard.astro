@@ -78,11 +78,13 @@ const avatarSrc = person.avatarUrl || person.imageUrl || '';
 const profileUrl = person.github || (person.handle ? `https://github.com/${person.handle}` : '#');
 const primaryCategory = person.category?.[0] ?? '';
 
-// Use pre-computed primaryBadge from backend if available, otherwise fall back to category scan
-const accentKey = person.primaryBadge ?? primaryCategory;
+// Use pre-computed primaryBadge from backend; fall back to category scan for older events
+const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
+const logoKey = person.primaryBadge
+  ? (PROGRAM_LOGOS[person.primaryBadge] ? person.primaryBadge : undefined)
+  : LOGO_PRIORITY.find(c => person.category?.includes(c));
+const accentKey = person.primaryBadge || LOGO_PRIORITY.find(c => person.category?.includes(c)) || primaryCategory;
 const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
-
-const logoKey = (person.primaryBadge && PROGRAM_LOGOS[person.primaryBadge]) ? person.primaryBadge : undefined;
 const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
 const typeLabel = { added: '+ Joined', removed: '− Left', updated: '✎ Updated' }[type];

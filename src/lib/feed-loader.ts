@@ -60,9 +60,13 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const profileUrl = p.github || (p.handle ? `https://github.com/${p.handle}` : '#');
   const cats = p.category ?? [];
   const primaryCat = cats[0] ?? '';
-  const accentKey = p.primaryBadge ?? primaryCat;
+  // Use pre-computed primaryBadge from backend; fall back to category scan for older events
+  const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
+  const logoKey = p.primaryBadge
+    ? (PROGRAM_LOGOS[p.primaryBadge] ? p.primaryBadge : undefined)
+    : LOGO_PRIORITY.find(c => cats.includes(c));
+  const accentKey = p.primaryBadge || LOGO_PRIORITY.find(c => cats.includes(c)) || primaryCat;
   const catInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCat] ?? { name: primaryCat, color: '#888' };
-  const logoKey = (p.primaryBadge && PROGRAM_LOGOS[p.primaryBadge]) ? p.primaryBadge : undefined;
   const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '';
   const typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
   const date = new Date(e.timestamp);
