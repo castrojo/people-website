@@ -43,6 +43,7 @@ try {
 // Falls back to empty if not yet generated (first build before Go has run).
 interface HeroRotations {
   generatedAt?: string;
+  everyone: Person[];
   ambassadors: Person[];
   kubestronauts: Person[];
   goldenKubestronauts: Person[];
@@ -50,7 +51,7 @@ interface HeroRotations {
   cncfLeadership: Person[];
 }
 let heroRotations: HeroRotations = {
-  ambassadors: [], kubestronauts: [], goldenKubestronauts: [],
+  everyone: [], ambassadors: [], kubestronauts: [], goldenKubestronauts: [],
   maintainers: [], cncfLeadership: [],
 };
 try {
@@ -393,6 +394,17 @@ for (const m of maintainerList) {
     )}
 
     <!-- Per-tab hero rows: shown when the matching tab is active (managed by JS below) -->
+    {heroRotations.everyone.length > 0 && (
+      <section class="tab-heroes-section" data-tab-heroes="everyone" style="display:none">
+        <h2 class="tab-heroes-heading">Community Members of the Day</h2>
+        <div class="heroes-grid">
+          {heroRotations.everyone.map(p => (
+            <HeroCard person={p} label={p.category?.[0] ?? 'Community'} categoryKey={p.category?.[0] ?? 'Community'} baseUrl={baseUrl} />
+          ))}
+        </div>
+      </section>
+    )}
+
     {heroRotations.ambassadors.length > 0 && (
       <section class="tab-heroes-section" data-tab-heroes="ambassadors" style="display:none">
         <h2 class="tab-heroes-heading">Ambassadors of the Day</h2>

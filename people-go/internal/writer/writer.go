@@ -397,6 +397,7 @@ func WritePeopleIndex(outDir string, events []models.Event) error {
 // HeroRotations is the output structure written to heroes.json.
 type HeroRotations struct {
 	GeneratedAt         time.Time               `json:"generatedAt"`
+	Everyone            []models.SafePerson     `json:"everyone"`
 	Ambassadors         []models.SafePerson     `json:"ambassadors"`
 	Kubestronauts       []models.SafePerson     `json:"kubestronauts"`
 	GoldenKubestronauts []models.SafePerson     `json:"goldenKubestronauts"`
@@ -441,6 +442,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 
 	// Build per-category pools from deduplicated people index.
 	seen := make(map[string]struct{})
+	var allPeople []models.SafePerson
 	pools := map[string][]models.SafePerson{
 		"Ambassadors":         {},
 		"Kubestronaut":        {},
@@ -461,6 +463,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 			continue
 		}
 		seen[key] = struct{}{}
+		allPeople = append(allPeople, e.Person)
 		if e.Person.Handle != "" {
 			byHandle[e.Person.Handle] = e.Person
 		}
@@ -481,6 +484,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 
 	rotations := HeroRotations{
 		GeneratedAt:         time.Now().UTC(),
+		Everyone:            dailyPick(allPeople, 4),
 		Ambassadors:         dailyPick(pools["Ambassadors"], 4),
 		Kubestronauts:       dailyPick(pools["Kubestronaut"], 4),
 		GoldenKubestronauts: dailyPick(pools["Golden-Kubestronaut"], 4),
