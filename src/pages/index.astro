@@ -622,7 +622,7 @@ const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g]
       </section>
     </div>
 
-    <!-- Alpha feeds: deduplicated, alphabetical (shown only for governing-board/staff tabs) -->
+    <!-- Alpha feeds: deduplicated, alphabetical (staff, everyone, and category roll-up tabs) -->
     {Object.entries(alphaFeeds).map(([tab, tabEvents]) => (
       <div id={`alpha-feed-${tab}`} class="alpha-feed" style="display:none" data-alpha-tab={tab}>
         {tabEvents.map(event => (
