@@ -1251,6 +1251,18 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
       if (e.key === 'h') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
       if (e.key === ' ' && !e.shiftKey) { e.preventDefault(); window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' }); }
       if (e.key === ' ' &&  e.shiftKey) { e.preventDefault(); window.scrollBy({ top: -window.innerHeight * 0.85, behavior: 'smooth' }); }
+      if (e.key === 'Tab') {
+        const tabBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]'));
+        if (tabBtns.length === 0) return;
+        e.preventDefault();
+        const activeBtn = tabBtns.find(b => b.classList.contains('active'));
+        const cur = activeBtn ? tabBtns.indexOf(activeBtn) : 0;
+        const next = e.shiftKey
+          ? (cur - 1 + tabBtns.length) % tabBtns.length
+          : (cur + 1) % tabBtns.length;
+        tabBtns[next].click();
+        tabBtns[next].scrollIntoView({ inline: 'nearest', block: 'nearest' });
+      }
       if (e.key === 'o' || e.key === 'Enter') {
         const all = visibleCards();
         const card = all[focusedIdx];
