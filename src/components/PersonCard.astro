@@ -120,21 +120,24 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     {(person.contributions || person.followers || person.publicRepos) && (
       <div class="stats-row">
         {person.contributions > 0 && (
-          <span class="stat-chip" title="GitHub contributions (last year)">
-            <span class="stat-icon">🟩</span>
+          <span class="stat-chip" aria-label={`${person.contributions.toLocaleString()} GitHub contributions in the last year`}>
+            <span class="stat-icon" aria-hidden="true">🟩</span>
             <span class="stat-val">{person.contributions.toLocaleString()}</span>
+            <span class="stat-label">contributions</span>
           </span>
         )}
         {person.followers > 0 && (
-          <span class="stat-chip" title="GitHub followers">
-            <span class="stat-icon">👥</span>
+          <span class="stat-chip" aria-label={`${person.followers.toLocaleString()} GitHub followers`}>
+            <span class="stat-icon" aria-hidden="true">👥</span>
             <span class="stat-val">{person.followers.toLocaleString()}</span>
+            <span class="stat-label">followers</span>
           </span>
         )}
         {person.publicRepos > 0 && (
-          <span class="stat-chip" title="Public repositories">
-            <span class="stat-icon">📦</span>
+          <span class="stat-chip" aria-label={`${person.publicRepos} public repositories`}>
+            <span class="stat-icon" aria-hidden="true">📦</span>
             <span class="stat-val">{person.publicRepos}</span>
+            <span class="stat-label">repos</span>
           </span>
         )}
       </div>
@@ -313,6 +316,7 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     margin-top: 0.5rem;
   }
   .stat-chip {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -322,8 +326,48 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     border-radius: 6px;
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
+    cursor: default;
   }
   .stat-val { font-weight: 600; color: var(--color-text-primary); }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+  }
+
+  /* Tooltip shown on hover — uses aria-label value */
+  .stat-chip::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-text-primary);
+    color: var(--color-bg-default);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+  }
+  .stat-chip::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--color-text-primary);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+  }
+  .stat-chip:hover::after,
+  .stat-chip:hover::before { opacity: 1; }
 
   .projects-row {
     display: flex;
