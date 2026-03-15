@@ -60,6 +60,20 @@ interface Props {
 
 const { id, type, timestamp, person, changes = [] } = Astro.props;
 
+// Convert a project name to a landscape.cncf.io logo slug
+function projectSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[()]/g, '')        // strip parens
+    .replace(/[^a-z0-9\s-]/g, '') // strip other special chars
+    .trim()
+    .replace(/\s+/g, '-');       // spaces → hyphens
+}
+
+function projectLogoUrl(name: string): string {
+  return `https://landscape.cncf.io/logos/${projectSlug(name)}.svg`;
+}
+
 const avatarSrc = person.avatarUrl || person.imageUrl || '';
 const profileUrl = person.github || (person.handle ? `https://github.com/${person.handle}` : '#');
 const primaryCategory = person.category?.[0] ?? '';
@@ -145,10 +159,19 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
 
     {person.projects && person.projects.length > 0 && (
       <div class="projects-row">
-        {person.projects.slice(0, 6).map(project => (
-          <span class="project-chip">{project}</span>
+        {person.projects.map(project => (
+          <span class="project-chip">
+            <img
+              src={projectLogoUrl(project)}
+              alt=""
+              class="project-logo"
+              aria-hidden="true"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
+            {project}
+          </span>
         ))}
-        {person.projects.length > 6 && <span class="project-chip project-more">+{person.projects.length - 6}</span>}
       </div>
     )}
 
@@ -382,15 +405,23 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     margin-top: 0.5rem;
   }
   .project-chip {
-    padding: 0.125rem 0.5rem;
-    background: var(--color-cncf-blue)11;
-    border: 1px solid var(--color-cncf-blue)33;
-    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.625rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
     font-size: 0.75rem;
-    color: var(--color-cncf-blue);
+    color: var(--color-text-primary);
     font-weight: 500;
   }
-  .project-more { background: var(--color-bg-tertiary); color: var(--color-text-secondary); border-color: var(--color-border-default); }
+  .project-logo {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
 
   .changes-details { margin-top: 0.75rem; }
   .changes-summary {
