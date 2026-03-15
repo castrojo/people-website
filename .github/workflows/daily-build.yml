@@ -38,7 +38,7 @@ jobs:
           cache: 'npm'
 
       - name: Restore sync cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: |
             .sync-cache
@@ -54,6 +54,16 @@ jobs:
           go build -o people cmd/people/main.go
           ./people
           ls -lh ../src/data/changelog.json
+
+      - name: Save sync cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .sync-cache
+            src/data/changelog.json
+          key: sync-cache-${{ runner.os }}-${{ github.run_id }}
+          retention-days: 90
 
       - name: Install dependencies
         run: npm ci

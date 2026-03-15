@@ -10,7 +10,7 @@ import (
 
 const (
 	cacheFile = "api_cache.json"
-	ttl       = 7 * 24 * time.Hour
+	ttl       = 90 * 24 * time.Hour
 )
 
 // UserStats holds enrichment data fetched from the GitHub API.

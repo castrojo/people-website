@@ -125,11 +125,7 @@ func main() {
 
 		ghClient := githubclient.New(ctx, token)
 		enriched := 0
-		const maxEnrich = 50
 		for i, e := range events {
-			if enriched >= maxEnrich {
-				break
-			}
 			if e.Person.Handle == "" {
 				continue
 			}

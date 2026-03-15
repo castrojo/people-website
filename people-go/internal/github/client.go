@@ -110,6 +110,9 @@ func (c *Client) EnrichCNCFYears(ctx context.Context, handle string, cache *apic
 		q,
 	)
 
+	// Rate limit: authenticated search API is 30 req/min.
+	time.Sleep(2 * time.Second)
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("warn: cncf years req %s: %v\n", handle, err)
