@@ -201,6 +201,9 @@ func main() {
 		if err := writer.WriteTOC(outDir, people); err != nil {
 			log.Printf("warn: write toc.json: %v", err)
 		}
+		if err := writer.WriteStaffSupport(outDir, people); err != nil {
+			log.Printf("WriteStaffSupport: %v", err)
+		}
 		if err := writer.WriteTAB(outDir, people); err != nil {
 			log.Printf("warn: write tab.json: %v", err)
 		}

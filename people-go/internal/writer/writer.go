@@ -714,6 +714,90 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 	return os.WriteFile(filepath.Join(outDir, "heroes.json"), data, 0o644)
 }
 
+// StaffAssignment is a single entry in staff-assignments.json.
+type StaffAssignment struct {
+	Handle     string `json:"handle,omitempty"`
+	Name       string `json:"name,omitempty"`
+	ImageURL   string `json:"imageUrl,omitempty"`
+	ProfileURL string `json:"profileUrl,omitempty"`
+}
+
+// StaffSupportEntry is the enriched output written to staff-support.json.
+type StaffSupportEntry struct {
+	Handle     string `json:"handle,omitempty"`
+	Name       string `json:"name"`
+	ImageURL   string `json:"imageUrl,omitempty"`
+	ProfileURL string `json:"profileUrl,omitempty"`
+}
+
+// WriteStaffSupport reads src/data/staff-assignments.json, enriches each handle
+// with the canonical name and image URL from cncf/people, and writes
+// src/data/staff-support.json. If staff-assignments.json is absent the function
+// logs a warning and returns nil (graceful no-op for first-run bootstraps).
+func WriteStaffSupport(outDir string, people []models.RawPerson) error {
+	assignPath := filepath.Join(outDir, "staff-assignments.json")
+	raw, err := os.ReadFile(assignPath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			log.Printf("warn: WriteStaffSupport: %s not found — skipping", assignPath)
+			return nil
+		}
+		return err
+	}
+
+	var assignments map[string][]StaffAssignment
+	if err := json.Unmarshal(raw, &assignments); err != nil {
+		return fmt.Errorf("parse staff-assignments.json: %w", err)
+	}
+
+	// Build lookup: lowercase GitHub handle → RawPerson
+	byHandle := make(map[string]models.RawPerson, len(people))
+	for _, p := range people {
+		if h := p.GitHubHandle(); h != "" {
+			byHandle[strings.ToLower(h)] = p
+		}
+	}
+
+	result := make(map[string][]StaffSupportEntry, len(assignments))
+	for tab, entries := range assignments {
+		out := make([]StaffSupportEntry, 0, len(entries))
+		for _, entry := range entries {
+			if entry.Handle != "" {
+				p, found := byHandle[strings.ToLower(entry.Handle)]
+				var name, imageURL string
+				if found {
+					name = p.Name
+					imageURL = p.ImageURL()
+				} else {
+					name = entry.Handle
+				}
+				out = append(out, StaffSupportEntry{
+					Handle:   entry.Handle,
+					Name:     name,
+					ImageURL: imageURL,
+				})
+			} else {
+				// No-handle entry (imageUrl/profileUrl staff): pass through as-is.
+				out = append(out, StaffSupportEntry{
+					Name:       entry.Name,
+					ImageURL:   entry.ImageURL,
+					ProfileURL: entry.ProfileURL,
+				})
+			}
+		}
+		result[tab] = out
+	}
+
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "staff-support.json"), data, 0o644)
+}
+
 // BackfillFromCache patches Pronouns, Location, and YearsContributing into changelog.json
 // events that are missing them, using data from the GitHub API cache. Only updates fields
 // that are currently empty/zero. Does not perform new API fetches — caller is responsible

@@ -1,0 +1,42 @@
+{
+  "ambassadors": [
+    { "handle": "AudMonte01" }
+  ],
+  "kubestronauts": [
+    { "handle": "huats" }
+  ],
+  "maintainers": [
+    { "handle": "krook" },
+    { "handle": "castrojo" },
+    { "handle": "mrbobbytables" },
+    { "handle": "jeefy" },
+    { "handle": "nate-double-u" },
+    { "name": "Shellea Williams", "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/Shellea_Williams.jpeg" }
+  ],
+  "toc": [
+    { "handle": "mrbobbytables" },
+    { "handle": "riaankleinhans" },
+    { "handle": "idvoretskyi" },
+    { "handle": "krook" },
+    { "handle": "jeefy" },
+    { "handle": "nate-double-u" }
+  ],
+  "tab": [
+    { "handle": "mrbobbytables" },
+    { "handle": "idvoretskyi" },
+    { "handle": "castrojo" },
+    { "handle": "taylorwaggoner" },
+    { "handle": "joannalee333" }
+  ],
+  "governing-board": [
+    { "handle": "jeefy" },
+    { "handle": "mrbobbytables" },
+    { "handle": "krook" }
+  ],
+  "marketing": [
+    { "name": "Eliza Power",       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/eliza-power.jpg",       "profileUrl": "https://www.linkedin.com/in/eliza-power-413809219/" },
+    { "name": "Mary Phan",         "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/mary-phan.jpeg",         "profileUrl": "https://www.linkedin.com/in/phanmary/" },
+    { "name": "Kaitlin Thornhill", "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/kaitlin-thornhill.jpg",  "profileUrl": "https://www.linkedin.com/in/kaitlin-thornhill-935a322b/" },
+    { "name": "Haley White",       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/haley-white.jpg",        "profileUrl": "https://www.linkedin.com/in/haleywhite20/" }
+  ]
+}
