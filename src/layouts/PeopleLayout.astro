@@ -52,7 +52,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
               <h1 class="site-title">
                 <a href={baseUrl} id="home-link" class="home-link">CNCF People</a>
               </h1>
-              <p class="site-subtitle">Who's joining the cloud native community</p>
+              <p class="site-subtitle">The people behind the magic ...</p>
             </div>
           </div>
           <div class="search-wrapper">
@@ -75,6 +75,8 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <button class="section-link" data-tab="ambassadors">Ambassadors</button>
         <button class="section-link" data-tab="kubestronauts">Kubestronauts</button>
         <button class="section-link" data-tab="golden-kubestronauts">Golden Kubestronauts</button>
+        <button class="section-link" data-tab="toc">TOC</button>
+        <button class="section-link" data-tab="tab">End User TAB</button>
         <button class="section-link" data-tab="staff">Staff</button>
       </nav>
     </div>
@@ -114,6 +116,8 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     'ambassadors':          'ambassadors',
     'kubestronauts':        'kubestronaut',
     'golden-kubestronauts': 'golden-kubestronaut',
+    'toc':                  'toc',
+    'tab':                  'end user tab',
     'staff':                'staff',
   };
 
