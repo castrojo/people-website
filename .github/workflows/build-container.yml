@@ -29,9 +29,7 @@ jobs:
       - name: Restore sync cache
         uses: actions/cache/restore@v4
         with:
-          path: |
-            .sync-cache
-            src/data
+          path: .sync-cache
           key: sync-cache-${{ runner.os }}-${{ github.run_id }}
           restore-keys: sync-cache-${{ runner.os }}-
 
@@ -47,9 +45,7 @@ jobs:
         if: always()
         uses: actions/cache/save@v4
         with:
-          path: |
-            .sync-cache
-            src/data
+          path: .sync-cache
           key: sync-cache-${{ runner.os }}-${{ github.run_id }}
           retention-days: 90
 
