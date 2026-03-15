@@ -132,12 +132,12 @@ function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>):
 </article>`;
 }
 
-export async function initMaintainerLoader(staticCount: number) {
+export async function initMaintainerLoader(staticCount: number, preloadedLogos?: Record<string, string>) {
   const feed = document.getElementById('maintainer-feed');
   if (!feed) return;
 
   let allMaintainers: SafeMaintainer[] = [];
-  let logos: Record<string, string> = {};
+  let logos: Record<string, string> = preloadedLogos ?? {};
   let nextIdx = staticCount;
   let loading = false;
   let done = false;
@@ -145,10 +145,10 @@ export async function initMaintainerLoader(staticCount: number) {
   async function loadData() {
     const [maintainersRes, logosRes] = await Promise.all([
       fetch(MAINTAINERS_URL),
-      fetch(LOGOS_URL).catch(() => null),
+      preloadedLogos ? null : fetch(LOGOS_URL).catch(() => null),
     ]);
     allMaintainers = await maintainersRes.json() as SafeMaintainer[];
-    if (logosRes?.ok) {
+    if (!preloadedLogos && logosRes?.ok) {
       logos = await logosRes.json() as Record<string, string>;
     }
     done = nextIdx >= allMaintainers.length;

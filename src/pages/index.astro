@@ -110,7 +110,7 @@ interface Event {
   changes?: Change[];
 }
 
-const STATIC_COUNT = 200;
+const STATIC_COUNT = 30;
 
 const events = changelogRaw as Event[];
 const staticEvents = events.slice(0, STATIC_COUNT);
@@ -1054,7 +1054,6 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   import { initFeedLoader } from '../lib/feed-loader';
   import { initMaintainerLoader } from '../lib/maintainer-loader';
   import { searchPeople, preloadSearchIndex } from '../lib/search';
-  import { fireConfetti } from '../lib/hero-confetti';
 
   const timelineFeed = document.getElementById('timeline-feed') as HTMLElement;
   const staticCount = parseInt(timelineFeed?.dataset.staticCount ?? '200', 10);
@@ -1066,16 +1065,42 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
   // Preload search index in background
   preloadSearchIndex(import.meta.env.BASE_URL);
 
-  // Fetch landscape logos once and kick off infinite scroll
-  fetch(`${baseUrl}/data/landscape_logos.json`)
-    .then(r => r.json())
-    .then((logos: Record<string, string>) => initFeedLoader(staticCount, logos, applyFilters))
-    .catch(() => initFeedLoader(staticCount, {}, applyFilters));
+  // Fetch landscape logos once — shared by both feed-loader and maintainer-loader.
+  // Cache in module-level promise so both loaders reuse the same fetch.
+  const logosPromise: Promise<Record<string, string>> =
+    fetch(`${baseUrl}/data/landscape_logos.json`)
+      .then(r => r.json())
+      .catch(() => ({}));
 
-  // Kick off maintainer lazy-loader
-  const maintainerStaticCount = document.getElementById('maintainer-feed')?.querySelectorAll('.maintainer-card').length ?? 0;
-  initMaintainerLoader(maintainerStaticCount);
+  // Kick off infinite scroll for the main timeline feed immediately.
+  logosPromise.then(logos => initFeedLoader(staticCount, logos, applyFilters));
 
+  // Defer maintainer data fetch until the Maintainers tab is first activated.
+  let maintainerInitialized = false;
+  function maybeInitMaintainer(tab: string) {
+    if (tab === 'maintainers' && !maintainerInitialized) {
+      maintainerInitialized = true;
+      const maintainerStaticCount = document.getElementById('maintainer-feed')
+        ?.querySelectorAll('.maintainer-card').length ?? 0;
+      // Pass the shared logos promise so we don't re-fetch landscape_logos.json.
+      logosPromise.then(logos => initMaintainerLoader(maintainerStaticCount, logos));
+    }
+  }
+
+  // Hook into tab buttons to trigger deferred init.
+  document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => maybeInitMaintainer(btn.dataset.tab ?? ''));
+  });
+  // Also check the restored tab on page load.
+  maybeInitMaintainer(localStorage.getItem('active-tab') ?? 'everyone');
+
+  // Hero card confetti: lazy-load canvas-confetti only on first click.
+  document.addEventListener('click', (e: MouseEvent) => {
+    const card = (e.target as Element)?.closest('.hero-card');
+    if (card) {
+      import('../lib/hero-confetti').then(({ fireConfetti }) => fireConfetti(card));
+    }
+  });
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;
   const catFilter   = document.getElementById('category-filter') as HTMLSelectElement;
