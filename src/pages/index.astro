@@ -205,7 +205,6 @@ const TAB_CATEGORY_FILTER: Record<string, (cats: string[]) => boolean> = {
   'everyone':            ()    => true,
   'ambassadors':         cats  => cats.includes('Ambassadors'),
   'kubestronauts':       cats  => cats.includes('Kubestronaut'),
-  'golden-kubestronauts': cats => cats.includes('Golden-Kubestronaut'),
   'toc':                 cats  => cats.includes('Technical Oversight Committee'),
   'tab':                 cats  => cats.includes('End User TAB'),
   'governing-board':     cats  => cats.includes('Governing Board'),
@@ -253,7 +252,6 @@ interface StaffMember {
 const TAB_STAFF: Record<string, StaffMember[]> = {
   'ambassadors':          [{ handle: 'AudMonte01',    name: 'Audra Montenegro'    }],
   'kubestronauts':        [{ handle: 'huats',         name: 'Christophe Sauthier' }],
-  'golden-kubestronauts': [{ handle: 'huats',         name: 'Christophe Sauthier' }],
   'maintainers':          [
     { handle: 'krook',          name: 'Daniel Krook'     },
     { handle: 'castrojo',       name: 'Jorge Castro'     },
@@ -526,6 +524,16 @@ const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g]
       </section>
     )}
 
+    {heroRotations.goldenKubestronauts.length > 0 && (
+      <section class="tab-heroes-section" data-tab-heroes="kubestronauts" style="display:none">
+        <h2 class="tab-heroes-heading">Golden Kubestronauts of the Day</h2>
+        <div class="heroes-grid">
+          {heroRotations.goldenKubestronauts.map(p => (
+            <HeroCard person={p} label="Golden Kubestronaut" categoryKey="Golden-Kubestronaut" baseUrl={baseUrl} />
+          ))}
+        </div>
+      </section>
+    )}
     {heroRotations.kubestronauts.length > 0 && (
       <section class="tab-heroes-section" data-tab-heroes="kubestronauts" style="display:none">
         <h2 class="tab-heroes-heading">Kubestronauts of the Day</h2>
@@ -541,33 +549,6 @@ const emeritusActiveGroups = EMERITUS_GROUP_ORDER.filter(g => emeritusGrouped[g]
         <h2 class="staff-support-heading">CNCF Staff providing Support</h2>
         <div class="staff-support-list">
           {TAB_STAFF['kubestronauts'].map(m => (
-            <a href={m.handle ? `https://github.com/${m.handle}` : (m.profileUrl ?? '#')} target="_blank" rel="noopener noreferrer" class="staff-support-card">
-              <img src={m.handle ? `https://avatars.githubusercontent.com/${m.handle}` : (m.imageUrl ?? '')} alt={m.name} class="staff-support-avatar" loading="lazy" />
-              <div class="staff-support-info">
-                <span class="staff-support-name">{m.name}</span>
-                {m.handle && <span class="staff-support-handle">@{m.handle}</span>}
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {heroRotations.goldenKubestronauts.length > 0 && (
-      <section class="tab-heroes-section" data-tab-heroes="golden-kubestronauts" style="display:none">
-        <h2 class="tab-heroes-heading">Golden Kubestronauts of the Day</h2>
-        <div class="heroes-grid">
-          {heroRotations.goldenKubestronauts.map(p => (
-            <HeroCard person={p} label="Golden Kubestronaut" categoryKey="Golden-Kubestronaut" baseUrl={baseUrl} />
-          ))}
-        </div>
-      </section>
-    )}
-    {TAB_STAFF['golden-kubestronauts'] && (
-      <section class="staff-support-section" data-tab-heroes="golden-kubestronauts" style="display:none">
-        <h2 class="staff-support-heading">CNCF Staff providing Support</h2>
-        <div class="staff-support-list">
-          {TAB_STAFF['golden-kubestronauts'].map(m => (
             <a href={m.handle ? `https://github.com/${m.handle}` : (m.profileUrl ?? '#')} target="_blank" rel="noopener noreferrer" class="staff-support-card">
               <img src={m.handle ? `https://avatars.githubusercontent.com/${m.handle}` : (m.imageUrl ?? '')} alt={m.name} class="staff-support-avatar" loading="lazy" />
               <div class="staff-support-info">
