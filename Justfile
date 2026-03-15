@@ -4,33 +4,36 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 default:
     just --list
 
-# Full build: Go sync → Astro
+# DEFAULT: build container, stop old one, run new one, open browser
+serve:
+    just container-build
+    podman rm -f people-website 2>/dev/null || true
+    podman run -d --name people-website -p 8080:8080 ghcr.io/castrojo/people-website:local
+    xdg-open http://localhost:8080/people-website/
+
+# Full production build (Go + Astro → dist/)
 build:
     npm ci
     cd people-go && go build -o people cmd/people/main.go && ./people
     npm run build
 
-# DEFAULT for all local iterations: sync data then start hot-reload dev server
-sync-dev:
-    just sync
-    just dev
-
-# Dev server with hot reload — only when data hasn't changed
-dev:
-    npx astro dev --port 4322 --host
-
-# Serve with hot-reload dev server and open browser
-serve:
-    xdg-open http://localhost:4322/people-website/ & just sync-dev
-
-# Run Go sync only (useful for testing backend without full build)
-sync:
-    cd people-go && go build -o people cmd/people/main.go && ./people
-
-# Build the production container image locally
+# Build the container image
 container-build:
     podman build -t ghcr.io/castrojo/people-website:local -f Containerfile .
 
-# Run the locally built container
-container-run:
-    xdg-open http://localhost:8080/people-website & sleep 1 && podman run --rm -p 8080:8080 ghcr.io/castrojo/people-website:local
+# Stop the running container
+stop:
+    podman rm -f people-website 2>/dev/null || true
+
+# Go sync only (regenerate changelog.json locally)
+sync:
+    cd people-go && go build -o people cmd/people/main.go && ./people
+
+# Astro hot-reload dev server (no container — UI iteration only)
+dev:
+    npx astro dev --port 4322 --host
+
+# Sync data then hot-reload dev (fast UI iteration, no container rebuild)
+sync-dev:
+    just sync
+    just dev

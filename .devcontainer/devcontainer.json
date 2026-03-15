@@ -18,7 +18,6 @@
     "GOPATH": "/root/go"
   },
   "postCreateCommand": "npm install && cd people-go && go mod download",
-  "postStartCommand": "just sync-dev",
   "customizations": {
     "vscode": {
       "extensions": [
