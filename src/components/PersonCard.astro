@@ -137,10 +137,9 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
       {(person.contributions || person.publicRepos || person.yearsContributing) && (
         <div class="stats-row">
           {person.yearsContributing > 0 && (
-            <span class="stat-chip" aria-label={`${person.yearsContributing} years contributing to CNCF projects`}>
+            <span class="stat-chip" aria-label={`Contributing to CNCF projects since ${new Date().getFullYear() - person.yearsContributing}`}>
               <img src="/people-website/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" />
-              <span class="stat-val">{person.yearsContributing}</span>
-              <span class="stat-label">yrs in CNCF</span>
+              <span class="stat-val">Since {new Date().getFullYear() - person.yearsContributing} ({person.yearsContributing}y)</span>
             </span>
           )}
           {person.contributions > 0 && (
