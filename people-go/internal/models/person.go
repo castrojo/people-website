@@ -102,10 +102,10 @@ type SafePerson struct {
 	Category   []string `json:"category"`
 	Projects   []string `json:"projects,omitempty"`
 	// GitHub enrichment fields
-	AvatarURL     string `json:"avatarUrl,omitempty"`
-	Contributions int    `json:"contributions,omitempty"`
-	Followers     int    `json:"followers,omitempty"`
-	PublicRepos   int    `json:"publicRepos,omitempty"`
+	AvatarURL        string `json:"avatarUrl,omitempty"`
+	Contributions    int    `json:"contributions,omitempty"`
+	PublicRepos      int    `json:"publicRepos,omitempty"`
+	YearsContributing int   `json:"yearsContributing,omitempty"`
 }
 
 // ToSafe converts a RawPerson to a SafePerson, dropping sensitive fields.

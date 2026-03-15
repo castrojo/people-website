@@ -70,12 +70,15 @@ func main() {
 
 	// ── Compute delta ─────────────────────────────────────────────────────
 	now := time.Now().UTC()
+	isBootstrap := len(previous) == 0
 	events := differ.Compute(previous, currentMap, now)
 	log.Printf("delta: %d events", len(events))
 
 	// ── Enrich with GitHub API ────────────────────────────────────────────
 	// Only enrich people who have a valid GitHub handle.
 	// Cap at 50 enrichments per run to avoid hitting rate limits.
+	// CNCF years search (1 extra REST call per person) is skipped on bootstrap
+	// to avoid hammering the API for thousands of people on first import.
 	if token != "" && len(events) > 0 {
 		apiCache, err := apicache.Load(cacheDir)
 		if err != nil {
@@ -97,10 +100,16 @@ func main() {
 				if stats.AvatarURL != "" {
 					events[i].Person.AvatarURL = stats.AvatarURL
 					events[i].Person.Contributions = stats.Contributions
-					events[i].Person.Followers = stats.Followers
 					events[i].Person.PublicRepos = stats.PublicRepos
-					enriched++
 				}
+				// Only search CNCF contribution history on incremental runs
+				if !isBootstrap {
+					ghClient.EnrichCNCFYears(ctx, e.Person.Handle, apiCache)
+					if s, ok := apiCache.Get(e.Person.Handle); ok {
+						events[i].Person.YearsContributing = s.YearsContributing
+					}
+				}
+				enriched++
 			}
 		}
 		log.Printf("enriched %d events", enriched)

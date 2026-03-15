@@ -15,11 +15,11 @@ const (
 
 // UserStats holds enrichment data fetched from the GitHub API.
 type UserStats struct {
-	AvatarURL     string    `json:"avatarUrl"`
-	Contributions int       `json:"contributions"`
-	Followers     int       `json:"followers"`
-	PublicRepos   int       `json:"publicRepos"`
-	FetchedAt     time.Time `json:"fetchedAt"`
+	AvatarURL         string    `json:"avatarUrl"`
+	Contributions     int       `json:"contributions"`
+	PublicRepos       int       `json:"publicRepos"`
+	YearsContributing int       `json:"yearsContributing"`
+	FetchedAt         time.Time `json:"fetchedAt"`
 }
 
 // Cache stores per-user API results with a TTL to avoid re-fetching.

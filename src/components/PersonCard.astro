@@ -46,8 +46,8 @@ interface Person {
   projects?: string[];
   avatarUrl?: string;
   contributions?: number;
-  followers?: number;
   publicRepos?: number;
+  yearsContributing?: number;
 }
 
 interface Props {
@@ -117,20 +117,20 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
       </div>
     </div>
 
-    {(person.contributions || person.followers || person.publicRepos) && (
+    {(person.contributions || person.publicRepos || person.yearsContributing) && (
       <div class="stats-row">
+        {person.yearsContributing > 0 && (
+          <span class="stat-chip" aria-label={`${person.yearsContributing} years contributing to CNCF projects`}>
+            <img src="/people-website/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" />
+            <span class="stat-val">{person.yearsContributing}</span>
+            <span class="stat-label">yrs in CNCF</span>
+          </span>
+        )}
         {person.contributions > 0 && (
           <span class="stat-chip" aria-label={`${person.contributions.toLocaleString()} GitHub contributions in the last year`}>
             <span class="stat-icon" aria-hidden="true">🟩</span>
             <span class="stat-val">{person.contributions.toLocaleString()}</span>
             <span class="stat-label">contributions</span>
-          </span>
-        )}
-        {person.followers > 0 && (
-          <span class="stat-chip" aria-label={`${person.followers.toLocaleString()} GitHub followers`}>
-            <span class="stat-icon" aria-hidden="true">👥</span>
-            <span class="stat-val">{person.followers.toLocaleString()}</span>
-            <span class="stat-label">followers</span>
           </span>
         )}
         {person.publicRepos > 0 && (
@@ -333,6 +333,12 @@ const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute
     font-size: 0.75rem;
     color: var(--color-text-secondary);
     opacity: 0.8;
+  }
+  .stat-cncf-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   /* Tooltip shown on hover — uses aria-label value */
