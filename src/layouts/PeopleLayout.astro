@@ -69,6 +69,14 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
           >?</button>
         </div>
       </div>
+      <!-- Category tab navigation -->
+      <nav class="section-nav" aria-label="Filter by category">
+        <button class="section-link active" data-tab="everyone">Everyone</button>
+        <button class="section-link" data-tab="ambassadors">Ambassadors</button>
+        <button class="section-link" data-tab="kubestronauts">Kubestronauts</button>
+        <button class="section-link" data-tab="golden-kubestronauts">Golden Kubestronauts</button>
+        <button class="section-link" data-tab="staff">Staff</button>
+      </nav>
     </div>
   </header>
 
@@ -99,6 +107,50 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   document.getElementById('help-button')?.addEventListener('click', () => {
     document.getElementById('keyboard-help-modal')?.classList.add('visible');
     document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+  });
+
+  // Category tab filtering
+  const TAB_CATEGORY_MAP: Record<string, string> = {
+    'ambassadors':          'ambassadors',
+    'kubestronauts':        'kubestronaut',
+    'golden-kubestronauts': 'golden-kubestronaut',
+    'staff':                'staff',
+  };
+
+  function applyTab(tab: string) {
+    const cards = document.querySelectorAll<HTMLElement>('.person-card');
+    const groups = document.querySelectorAll<HTMLElement>('.day-group');
+
+    cards.forEach(card => {
+      if (tab === 'everyone') {
+        card.style.display = '';
+      } else {
+        const cat = card.dataset.category ?? '';
+        const tabCat = TAB_CATEGORY_MAP[tab] ?? tab;
+        // A golden kubestronaut also matches the kubestronauts tab
+        const matches =
+          cat === tabCat ||
+          (tab === 'kubestronauts' && cat === 'golden-kubestronaut');
+        card.style.display = matches ? '' : 'none';
+      }
+    });
+
+    // Hide date group headers with no visible cards
+    groups.forEach(group => {
+      const visible = Array.from(group.querySelectorAll<HTMLElement>('.person-card'))
+        .some(c => c.style.display !== 'none');
+      group.style.display = visible ? '' : 'none';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.section-link[data-tab]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyTab(btn.dataset.tab ?? 'everyone');
+      });
+    });
   });
 </script>
 
@@ -161,7 +213,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   .site-header {
     background: var(--color-bg-default);
     border-bottom: 1px solid var(--color-border-default);
-    padding: 2rem 0 1rem;
+    padding: 2rem 0 0;
     margin-bottom: 2rem;
   }
 
@@ -170,6 +222,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
+    padding-bottom: 1rem;
   }
 
   .header-left {
@@ -191,6 +244,33 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   .home-link:hover { color: var(--color-text-link); }
 
   .site-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+
+  /* Section / category tab nav */
+  .section-nav {
+    display: flex;
+    gap: 0.25rem;
+    padding-bottom: 0;
+  }
+
+  .section-link {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .section-link:hover { color: var(--color-text-primary); }
+
+  .section-link.active {
+    color: var(--color-text-primary);
+    border-bottom-color: var(--color-accent-emphasis);
+  }
 
   .cncf-logo-wrapper {
     display: flex;
