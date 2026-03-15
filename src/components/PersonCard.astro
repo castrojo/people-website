@@ -1,0 +1,357 @@
+---
+interface Category {
+  name: string;
+  color: string;
+}
+
+const CATEGORY_MAP: Record<string, Category> = {
+  'Kubestronaut': { name: 'Kubestronaut', color: 'var(--color-kubestronaut, #FFB300)' },
+  'Golden-Kubestronaut': { name: '⭐ Golden Kubestronaut', color: 'var(--color-golden, #C9A000)' },
+  'Ambassadors': { name: 'Ambassador', color: 'var(--color-ambassador, #0086FF)' },
+  'Staff': { name: 'Staff', color: 'var(--color-staff, #00A86B)' },
+  'TOC': { name: 'TOC', color: 'var(--color-toc, #D62293)' },
+  'End User TAB': { name: 'End User TAB', color: 'var(--color-tab, #7B2FBE)' },
+  'Governing Board': { name: 'Governing Board', color: 'var(--color-board, #E65100)' },
+  'Marketing Committee': { name: 'Marketing Committee', color: 'var(--color-board, #E65100)' },
+};
+
+interface Change {
+  field: string;
+  from: string;
+  to: string;
+}
+
+interface Person {
+  name: string;
+  handle?: string;
+  github?: string;
+  imageUrl?: string;
+  company?: string;
+  location?: string;
+  linkedin?: string;
+  twitter?: string;
+  website?: string;
+  bluesky?: string;
+  mastodon?: string;
+  category: string[];
+  projects?: string[];
+  avatarUrl?: string;
+  contributions?: number;
+  followers?: number;
+  publicRepos?: number;
+}
+
+interface Props {
+  id: string;
+  type: 'added' | 'removed' | 'updated';
+  timestamp: string;
+  person: Person;
+  changes?: Change[];
+}
+
+const { id, type, timestamp, person, changes = [] } = Astro.props;
+
+const avatarSrc = person.avatarUrl || person.imageUrl || '';
+const profileUrl = person.github || (person.handle ? `https://github.com/${person.handle}` : '#');
+const primaryCategory = person.category?.[0] ?? '';
+const categoryInfo = CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
+
+const typeLabel = { added: '+ Joined', removed: '− Left', updated: '✎ Updated' }[type];
+const typeBadgeClass = `badge-${type}`;
+
+const date = new Date(timestamp);
+const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC', timeZoneName: 'short' });
+---
+
+<article class="person-card" data-id={id} data-type={type} data-category={primaryCategory.toLowerCase()} style={`--card-accent: ${categoryInfo.color}`}>
+  <div class="card-accent-bar"></div>
+
+  <div class="card-body">
+    <div class="card-identity">
+      <a href={profileUrl} target="_blank" rel="noopener noreferrer" class="avatar-link">
+        {avatarSrc
+          ? <img src={avatarSrc} alt={person.name} class="avatar" loading="lazy" width="64" height="64" />
+          : <div class="avatar avatar-placeholder" aria-hidden="true">{person.name.charAt(0)}</div>
+        }
+      </a>
+
+      <div class="identity-info">
+        <div class="name-row">
+          <a href={profileUrl} target="_blank" rel="noopener noreferrer" class="person-name">{person.name}</a>
+          {person.handle && <a href={profileUrl} target="_blank" rel="noopener noreferrer" class="handle">@{person.handle}</a>}
+        </div>
+        <div class="badges">
+          <span class={`badge ${typeBadgeClass}`}>{typeLabel}</span>
+          {person.category.map(cat => (
+            <span class="badge badge-category" style={`background: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}22; color: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}; border-color: ${(CATEGORY_MAP[cat] ?? categoryInfo).color}44`}>
+              {CATEGORY_MAP[cat]?.name ?? cat}
+            </span>
+          ))}
+        </div>
+        {(person.company || person.location) && (
+          <p class="meta-line">
+            {person.company && <span class="meta-item">🏢 {person.company}</span>}
+            {person.location && <span class="meta-item">📍 {person.location}</span>}
+          </p>
+        )}
+      </div>
+    </div>
+
+    {(person.contributions || person.followers || person.publicRepos) && (
+      <div class="stats-row">
+        {person.contributions > 0 && (
+          <span class="stat-chip" title="GitHub contributions (last year)">
+            <span class="stat-icon">🟩</span>
+            <span class="stat-val">{person.contributions.toLocaleString()}</span>
+          </span>
+        )}
+        {person.followers > 0 && (
+          <span class="stat-chip" title="GitHub followers">
+            <span class="stat-icon">👥</span>
+            <span class="stat-val">{person.followers.toLocaleString()}</span>
+          </span>
+        )}
+        {person.publicRepos > 0 && (
+          <span class="stat-chip" title="Public repositories">
+            <span class="stat-icon">📦</span>
+            <span class="stat-val">{person.publicRepos}</span>
+          </span>
+        )}
+      </div>
+    )}
+
+    {person.projects && person.projects.length > 0 && (
+      <div class="projects-row">
+        {person.projects.slice(0, 6).map(project => (
+          <span class="project-chip">{project}</span>
+        ))}
+        {person.projects.length > 6 && <span class="project-chip project-more">+{person.projects.length - 6}</span>}
+      </div>
+    )}
+
+    {changes.length > 0 && (
+      <details class="changes-details">
+        <summary class="changes-summary">{changes.length} field{changes.length > 1 ? 's' : ''} changed</summary>
+        <ul class="changes-list">
+          {changes.map(c => (
+            <li class="change-item">
+              <span class="change-field">{c.field}</span>
+              <span class="change-from">{c.from || '(empty)'}</span>
+              <span class="change-arrow">→</span>
+              <span class="change-to">{c.to || '(empty)'}</span>
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
+  </div>
+
+  <div class="card-footer">
+    <time datetime={timestamp} class="timestamp">{formattedDate} · {formattedTime}</time>
+    <div class="social-links">
+      {person.github && <a href={person.github} target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      </a>}
+      {person.linkedin && <a href={person.linkedin} target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>}
+      {person.twitter && <a href={person.twitter} target="_blank" rel="noopener noreferrer" class="social-link" title="Twitter/X" aria-label="Twitter">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>}
+      {person.bluesky && <a href={person.bluesky} target="_blank" rel="noopener noreferrer" class="social-link" title="Bluesky" aria-label="Bluesky">🦋</a>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .person-card {
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    margin-bottom: 1rem;
+  }
+  .person-card:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-color: var(--card-accent);
+  }
+
+  .card-accent-bar {
+    height: 3px;
+    background: var(--card-accent);
+  }
+
+  .card-body { padding: 1rem; }
+
+  .card-identity {
+    display: flex;
+    gap: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .avatar-link { flex-shrink: 0; }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border-default);
+  }
+
+  .avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--card-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 2px solid var(--color-border-default);
+  }
+
+  .identity-info { flex: 1; min-width: 0; }
+
+  .name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.375rem;
+  }
+
+  .person-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .person-name:hover { color: var(--color-text-link); }
+
+  .handle {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-family: ui-monospace, monospace;
+  }
+  .handle:hover { color: var(--color-text-link); }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .badge-added    { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+  .badge-removed  { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+  .badge-updated  { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+  [data-theme="dark"] .badge-added    { background: #14532d44; color: #86efac; border-color: #166534; }
+  [data-theme="dark"] .badge-removed  { background: #7f1d1d44; color: #fca5a5; border-color: #991b1b; }
+  [data-theme="dark"] .badge-updated  { background: #1e3a8a44; color: #93c5fd; border-color: #1e40af; }
+  .badge-category { font-weight: 500; }
+
+  .meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+  }
+  .meta-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+  }
+  .stat-val { font-weight: 600; color: var(--color-text-primary); }
+
+  .projects-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+  }
+  .project-chip {
+    padding: 0.125rem 0.5rem;
+    background: var(--color-cncf-blue)11;
+    border: 1px solid var(--color-cncf-blue)33;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--color-cncf-blue);
+    font-weight: 500;
+  }
+  .project-more { background: var(--color-bg-tertiary); color: var(--color-text-secondary); border-color: var(--color-border-default); }
+
+  .changes-details { margin-top: 0.75rem; }
+  .changes-summary {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+  }
+  .changes-list { list-style: none; padding: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.375rem; }
+  .change-item {
+    display: flex;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .change-field { font-weight: 600; color: var(--color-text-primary); }
+  .change-from { color: #991b1b; background: #fee2e2; padding: 0.1rem 0.4rem; border-radius: 4px; }
+  .change-to   { color: #166534; background: #dcfce7; padding: 0.1rem 0.4rem; border-radius: 4px; }
+  .change-arrow { color: var(--color-text-tertiary); }
+  [data-theme="dark"] .change-from { color: #fca5a5; background: #7f1d1d44; }
+  [data-theme="dark"] .change-to   { color: #86efac; background: #14532d44; }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    border-top: 1px solid var(--color-border-default);
+    background: var(--color-bg-tertiary);
+  }
+
+  .timestamp { font-size: 0.75rem; color: var(--color-text-secondary); }
+
+  .social-links { display: flex; gap: 0.5rem; align-items: center; }
+  .social-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.15s;
+  }
+  .social-link:hover { color: var(--color-text-primary); }
+</style>

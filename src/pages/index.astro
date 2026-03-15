@@ -1,17 +1,278 @@
 ---
+import PeopleLayout from '../layouts/PeopleLayout.astro';
+import PersonCard from '../components/PersonCard.astro';
+import InfoBox from '../components/InfoBox.astro';
+import KubeConBanner from '../components/KubeConBanner.astro';
+import { getActiveBanners } from '../lib/banners';
 
+import changelogRaw from '../data/changelog.json';
+
+interface Change {
+  field: string;
+  from: string;
+  to: string;
+}
+
+interface Person {
+  name: string;
+  handle?: string;
+  github?: string;
+  imageUrl?: string;
+  company?: string;
+  location?: string;
+  linkedin?: string;
+  twitter?: string;
+  website?: string;
+  bluesky?: string;
+  mastodon?: string;
+  category: string[];
+  projects?: string[];
+  avatarUrl?: string;
+  contributions?: number;
+  followers?: number;
+  publicRepos?: number;
+}
+
+interface Event {
+  id: string;
+  type: 'added' | 'removed' | 'updated';
+  timestamp: string;
+  person: Person;
+  changes?: Change[];
+}
+
+const events = changelogRaw as Event[];
+
+function dateHeader(ts: string): string {
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+}
+
+const grouped: Map<string, Event[]> = new Map();
+for (const e of events) {
+  const key = dateHeader(e.timestamp);
+  if (!grouped.has(key)) grouped.set(key, []);
+  grouped.get(key)!.push(e);
+}
+
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
+const feedUrl = `${baseUrl}feed.xml`;
+
+const banners = await getActiveBanners();
+
+const stats = {
+  total: events.length,
+  added: events.filter(e => e.type === 'added').length,
+  removed: events.filter(e => e.type === 'removed').length,
+  updated: events.filter(e => e.type === 'updated').length,
+};
+
+const categories = [...new Set(events.flatMap(e => e.person.category ?? []))].sort();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>CNCF People</title>
-	</head>
-	<body>
-		<h1>CNCF People</h1>
-		<p>Who's joining the cloud native community — coming soon.</p>
-	</body>
-</html>
+<PeopleLayout pageTitle="CNCF People" feedUrl={feedUrl}>
+  <div slot="search" class="search-bar">
+    <input
+      type="search"
+      id="search-input"
+      placeholder="Search by name, company, or location…"
+      class="search-input"
+      autocomplete="off"
+    />
+  </div>
+
+  <div slot="sidebar">
+    {banners.length > 0 && <KubeConBanner banners={banners} />}
+
+    <div class="sidebar-section">
+      <h2 class="sidebar-heading">Filter</h2>
+      <div class="filter-controls">
+        <select id="type-filter" class="filter-select">
+          <option value="">All events</option>
+          <option value="added">Joined</option>
+          <option value="removed">Left</option>
+          <option value="updated">Updated</option>
+        </select>
+        <select id="category-filter" class="filter-select">
+          <option value="">All categories</option>
+          {categories.map(cat => <option value={cat.toLowerCase()}>{cat}</option>)}
+        </select>
+      </div>
+      <p id="filter-count" class="filter-count"></p>
+    </div>
+
+    <div class="sidebar-section">
+      <h2 class="sidebar-heading">Stats</h2>
+      <div class="stats-grid">
+        <div class="stat-item"><span class="stat-num">{stats.total}</span><span class="stat-lbl">Total</span></div>
+        <div class="stat-item"><span class="stat-num" style="color:#166534">{stats.added}</span><span class="stat-lbl">Joined</span></div>
+        <div class="stat-item"><span class="stat-num" style="color:#991b1b">{stats.removed}</span><span class="stat-lbl">Left</span></div>
+        <div class="stat-item"><span class="stat-num" style="color:#1e40af">{stats.updated}</span><span class="stat-lbl">Updated</span></div>
+      </div>
+    </div>
+
+    <InfoBox
+      title="About"
+      description="Live activity feed for cncf/people — who's joining, leaving, or updating their profile in the CNCF community."
+      links={[
+        { text: 'RSS Feed', url: feedUrl, rss: true },
+        { text: 'cncf/people on GitHub', url: 'https://github.com/cncf/people', external: true },
+        { text: 'castrojo/people-website', url: 'https://github.com/castrojo/people-website', external: true },
+        { text: 'CNCF Releases (Firehose)', url: 'https://castrojo.github.io/firehose/', external: true },
+      ]}
+    />
+  </div>
+
+  <div id="feed" class="feed">
+    {[...grouped.entries()].map(([date, dayEvents]) => (
+      <section class="day-group" data-date={date}>
+        <h2 class="day-header">{date}</h2>
+        {dayEvents.map(event => (
+          <PersonCard
+            id={event.id}
+            type={event.type}
+            timestamp={event.timestamp}
+            person={event.person}
+            changes={event.changes}
+          />
+        ))}
+      </section>
+    ))}
+
+    {events.length === 0 && (
+      <div class="empty-state">
+        <p>No activity yet — check back after the first daily sync.</p>
+      </div>
+    )}
+  </div>
+</PeopleLayout>
+
+<style>
+  .search-bar { width: 100%; }
+  .search-input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    font-size: 0.9375rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--color-accent-emphasis); }
+  .search-input::placeholder { color: var(--color-text-tertiary); }
+
+  .filter-controls { display: flex; flex-direction: column; gap: 0.5rem; }
+  .filter-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background: var(--color-bg-default);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  .filter-count {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+    text-align: center;
+    min-height: 1.25rem;
+  }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.625rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--color-accent-emphasis); line-height: 1; }
+  .stat-lbl { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .day-group { margin-bottom: 2rem; }
+  .day-header {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-default);
+    margin-bottom: 1rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+  }
+</style>
+
+<script>
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;
+  const catFilter   = document.getElementById('category-filter') as HTMLSelectElement;
+  const filterCount = document.getElementById('filter-count');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.person-card'));
+
+  function applyFilters() {
+    const query = searchInput?.value.toLowerCase() ?? '';
+    const type  = typeFilter?.value ?? '';
+    const cat   = catFilter?.value ?? '';
+
+    let visible = 0;
+    for (const card of cards) {
+      const text = card.textContent?.toLowerCase() ?? '';
+      const cardType = card.dataset.type ?? '';
+      const cardCat  = card.dataset.category ?? '';
+
+      const matchSearch = !query || text.includes(query);
+      const matchType   = !type  || cardType === type;
+      const matchCat    = !cat   || cardCat.includes(cat);
+
+      const show = matchSearch && matchType && matchCat;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    }
+
+    for (const group of document.querySelectorAll<HTMLElement>('.day-group')) {
+      const visibleCards = group.querySelectorAll<HTMLElement>('.person-card:not([style*="display: none"])');
+      (group as HTMLElement).style.display = visibleCards.length ? '' : 'none';
+    }
+
+    if (filterCount) {
+      filterCount.textContent = (query || type || cat)
+        ? `Showing ${visible} of ${cards.length}`
+        : '';
+    }
+  }
+
+  searchInput?.addEventListener('input', applyFilters);
+  typeFilter?.addEventListener('change', applyFilters);
+  catFilter?.addEventListener('change', applyFilters);
+
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    const active = document.activeElement as HTMLElement;
+    const inInput = active?.tagName === 'INPUT' || active?.tagName === 'SELECT';
+
+    if (!inInput) {
+      if (e.key === '/' || e.key === 's') { e.preventDefault(); searchInput?.focus(); }
+      if (e.key === 't') { (window as unknown as { toggleTheme?: () => void }).toggleTheme?.(); }
+      if (e.key === '?') {
+        document.getElementById('keyboard-help-modal')?.classList.add('visible');
+        document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+      }
+    }
+    if (e.key === 'Escape' && inInput) active.blur();
+  });
+</script>

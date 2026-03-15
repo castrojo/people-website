@@ -1,0 +1,285 @@
+---
+import CNCFLogoColor from '../assets/cncf-icon-color.svg';
+import CNCFLogoWhite from '../assets/cncf-icon-white.svg';
+import KeyboardHelp from '../components/KeyboardHelp.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  pageTitle?: string;
+  feedUrl?: string;
+}
+
+const {
+  pageTitle = 'CNCF People',
+  feedUrl,
+} = Astro.props;
+
+const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
+---
+
+<!DOCTYPE html>
+<html lang="en" data-base-url={baseUrl}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Who's joining the CNCF community — activity feed for cncf/people">
+  {feedUrl && <link rel="alternate" type="application/rss+xml" title={pageTitle} href={feedUrl}>}
+  <title>{pageTitle}</title>
+
+  <script is:inline>
+    (function() {
+      const getTheme = () => {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') return stored;
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        return 'light';
+      };
+      document.documentElement.setAttribute('data-theme', getTheme());
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="logo-title">
+            <span class="cncf-logo-wrapper" aria-hidden="true">
+              <CNCFLogoColor class="logo-light" width={40} height={40} />
+              <CNCFLogoWhite class="logo-dark" width={40} height={40} />
+            </span>
+            <div>
+              <h1 class="site-title">
+                <a href={baseUrl} id="home-link" class="home-link">CNCF People</a>
+              </h1>
+              <p class="site-subtitle">Who's joining the cloud native community</p>
+            </div>
+          </div>
+          <div class="search-wrapper">
+            <slot name="search" />
+          </div>
+        </div>
+        <div class="header-actions">
+          <ThemeToggle />
+          <button
+            id="help-button"
+            class="keyboard-help-button"
+            aria-label="Keyboard shortcuts"
+            title="Keyboard shortcuts (Press ?)"
+          >?</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-layout">
+      <aside class="sidebar">
+        <slot name="sidebar" />
+      </aside>
+      <div class="main-content">
+        <slot />
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Updated daily from <a href="https://github.com/cncf/people" target="_blank" rel="noopener noreferrer">cncf/people</a> •
+        <a href="https://github.com/castrojo/people-website" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+    </div>
+  </footer>
+
+  <KeyboardHelp />
+  <div id="kbd-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+</body>
+</html>
+
+<script>
+  document.getElementById('help-button')?.addEventListener('click', () => {
+    document.getElementById('keyboard-help-modal')?.classList.add('visible');
+    document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
+  });
+</script>
+
+<style>
+  :root {
+    --color-cncf-blue: #0086FF;
+    --color-cncf-black: #000000;
+    --color-cncf-turquoise: #93EAFF;
+    --color-cncf-pink: #D62293;
+    --color-cncf-stone: #E5E5E5;
+    --color-cncf-white: #FFFFFF;
+
+    --color-bg-default: #ffffff;
+    --color-bg-secondary: #fdfdfd;
+    --color-bg-tertiary: #f8f8f8;
+    --color-border-default: #e6e6e6;
+    --color-text-primary: #000000;
+    --color-text-secondary: #747474;
+    --color-text-tertiary: #c4c4c4;
+    --color-text-link: #D62293;
+    --color-accent-emphasis: #0086FF;
+    --color-rss-orange: #ff6600;
+
+    /* Category badge colors */
+    --color-kubestronaut: #FFB300;
+    --color-golden: #C9A000;
+    --color-ambassador: #0086FF;
+    --color-staff: #00A86B;
+    --color-toc: #D62293;
+    --color-tab: #7B2FBE;
+    --color-board: #E65100;
+  }
+
+  [data-theme="dark"] {
+    --color-bg-default: #0d1117;
+    --color-bg-secondary: #010409;
+    --color-bg-tertiary: #161b22;
+    --color-border-default: #30363d;
+    --color-text-primary: #c9d1d9;
+    --color-text-secondary: #8b949e;
+    --color-text-tertiary: #6e7681;
+    --color-text-link: #ff6bc4;
+    --color-accent-emphasis: #79c0ff;
+    --color-cncf-blue: #79c0ff;
+    --color-rss-orange: #ffa657;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Clarity City', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
+
+  .site-header {
+    background: var(--color-bg-default);
+    border-bottom: 1px solid var(--color-border-default);
+    padding: 2rem 0 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+  }
+
+  .logo-title { display: flex; align-items: flex-start; gap: 0.75rem; }
+
+  .search-wrapper { flex: 1; max-width: 600px; }
+
+  .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+  .site-title { font-size: 2rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+  .home-link { color: var(--color-text-primary); text-decoration: none; transition: color 0.2s; }
+  .home-link:hover { color: var(--color-text-link); }
+
+  .site-subtitle { color: var(--color-text-secondary); font-size: 1rem; }
+
+  .cncf-logo-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: calc((2rem * 1.6 - 40px) / 2);
+  }
+  .cncf-logo-wrapper .logo-dark { display: none; }
+  [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
+  [data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
+  .cncf-logo-wrapper svg { width: 40px; height: 40px; }
+
+  .keyboard-help-button {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    margin-left: 1rem;
+  }
+  .keyboard-help-button:hover {
+    background: var(--color-bg-default);
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+  }
+
+  .page-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+  .main-content { min-width: 0; }
+
+  .site-footer {
+    background: var(--color-bg-default);
+    border-top: 1px solid var(--color-border-default);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+  .site-footer a { color: var(--color-text-link); text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0;
+    margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border-width: 0;
+  }
+
+  :global(.sidebar-heading) {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border-default);
+  }
+  :global(.sidebar-section) {
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 1023px) {
+    .page-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-title { font-size: 1.5rem; }
+    .header-left { gap: 1rem; }
+    .search-wrapper { display: none; }
+  }
+  @media (max-width: 640px) {
+    .container { padding: 0 0.75rem; }
+    .site-header { padding: 1rem 0; }
+    .site-title { font-size: 1.25rem; }
+  }
+</style>

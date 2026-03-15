@@ -1,0 +1,34 @@
+{
+  "name": "people-website",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [4322, 8080],
+  "portsAttributes": {
+    "4322": {
+      "label": "Astro Dev Server",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Container (nginx)",
+      "onAutoForward": "silent"
+    }
+  },
+  "containerEnv": {
+    "GOPATH": "/root/go"
+  },
+  "postCreateCommand": "npm install && cd people-go && go mod download",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "golang.go",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "go.toolsManagement.autoUpdate": false
+      }
+    }
+  }
+}
