@@ -411,7 +411,7 @@ type HeroRotations struct {
 // This ensures the same 4 people show all day, and the full list cycles before repeating.
 func dailyPick[T any](items []T, n int) []T {
 	if len(items) == 0 {
-		return nil
+		return []T{}
 	}
 	if n >= len(items) {
 		result := make([]T, len(items))
@@ -475,7 +475,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 	}
 
 	// Resolve CNCF Leadership from handles.
-	var leadership []models.SafePerson
+	leadership := []models.SafePerson{}
 	for _, h := range leadershipHandles {
 		if p, ok := byHandle[h]; ok {
 			leadership = append(leadership, p)
