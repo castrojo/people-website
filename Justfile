@@ -15,10 +15,9 @@ dev:
     cd people-go && go build -o people cmd/people/main.go && ./people
     npm run dev -- --port 4322
 
-# Serve built output and open browser
+# Serve with hot-reload dev server and open browser
 serve:
-    npm run build
-    xdg-open http://localhost:4322/people-website & sleep 1 && npx astro preview --port 4322 --host
+    xdg-open http://localhost:4322/people-website/ & npx astro dev --port 4322 --host
 
 # Build the production container image locally
 container-build:
