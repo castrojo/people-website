@@ -147,7 +147,13 @@ func (c *Client) EnrichCNCFYears(ctx context.Context, handle string, cache *apic
 		return
 	}
 
-	years := time.Now().Year() - firstDate.Year()
+	// CNCF was founded in 2015 — cap the floor there
+	firstYear := firstDate.Year()
+	if firstYear < 2015 {
+		firstYear = 2015
+	}
+
+	years := time.Now().Year() - firstYear
 	if years < 1 {
 		years = 1
 	}
