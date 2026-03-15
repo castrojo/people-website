@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"regexp"
 	"strings"
 )
 
@@ -92,6 +93,7 @@ type SafePerson struct {
 	Handle     string   `json:"handle,omitempty"`
 	GitHub     string   `json:"github,omitempty"`
 	ImageURL   string   `json:"imageUrl,omitempty"`
+	Bio        string   `json:"bio,omitempty"`
 	Company    string   `json:"company,omitempty"`
 	Location   string   `json:"location,omitempty"`
 	LinkedIn   string   `json:"linkedin,omitempty"`
@@ -115,6 +117,7 @@ func (p RawPerson) ToSafe() SafePerson {
 		Handle:   p.GitHubHandle(),
 		GitHub:   p.GitHub,
 		ImageURL: p.ImageURL(),
+		Bio:      stripHTML(p.Bio),
 		Company:  p.Company,
 		Location: p.Location,
 		LinkedIn: p.LinkedIn,
@@ -125,6 +128,20 @@ func (p RawPerson) ToSafe() SafePerson {
 		Category: p.Category,
 		Projects: p.Projects,
 	}
+}
+
+var htmlTagRe = regexp.MustCompile(`<[^>]+>`)
+
+// stripHTML removes HTML tags and decodes common entities.
+func stripHTML(s string) string {
+	s = htmlTagRe.ReplaceAllString(s, "")
+	s = strings.ReplaceAll(s, "&amp;", "&")
+	s = strings.ReplaceAll(s, "&lt;", "<")
+	s = strings.ReplaceAll(s, "&gt;", ">")
+	s = strings.ReplaceAll(s, "&quot;", `"`)
+	s = strings.ReplaceAll(s, "&#39;", "'")
+	s = strings.ReplaceAll(s, "&nbsp;", " ")
+	return strings.TrimSpace(s)
 }
 
 // RawPeopleMap returns a map keyed by the person's unique Key().
