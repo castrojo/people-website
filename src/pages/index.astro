@@ -1070,11 +1070,25 @@ for (const m of maintainerList) {
   });
 
   // ── Vim-style card navigation ──────────────────────────────────────────
+  //
+  // Navigable elements: .person-card AND .hero-card.
+  //
+  // Visibility is determined by offsetParent !== null, which returns null whenever
+  // the element or any ancestor has display:none. This correctly excludes:
+  //   - Cards inside hidden tab alpha-feeds (display:none on the feed parent)
+  //   - Hero cards inside hidden [data-tab-heroes] sections
+  //   - Filtered-out person cards (display:none on the card itself)
   const visibleCards = () =>
-    Array.from(document.querySelectorAll<HTMLElement>('.person-card'))
-      .filter(c => c.style.display !== 'none');
+    Array.from(document.querySelectorAll<HTMLElement>('.person-card, .hero-card'))
+      .filter(c => c.offsetParent !== null && c.style.display !== 'none');
 
   let focusedIdx = -1;
+
+  function resetFocus() {
+    document.querySelectorAll<HTMLElement>('.keyboard-focused')
+      .forEach(c => c.classList.remove('keyboard-focused'));
+    focusedIdx = -1;
+  }
 
   function focusCard(idx: number) {
     const all = visibleCards();
@@ -1084,13 +1098,23 @@ for (const m of maintainerList) {
     all[focusedIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
+  // Reset focus state whenever the active tab changes so j/k starts from scratch.
+  document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]').forEach(btn => {
+    btn.addEventListener('click', resetFocus);
+  });
+
   document.addEventListener('keydown', (e: KeyboardEvent) => {
     const active = document.activeElement as HTMLElement;
-    const inInput = active?.tagName === 'INPUT' || active?.tagName === 'SELECT';
+    const inInput = active?.tagName === 'INPUT' || active?.tagName === 'TEXTAREA' || active?.tagName === 'SELECT';
 
-    // '/' and '?' work regardless of input focus
-    if (e.key === '/') { e.preventDefault(); searchInput?.focus(); return; }
-    if (e.key === '?') {
+    // '/' focuses search — skip if already focused there to avoid preventDefault swallowing the char
+    if (e.key === '/') {
+      if (active !== searchInput) { e.preventDefault(); searchInput?.focus(); }
+      return;
+    }
+
+    // '?' opens help — only when not typing in an input
+    if (e.key === '?' && !inInput) {
       document.getElementById('keyboard-help-modal')?.classList.add('visible');
       document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
       return;
@@ -1104,8 +1128,7 @@ for (const m of maintainerList) {
         searchInput.dispatchEvent(new Event('input'));
       }
       (document.activeElement as HTMLElement)?.blur();
-      visibleCards().forEach(c => c.classList.remove('keyboard-focused'));
-      focusedIdx = -1;
+      resetFocus();
       return;
     }
 
@@ -1128,7 +1151,8 @@ for (const m of maintainerList) {
 </script>
 
 <style is:global>
-  .person-card.keyboard-focused {
+  .person-card.keyboard-focused,
+  .hero-card.keyboard-focused {
     outline: 2px solid var(--color-accent-emphasis);
     outline-offset: 2px;
   }
