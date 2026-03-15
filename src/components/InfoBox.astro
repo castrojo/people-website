@@ -19,7 +19,6 @@ const { title, description, links } = Astro.props;
   <h2 class="sidebar-heading">{title}</h2>
   {description && <p class="info-description">{description}</p>}
   <slot name="description" />
-  <slot name="description" />
   <ul class="info-links">
     {links.map(link => (
       <li>
