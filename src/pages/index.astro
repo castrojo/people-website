@@ -20,13 +20,16 @@ interface Person {
   github?: string;
   imageUrl?: string;
   bio?: string;
+  pronouns?: string;
   company?: string;
   location?: string;
   linkedin?: string;
   twitter?: string;
+  youtube?: string;
   website?: string;
   bluesky?: string;
   mastodon?: string;
+  certDirectory?: string;
   category: string[];
   projects?: string[];
   avatarUrl?: string;
@@ -100,6 +103,29 @@ function categoryStats(filterFn: (cats: string[]) => boolean) {
 const tabStats = Object.fromEntries(
   Object.entries(TAB_CATEGORY_FILTER).map(([tab, fn]) => [tab, categoryStats(fn)])
 );
+
+// Alphabetical tabs — deduplicated (most recent event per person), sorted by name
+const ALPHA_TABS: Record<string, (cats: string[]) => boolean> = {
+  'toc':   cats => cats.includes('Technical Oversight Committee'),
+  'tab':   cats => cats.includes('End User TAB'),
+  'staff': cats => cats.includes('Staff'),
+};
+
+function alphabeticalPeople(filterFn: (cats: string[]) => boolean): Event[] {
+  // events is newest-first; first occurrence = most recent event per person
+  const seen = new Map<string, Event>();
+  for (const e of events) {
+    const key = e.person.github ?? e.person.name;
+    if (!seen.has(key) && filterFn(e.person.category ?? [])) {
+      seen.set(key, e);
+    }
+  }
+  return [...seen.values()].sort((a, b) => a.person.name.localeCompare(b.person.name));
+}
+
+const alphaFeeds = Object.fromEntries(
+  Object.entries(ALPHA_TABS).map(([tab, fn]) => [tab, alphabeticalPeople(fn)])
+);
 ---
 
 <PeopleLayout pageTitle="CNCF People" feedUrl={feedUrl}>
@@ -172,12 +198,37 @@ const tabStats = Object.fromEntries(
       </div>
     ))}
 
-    {[...grouped.entries()].map(([date, dayEvents]) => (
-      <section class="day-group" data-date={date}>
-        <h2 class="day-header">{date}</h2>
-        {dayEvents.map(event => (
+    <!-- Timeline feed: recent-first, date-grouped (hidden for alpha tabs) -->
+    <div id="timeline-feed">
+      {[...grouped.entries()].map(([date, dayEvents]) => (
+        <section class="day-group" data-date={date}>
+          <h2 class="day-header">{date}</h2>
+          {dayEvents.map(event => (
+            <PersonCard
+              id={event.id}
+              type={event.type}
+              timestamp={event.timestamp}
+              person={event.person}
+              changes={event.changes}
+              landscapeLogos={landscapeLogos}
+            />
+          ))}
+        </section>
+      ))}
+
+      {events.length === 0 && (
+        <div class="empty-state">
+          <p>No activity yet — check back after the first daily sync.</p>
+        </div>
+      )}
+    </div>
+
+    <!-- Alpha feeds: deduplicated, alphabetical (shown only for toc/tab/staff tabs) -->
+    {Object.entries(alphaFeeds).map(([tab, tabEvents]) => (
+      <div id={`alpha-feed-${tab}`} class="alpha-feed" style="display:none" data-alpha-tab={tab}>
+        {tabEvents.map(event => (
           <PersonCard
-            id={event.id}
+            id={`alpha-${event.id}`}
             type={event.type}
             timestamp={event.timestamp}
             person={event.person}
@@ -185,14 +236,8 @@ const tabStats = Object.fromEntries(
             landscapeLogos={landscapeLogos}
           />
         ))}
-      </section>
-    ))}
-
-    {events.length === 0 && (
-      <div class="empty-state">
-        <p>No activity yet — check back after the first daily sync.</p>
       </div>
-    )}
+    ))}
   </div>
 </PeopleLayout>
 

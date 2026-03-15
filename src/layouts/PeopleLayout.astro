@@ -121,26 +121,43 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     'staff':                'staff',
   };
 
+  const ALPHA_TABS = new Set(['toc', 'tab', 'staff']);
+
   function applyTab(tab: string) {
-    const cards = document.querySelectorAll<HTMLElement>('.person-card');
-    const groups = document.querySelectorAll<HTMLElement>('.day-group');
+    const timelineFeed = document.getElementById('timeline-feed');
+    const alphaFeeds = document.querySelectorAll<HTMLElement>('.alpha-feed');
 
-    cards.forEach(card => {
-      if (tab === 'everyone') {
-        card.style.display = '';
-      } else {
-        const cats = (card.dataset.categories ?? '').split('|');
-        const tabCat = TAB_CATEGORY_MAP[tab] ?? tab;
-        card.style.display = cats.includes(tabCat) ? '' : 'none';
-      }
-    });
+    if (ALPHA_TABS.has(tab)) {
+      // Show alphabetical directory, hide timeline
+      if (timelineFeed) timelineFeed.style.display = 'none';
+      alphaFeeds.forEach(feed => {
+        feed.style.display = feed.dataset.alphaTab === tab ? '' : 'none';
+      });
+    } else {
+      // Show timeline, hide all alpha feeds
+      if (timelineFeed) timelineFeed.style.display = '';
+      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
 
-    // Hide date group headers with no visible cards
-    groups.forEach(group => {
-      const visible = Array.from(group.querySelectorAll<HTMLElement>('.person-card'))
-        .some(c => c.style.display !== 'none');
-      group.style.display = visible ? '' : 'none';
-    });
+      // Filter timeline cards by category
+      const cards = timelineFeed?.querySelectorAll<HTMLElement>('.person-card') ?? [];
+      const groups = timelineFeed?.querySelectorAll<HTMLElement>('.day-group') ?? [];
+
+      cards.forEach(card => {
+        if (tab === 'everyone') {
+          card.style.display = '';
+        } else {
+          const cats = (card.dataset.categories ?? '').split('|');
+          const tabCat = TAB_CATEGORY_MAP[tab] ?? tab;
+          card.style.display = cats.includes(tabCat) ? '' : 'none';
+        }
+      });
+
+      groups.forEach(group => {
+        const visible = Array.from(group.querySelectorAll<HTMLElement>('.person-card'))
+          .some(c => c.style.display !== 'none');
+        group.style.display = visible ? '' : 'none';
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -94,13 +94,16 @@ type SafePerson struct {
 	GitHub     string   `json:"github,omitempty"`
 	ImageURL   string   `json:"imageUrl,omitempty"`
 	Bio        string   `json:"bio,omitempty"`
+	Pronouns   string   `json:"pronouns,omitempty"`
 	Company    string   `json:"company,omitempty"`
 	Location   string   `json:"location,omitempty"`
 	LinkedIn   string   `json:"linkedin,omitempty"`
 	Twitter    string   `json:"twitter,omitempty"`
+	YouTube    string   `json:"youtube,omitempty"`
 	Website    string   `json:"website,omitempty"`
 	Bluesky    string   `json:"bluesky,omitempty"`
 	Mastodon   string   `json:"mastodon,omitempty"`
+	CertDirectory string `json:"certDirectory,omitempty"`
 	Category   []string `json:"category"`
 	Projects   []string `json:"projects,omitempty"`
 	// GitHub enrichment fields
@@ -113,20 +116,23 @@ type SafePerson struct {
 // ToSafe converts a RawPerson to a SafePerson, dropping sensitive fields.
 func (p RawPerson) ToSafe() SafePerson {
 	return SafePerson{
-		Name:     p.Name,
-		Handle:   p.GitHubHandle(),
-		GitHub:   p.GitHub,
-		ImageURL: p.ImageURL(),
-		Bio:      stripHTML(p.Bio),
-		Company:  p.Company,
-		Location: p.Location,
-		LinkedIn: p.LinkedIn,
-		Twitter:  p.Twitter,
-		Website:  p.Website,
-		Bluesky:  p.Bluesky,
-		Mastodon: p.Mastodon,
-		Category: p.Category,
-		Projects: p.Projects,
+		Name:          p.Name,
+		Handle:        p.GitHubHandle(),
+		GitHub:        p.GitHub,
+		ImageURL:      p.ImageURL(),
+		Bio:           stripHTML(p.Bio),
+		Pronouns:      p.Pronouns,
+		Company:       p.Company,
+		Location:      p.Location,
+		LinkedIn:      p.LinkedIn,
+		Twitter:       p.Twitter,
+		YouTube:       p.YouTube,
+		Website:       p.Website,
+		Bluesky:       p.Bluesky,
+		Mastodon:      p.Mastodon,
+		CertDirectory: p.CertDirectory,
+		Category:      p.Category,
+		Projects:      p.Projects,
 	}
 }
 
