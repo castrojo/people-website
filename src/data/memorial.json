@@ -1,0 +1,14 @@
+[
+  { "name": "Bradley Childs",    "slug": "bradley-childs",    "url": "https://github.com/cncf/memorials/blob/main/bradley-childs.md" },
+  { "name": "Carolyn Van Slyck", "slug": "carolyn-van-slyck", "url": "https://github.com/cncf/memorials/blob/main/carolyn-van-slyck.md" },
+  { "name": "Cody Crudgington",  "slug": "cody-crudgington",  "url": "https://github.com/cncf/memorials/blob/main/cody-crudgington.md" },
+  { "name": "Dan Kohn",          "slug": "dan-kohn",          "url": "https://github.com/cncf/memorials/blob/main/dan-kohn.md" },
+  { "name": "Gal Navon",         "slug": "gal-navon",         "url": "https://github.com/cncf/memorials/blob/main/gal-navon.md" },
+  { "name": "Han Kang",          "slug": "han-kang",          "url": "https://github.com/cncf/memorials/blob/main/han-kang.md" },
+  { "name": "Ido Hubara",        "slug": "ido-hubara",        "url": "https://github.com/cncf/memorials/blob/main/ido-hubara.md" },
+  { "name": "Kris Nóva",        "slug": "kris-nova",         "url": "https://github.com/cncf/memorials/blob/main/kris-n%C3%B3va.md" },
+  { "name": "Peeyush Gupta",     "slug": "peeyush-gupta",     "url": "https://github.com/cncf/memorials/blob/main/peeyush-gupta.md" },
+  { "name": "Rodolfo Martinez",  "slug": "rodolfo-martinez",  "url": "https://github.com/cncf/memorials/blob/main/rodolfo-martinez.md" },
+  { "name": "Roee Negri",        "slug": "roee-negri",        "url": "https://github.com/cncf/memorials/blob/main/roee-negri.md" },
+  { "name": "Sefi Genis",        "slug": "sefi-genis",        "url": "https://github.com/cncf/memorials/blob/main/sefi-genis.md" }
+]

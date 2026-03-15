@@ -79,6 +79,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <button class="section-link" data-tab="tab">End User TAB</button>
         <button class="section-link" data-tab="governing-board">Governing Board</button>
         <button class="section-link" data-tab="staff">Staff</button>
+        <button class="section-link tab-memorial" data-tab="memorial">🕯️ Memorial</button>
       </nav>
     </div>
   </header>
@@ -128,19 +129,23 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   function applyTab(tab: string) {
     const timelineFeed = document.getElementById('timeline-feed');
     const alphaFeeds = document.querySelectorAll<HTMLElement>('.alpha-feed');
+    const memorialFeed = document.getElementById('memorial-feed');
 
-    if (ALPHA_TABS.has(tab)) {
-      // Show alphabetical directory, hide timeline
+    if (tab === 'memorial') {
       if (timelineFeed) timelineFeed.style.display = 'none';
+      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
+      if (memorialFeed) memorialFeed.style.display = '';
+    } else if (ALPHA_TABS.has(tab)) {
+      if (timelineFeed) timelineFeed.style.display = 'none';
+      if (memorialFeed) memorialFeed.style.display = 'none';
       alphaFeeds.forEach(feed => {
         feed.style.display = feed.dataset.alphaTab === tab ? '' : 'none';
       });
     } else {
-      // Show timeline, hide all alpha feeds
+      if (memorialFeed) memorialFeed.style.display = 'none';
       if (timelineFeed) timelineFeed.style.display = '';
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
 
-      // Filter timeline cards by category
       const cards = timelineFeed?.querySelectorAll<HTMLElement>('.person-card') ?? [];
       const groups = timelineFeed?.querySelectorAll<HTMLElement>('.day-group') ?? [];
 
@@ -274,7 +279,15 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     display: flex;
     gap: 0.25rem;
     padding-bottom: 0;
+    flex-wrap: wrap;
   }
+
+  .tab-memorial {
+    margin-left: auto;
+    color: #9ca3af;
+  }
+  .tab-memorial:hover { color: var(--color-text-primary); }
+  .tab-memorial.active { color: var(--color-text-primary); border-bottom-color: #6b7280; }
 
   .section-link {
     padding: 0.5rem 1rem;

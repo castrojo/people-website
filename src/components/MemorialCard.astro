@@ -1,0 +1,76 @@
+---
+interface Memorial {
+  name: string;
+  slug: string;
+  url:  string;
+}
+interface Props { person: Memorial; }
+const { person } = Astro.props;
+
+// Derive initials for placeholder
+const initials = person.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+---
+
+<a href={person.url} target="_blank" rel="noopener noreferrer" class="memorial-card">
+  <div class="memorial-avatar" aria-hidden="true">{initials}</div>
+  <div class="memorial-info">
+    <span class="memorial-name">{person.name}</span>
+    <span class="memorial-link">Read memorial ↗</span>
+  </div>
+</a>
+
+<style>
+  .memorial-card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-left: 3px solid #6b7280;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 0.625rem;
+  }
+  .memorial-card:hover {
+    border-left-color: #9ca3af;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .memorial-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #374151;
+    color: #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .memorial-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .memorial-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .memorial-link {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+  }
+
+  .memorial-card:hover .memorial-link {
+    color: var(--color-accent);
+  }
+</style>

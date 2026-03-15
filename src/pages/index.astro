@@ -1,12 +1,14 @@
 ---
 import PeopleLayout from '../layouts/PeopleLayout.astro';
 import PersonCard from '../components/PersonCard.astro';
+import MemorialCard from '../components/MemorialCard.astro';
 import InfoBox from '../components/InfoBox.astro';
 import KubeConBanner from '../components/KubeConBanner.astro';
 import { getActiveBanners } from '../lib/banners';
 
 import changelogRaw from '../data/changelog.json';
 import landscapeLogosRaw from '../data/landscape_logos.json';
+import memorialList from '../data/memorial.json';
 
 interface Change {
   field: string;
@@ -241,6 +243,14 @@ const alphaFeeds = Object.fromEntries(
         ))}
       </div>
     ))}
+
+    <!-- Memorial feed (hidden until Memorial tab is selected) -->
+    <div id="memorial-feed" style="display:none">
+      <p class="memorial-intro">In memory of members of our community who have passed. Their contributions continue to shape the CNCF ecosystem.</p>
+      {memorialList.map(person => (
+        <MemorialCard person={person} />
+      ))}
+    </div>
   </div>
 </PeopleLayout>
 
@@ -257,6 +267,17 @@ const alphaFeeds = Object.fromEntries(
     line-height: 1.5;
   }
   .category-summary strong { color: var(--color-text-primary); }
+  .memorial-intro {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-default);
+    border-left: 3px solid #6b7280;
+    border-radius: 6px;
+  }
 
   .search-bar { width: 100%; }
   .search-input {
