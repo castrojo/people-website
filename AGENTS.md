@@ -109,3 +109,80 @@ git push
 ```
 
 Branch is `main`. Push directly (castrojo-owned, no fork workflow).
+
+---
+
+## Header Migration (PENDING — canonical design from projects-website)
+
+> **Status:** Not yet implemented. projects-website is the reference. Implement this section exactly.
+
+The canonical header was finalized on 2026-03-16 in `castrojo/projects-website`.
+All three sites must be pixel-perfect identical in header structure.
+See `~/src/skills/cncf-layout/SKILL.md` → "Required Header Structure" for the full spec.
+
+### What needs to change in people-website
+
+#### HTML (`src/layouts/PeopleLayout.astro`)
+
+- [ ] **Logo**: Change `width={56} height={56}` → `width={42} height={42}` on both `CNCFLogoColor` and `CNCFLogoWhite`
+- [ ] **Remove slogan**: Delete `<p class="site-subtitle" id="rotating-slogan">` element
+- [ ] **Remove slogan JS**: Delete the `SLOGANS` array + `setInterval` block
+- [ ] **Remove slogan CSS**: Delete `.site-subtitle` and `.site-subtitle.fade` rules
+- [ ] **Move nav-group outside header-left**: `nav-group` div must be a direct child of `header-inner`, NOT nested inside `header-left`
+- [ ] **Add clear button**: Add `<button id="search-clear" class="search-clear" aria-label="Clear search">✕</button>` inside `.search-wrapper`
+- [ ] **Add clear button JS**: Add the clear button event handler (see skill for exact code)
+- [ ] **Dark mode logo rules**: Remove redundant `.cncf-logo-wrapper .logo-dark` and `[data-theme="dark"] .cncf-logo-wrapper .logo-light` lines
+
+#### CSS — extract and update (see backlog item #4)
+
+Since people-website has all CSS inline, these changes go in the inline `<style is:global>` block
+until CSS is extracted to `src/styles/layout.css` (a separate backlog task):
+
+```css
+/* Replace old values with these canonical values */
+.logo-title            { gap: 0.5rem; }
+.cncf-logo-wrapper img { height: 42px; width: auto; object-fit: contain; display: block; }
+.title-block           { height: 42px; display: flex; align-items: center; }
+                         /* REMOVE: flex-direction: column, text-align: center */
+.site-title            { font-size: 1.375rem; font-weight: 700; line-height: 1.1; margin: 0; }
+.header-left           { flex-shrink: 0; }   /* REMOVE: flex: 1 if present */
+.nav-group             { flex: 1; flex-direction: row; align-items: center;
+                         justify-content: flex-start; gap: 0.75rem; padding-left: 3rem; }
+                         /* REMOVE: flex-direction: column, align-items: center (column behavior) */
+.search-input          { width: 360px; padding: 0.5rem 2rem 0.5rem 0.75rem; }
+.search-input:focus    { border-color: var(--color-cncf-blue);
+                         box-shadow: 0 0 0 2px var(--color-cncf-blue); }
+.search-count          { position: absolute; right: 2rem; /* (was right: 0.5rem) */ }
+.search-clear          { /* new — see cncf-layout skill for full rule */ }
+
+/* Mobile breakpoint — add this block */
+@media (max-width: 768px) {
+  .header-inner  { flex-wrap: wrap; gap: 0.75rem; }
+  .nav-group     { order: 3; flex: 1 1 100%; justify-content: flex-start; padding-left: 0; }
+  .header-actions { order: 2; margin-left: auto; }
+  .header-left   { order: 1; }
+  .search-input  { width: 100%; }
+  .nav-group .search-wrapper { flex: 1; }
+  .nav-group .site-switcher  { padding: 1px; }
+  .nav-group .switcher-pill  { padding: 0.2rem 0.55rem; font-size: 0.75rem; }
+}
+```
+
+#### CSS variables (`src/styles/variables.css` or equivalent)
+
+Add if missing:
+```css
+--color-accent-emphasis: #0969da;   /* light */
+--color-text-tertiary: #6e7781;     /* light */
+/* dark theme: */
+--color-accent-emphasis: #2f81f7;
+--color-text-tertiary: #8b949e;
+```
+
+### Tests to add after migration
+
+Copy `tests/e2e/header.spec.ts` from `castrojo/projects-website` and update:
+- Line with `"CNCF Projects"` → `"CNCF People"` (or whatever this site's title is)
+- `activeSite="projects"` pill check → `activeSite="people"`
+- Section-nav tab count/labels to match people-website tabs
+- Base URL in playwright.config.ts
