@@ -89,7 +89,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const projectsRow = (p.projects?.length) ? `
     <div class="projects-row">${p.projects.map(proj => {
       const logo = landscapeLogos[proj] ?? landscapeLogos[proj.toLowerCase()] ?? '';
-      return `<span class="project-chip">${logo ? `<img src="${esc(logo)}" alt="" class="project-logo" aria-hidden="true" loading="lazy" onerror="this.style.display='none'">` : ''}${esc(proj)}</span>`;
+      return `<span class="project-chip">${logo ? `<img src="${esc(logo)}" alt="" class="project-logo" aria-hidden="true" loading="lazy" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)" onerror="this.style.display='none'">` : ''}${esc(proj)}</span>`;
     }).join('')}</div>` : '';
 
   const changesHtml = e.changes?.length ? `

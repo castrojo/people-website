@@ -1105,6 +1105,14 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
     setTimeout(() => card.classList.remove('pressing'), 200);
     import('../lib/hero-confetti').then(({ fireConfetti }) => fireConfetti(card));
   });
+
+  // Preload confetti logos on first hover over any hero card (improves logo burst on click).
+  document.addEventListener('mouseover', (e: MouseEvent) => {
+    const card = (e.target as Element)?.closest('.hero-card');
+    if (card) {
+      import('../lib/hero-confetti').then(({ preloadOnHover }) => preloadOnHover(card));
+    }
+  }, { once: true });
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;
   const catFilter   = document.getElementById('category-filter') as HTMLSelectElement;

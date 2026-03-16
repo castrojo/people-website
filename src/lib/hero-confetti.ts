@@ -22,13 +22,14 @@ const CNCF_LOGO_URLS = [
 
 const CNCF_COLORS = ['#0086FF', '#D62293', '#93EAFF', '#FFB300', '#00A86B', '#7B2FBE'];
 
-// Cache preloaded shapes so subsequent clicks are instant.
-let cachedShapes: confetti.Shape[] | null = null;
+// Logo shapes are loaded in the background. Once ready, subsequent clicks use them.
+let logoShapes: confetti.Shape[] | null = null;
+let loadingLogos = false;
 
-async function loadLogoShapes(): Promise<confetti.Shape[]> {
-  if (cachedShapes) return cachedShapes;
-
-  const shapes = await Promise.all(
+function loadLogoShapes(): void {
+  if (loadingLogos || logoShapes !== null) return;
+  loadingLogos = true;
+  Promise.all(
     CNCF_LOGO_URLS.map(url =>
       new Promise<confetti.Shape | null>(resolve => {
         const img = new Image();
@@ -36,26 +37,29 @@ async function loadLogoShapes(): Promise<confetti.Shape[]> {
         img.onload = () => resolve(confetti.shapeFromImage({ src: url, width: 40, height: 40 }));
         img.onerror = () => resolve(null);
         img.src = url;
-        // Timeout: skip logos that don't load within 3s
-        setTimeout(() => resolve(null), 3000);
+        setTimeout(() => resolve(null), 4000);
       })
     )
-  );
-
-  cachedShapes = shapes.filter((s): s is confetti.Shape => s !== null);
-  // Fall back to squares if no logos loaded (e.g. offline)
-  if (cachedShapes.length === 0) cachedShapes = ['square'];
-  return cachedShapes;
+  ).then(shapes => {
+    const valid = shapes.filter((s): s is confetti.Shape => s !== null);
+    logoShapes = valid.length > 0 ? valid : ['square'];
+  });
 }
 
-// Preload in the background as soon as this module is imported.
+// Start loading logos immediately on module import.
 loadLogoShapes();
 
-// Per-element debounce: track last fire time by card element.
-const lastFired = new WeakMap<Element, number>();
-const DEBOUNCE_MS = 1200;
+// Also preload on first hero card hover for faster first-click response.
+export function preloadOnHover(card: Element): void {
+  card.addEventListener('mouseenter', loadLogoShapes, { once: true });
+  card.addEventListener('touchstart', loadLogoShapes, { once: true, passive: true });
+}
 
-export async function fireConfetti(card: Element): Promise<void> {
+// Per-element debounce — snappy 300ms so rapid clicks feel responsive.
+const lastFired = new WeakMap<Element, number>();
+const DEBOUNCE_MS = 300;
+
+export function fireConfetti(card: Element): void {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
   lastFired.set(card, now);
@@ -66,23 +70,23 @@ export async function fireConfetti(card: Element): Promise<void> {
     y: (rect.top + rect.height / 2) / window.innerHeight,
   };
 
-  const shapes = await loadLogoShapes();
-
-  // Mix logo shapes with colored squares for density & festivity
-  const mixed: confetti.Shape[] = [...shapes, 'square', 'square', 'circle'];
-
   const base = {
     origin,
     colors: CNCF_COLORS,
-    shapes: mixed,
     scalar: 1.4,
     gravity: 1.1,
-    drift: 0,
     ticks: 220,
   };
 
-  // Pinata burst: three volleys in different directions
-  confetti({ ...base, particleCount: 50, spread: 100, startVelocity: 50, angle: 90 });
-  confetti({ ...base, particleCount: 30, spread: 80,  startVelocity: 35, angle: 60 });
-  confetti({ ...base, particleCount: 30, spread: 80,  startVelocity: 35, angle: 120 });
+  // Phase 1: fire INSTANTLY with simple shapes — zero latency, always works.
+  const fastShapes: confetti.Shape[] = ['square', 'circle', 'square'];
+  confetti({ ...base, shapes: fastShapes, particleCount: 50, spread: 100, startVelocity: 50, angle: 90 });
+  confetti({ ...base, shapes: fastShapes, particleCount: 25, spread: 80,  startVelocity: 35, angle: 60 });
+  confetti({ ...base, shapes: fastShapes, particleCount: 25, spread: 80,  startVelocity: 35, angle: 120 });
+
+  // Phase 2: if logos already loaded, add a logo burst on top immediately.
+  if (logoShapes && logoShapes.length > 0) {
+    const mixed = [...logoShapes, 'square'];
+    confetti({ ...base, shapes: mixed, particleCount: 40, spread: 110, startVelocity: 45, angle: 90 });
+  }
 }

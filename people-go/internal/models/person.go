@@ -125,11 +125,17 @@ type SafePerson struct {
 
 // ToSafe converts a RawPerson to a SafePerson, dropping sensitive fields.
 func (p RawPerson) ToSafe() SafePerson {
+	handle := p.GitHubHandle()
+	avatarURL := ""
+	if handle != "" {
+		avatarURL = "https://avatars.githubusercontent.com/" + handle
+	}
 	return SafePerson{
 		Name:          p.Name,
-		Handle:        p.GitHubHandle(),
+		Handle:        handle,
 		GitHub:        p.GitHub,
 		ImageURL:      p.ImageURL(),
+		AvatarURL:     avatarURL,
 		Bio:           stripHTML(p.Bio),
 		Pronouns:      p.Pronouns,
 		Company:             p.Company,

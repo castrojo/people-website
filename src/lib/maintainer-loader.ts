@@ -76,7 +76,7 @@ function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>):
   const projectChips = chipProjects.map(({ name: p, maturity: pm }) => {
     const chipColor = MATURITY_COLOR[pm] ?? '#8b949e';
     const logo = resolveLogoUrl(p, logos);
-    const logoImg = logo ? `<img class="project-logo" src="${esc(logo)}" onerror="this.style.display='none'" loading="lazy" alt="">` : '';
+    const logoImg = logo ? `<img class="project-logo" src="${esc(logo)}" onerror="this.style.display='none'" loading="lazy" alt="" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)">` : '';
     return `<span class="project-chip" style="--chip-accent:${chipColor}; border-color:${chipColor}33; background:${chipColor}11">${logoImg}${esc(p)}</span>`;
   }).join('');
 

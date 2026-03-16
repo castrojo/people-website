@@ -825,6 +825,11 @@ func BackfillFromCache(outDir string, cache *apicache.Cache) error {
 			continue
 		}
 		p := &events[i].Person
+		// Derive avatarUrl from handle if not already set (free — no API call needed).
+		if p.AvatarURL == "" && p.Handle != "" {
+			p.AvatarURL = "https://avatars.githubusercontent.com/" + p.Handle
+			changed = true
+		}
 		if p.Pronouns == "" && stats.Pronouns != "" {
 			p.Pronouns = stats.Pronouns
 			changed = true
