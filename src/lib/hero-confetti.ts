@@ -70,19 +70,23 @@ export function fireHearts(card: Element): void {
     y: (rect.top + rect.height / 2) / window.innerHeight,
   };
 
-  const heart = confetti.shapeFromText({ text: '💙', scalar: 2 });
+  const blueHeart = confetti.shapeFromText({ text: '💙', scalar: 4 });
+  const redHeart  = confetti.shapeFromText({ text: '❤️', scalar: 4 });
+  // Alternate blue and red hearts so roughly half are each colour.
+  const shapes = [blueHeart, redHeart, blueHeart, redHeart];
+
   const base = {
     origin,
-    colors: ['#0086FF', '#93EAFF', '#4DB8FF', '#1E90FF'],
-    shapes: [heart],
-    scalar: 2,
+    colors: ['#0086FF', '#CC0000', '#93EAFF', '#FF4444'],
+    shapes,
+    scalar: 4,
     gravity: 0.8,
     ticks: 280,
   };
 
-  confetti({ ...base, particleCount: 30, spread: 80,  startVelocity: 40, angle: 90 });
-  confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 60 });
-  confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 120 });
+  confetti({ ...base, particleCount: 15, spread: 100, startVelocity: 40, angle: 90 });
+  confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 60 });
+  confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 120 });
 }
 
 export function fireConfetti(card: Element): void {
