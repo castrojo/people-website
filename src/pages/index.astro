@@ -1103,7 +1103,11 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
     e.preventDefault();
     card.classList.add('pressing');
     setTimeout(() => card.classList.remove('pressing'), 200);
-    import('../lib/hero-confetti').then(({ fireConfetti }) => fireConfetti(card));
+    const isMemorial = (card as HTMLElement).dataset.category === 'Memorial';
+    import('../lib/hero-confetti').then(({ fireConfetti, fireHearts }) => {
+      if (isMemorial) fireHearts(card);
+      else fireConfetti(card);
+    });
   });
 
   // Preload confetti logos on first hover over any hero card (improves logo burst on click).

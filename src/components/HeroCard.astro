@@ -66,7 +66,7 @@ const profileUrl = person.github
 const handle     = person.handle ? `@${person.handle}` : '';
 ---
 
-<div class="hero-card" style={`--hero-color:${color};--hero-shadow-rgb:${shadowRgb};--hero-label-text:${labelText}`}>
+<div class="hero-card" data-category={categoryKey} style={`--hero-color:${color};--hero-shadow-rgb:${shadowRgb};--hero-label-text:${labelText}`}>
   <!-- category label top-left -->
   <span class="hero-label">{label}</span>
 

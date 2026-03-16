@@ -59,7 +59,31 @@ export function preloadOnHover(card: Element): void {
 const lastFired = new WeakMap<Element, number>();
 const DEBOUNCE_MS = 300;
 
-export function fireConfetti(card: Element): void {
+export function fireHearts(card: Element): void {
+  const now = Date.now();
+  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
+  lastFired.set(card, now);
+
+  const rect = card.getBoundingClientRect();
+  const origin = {
+    x: (rect.left + rect.width / 2) / window.innerWidth,
+    y: (rect.top + rect.height / 2) / window.innerHeight,
+  };
+
+  const heart = confetti.shapeFromText({ text: '💙', scalar: 2 });
+  const base = {
+    origin,
+    colors: ['#0086FF', '#93EAFF', '#4DB8FF', '#1E90FF'],
+    shapes: [heart],
+    scalar: 2,
+    gravity: 0.8,
+    ticks: 280,
+  };
+
+  confetti({ ...base, particleCount: 30, spread: 80,  startVelocity: 40, angle: 90 });
+  confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 60 });
+  confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 120 });
+}
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
   lastFired.set(card, now);
