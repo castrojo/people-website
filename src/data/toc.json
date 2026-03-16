@@ -5,6 +5,11 @@
     "title": "Chair"
   },
   {
+    "handle": "kevin-wangzefeng",
+    "name": "Kevin (Zefeng) Wang",
+    "title": "Vice Chair"
+  },
+  {
     "handle": "chira001",
     "name": "Alex Chircop",
     "title": "Member"
@@ -35,13 +40,8 @@
     "title": "Member"
   },
   {
-    "handle": "kgamanji",
+    "handle": "",
     "name": "Katie Gamanji",
-    "title": "Member"
-  },
-  {
-    "handle": "kevin-wangzefeng",
-    "name": "Kevin Wang",
     "title": "Member"
   },
   {
@@ -50,13 +50,13 @@
     "title": "Member"
   },
   {
+    "handle": "raravena80",
+    "name": "Ricardo Aravena",
+    "title": "Shadow (GB)"
+  },
+  {
     "handle": "rochaporto",
     "name": "Ricardo Rocha",
     "title": "Member"
-  },
-  {
-    "handle": "raravena80",
-    "name": "Ricardo Aravena",
-    "title": "Shadow"
   }
 ]

@@ -21,18 +21,30 @@ test.describe('layout structure', () => {
     await expect(logo).toBeVisible();
   });
 
-  test('header contains title, slogan, switcher, search, theme toggle, help', async ({ page }) => {
+  test('header contains title, switcher, search, theme toggle, help', async ({ page }) => {
     const header = page.locator('header');
     await expect(header.locator('h1.site-title')).toBeVisible();
-    await expect(header.locator('#rotating-slogan')).toBeVisible();
     await expect(header.locator('.site-switcher')).toBeVisible();
     await expect(header.locator('#search-input')).toBeVisible();
     await expect(header.locator('#help-button')).toBeVisible();
   });
 
-  test('search input is in header-left section', async ({ page }) => {
+  test('search input is in .nav-group (sibling of header-left, not inside it)', async ({ page }) => {
+    const searchInNavGroup = page.locator('.nav-group #search-input');
+    await expect(searchInNavGroup).toBeVisible();
     const searchInLeft = page.locator('.header-left #search-input');
-    await expect(searchInLeft).toBeVisible();
+    await expect(searchInLeft).toHaveCount(0);
+  });
+
+  test('nav-group is to the right of header-left', async ({ page }) => {
+    const positions = await page.evaluate(() => {
+      const left = document.querySelector('.header-left');
+      const nav = document.querySelector('.nav-group');
+      if (!left || !nav) return null;
+      return { leftRight: left.getBoundingClientRect().right, navLeft: nav.getBoundingClientRect().left };
+    });
+    expect(positions).not.toBeNull();
+    expect(positions!.navLeft).toBeGreaterThan(positions!.leftRight);
   });
 
   test('tab navigation exists with section-nav', async ({ page }) => {

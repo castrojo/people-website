@@ -1,25 +1,19 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-# List available recipes
 default:
     just --list
 
-# DEFAULT: build container, stop old one, run new one, open browser
+# Build locally and preview in browser — always fresh, Ctrl+C to stop
 serve:
-    just container-build
-    podman rm -f people-website 2>/dev/null || true
-    podman run -d --name people-website -p 8080:8080 ghcr.io/castrojo/people-website:local
-    xdg-open http://localhost:8080/people-website/
+    npm run build
+    xdg-open http://localhost:4323/people-website/
+    npx astro preview --port 4323
 
-# Full production build (Go + Astro → dist/)
+# Astro-only local build (uses existing synced data)
 build:
-    npm ci
-    cd people-go && go build -o people cmd/people/main.go && ./people
-    mkdir -p public/data
-    cp src/data/changelog.json public/data/changelog.json
     npm run build
 
-# Build the container image
+# Full container build (Go sync + Astro + nginx image)
 container-build:
     podman build -t ghcr.io/castrojo/people-website:local -f Containerfile .
 
@@ -27,15 +21,25 @@ container-build:
 stop:
     podman rm -f people-website 2>/dev/null || true
 
-# Go sync only (regenerate changelog.json locally)
+# Go backend sync only (re-fetch data from cncf/people)
 sync:
     cd people-go && go build -o people cmd/people/main.go && ./people
+    mkdir -p public/data
+    cp src/data/changelog.json public/data/changelog.json
 
-# Astro hot-reload dev server (no container — UI iteration only)
+# Astro hot-reload dev server (fastest UI iteration, no build step)
 dev:
-    npx astro dev --port 4322 --host
+    npx astro dev --port 4323 --host
 
-# Sync data then hot-reload dev (fast UI iteration, no container rebuild)
+# Sync data then hot-reload dev
 sync-dev:
     just sync
     just dev
+
+# Run unit tests
+test:
+    npx vitest run
+
+# Run E2E tests (builds + previews automatically via playwright config)
+test-e2e:
+    npx playwright test

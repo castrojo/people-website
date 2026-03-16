@@ -71,15 +71,24 @@ test.describe('visual layout verification', () => {
   });
 
   test('hero cards have minimum dimensions', async ({ page }) => {
+    // Ensure the "everyone" tab is active so hero cards are visible
+    const everyoneBtn = page.locator('.section-link[data-tab="everyone"]');
+    if (await everyoneBtn.count() > 0) {
+      await everyoneBtn.click();
+      await page.waitForTimeout(300);
+    }
     const heroCards = await page.evaluate(() => {
       const cards = document.querySelectorAll('.hero-card');
       if (cards.length === 0) return null;
-      return Array.from(cards).slice(0, 4).map(card => {
+      // Only check cards that are actually visible (not in hidden sections)
+      const visible = Array.from(cards).filter(c => c.getBoundingClientRect().width > 0);
+      if (visible.length === 0) return null;
+      return visible.slice(0, 4).map(card => {
         const rect = card.getBoundingClientRect();
         return { width: rect.width, height: rect.height };
       });
     });
-    // If hero cards exist, they should have reasonable minimum dimensions
+    // If hero cards exist and are visible, they must have reasonable dimensions
     if (heroCards) {
       for (const card of heroCards) {
         expect(card.width).toBeGreaterThanOrEqual(200);

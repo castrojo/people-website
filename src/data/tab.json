@@ -1,47 +1,17 @@
 [
   {
-    "handle": "rochaporto",
-    "name": "Ricardo Rocha",
-    "title": "Chair"
-  },
-  {
-    "handle": "jrsapi",
-    "name": "Joseph Sandoval",
-    "title": "Vice-Chair"
-  },
-  {
-    "handle": "alolita",
-    "name": "Alolita Sharma",
-    "title": "Member"
-  },
-  {
-    "handle": "ma-cvs",
-    "name": "Michael Amundson",
-    "title": "Member"
-  },
-  {
-    "handle": "hblixt",
-    "name": "Henrik Blixt",
-    "title": "Member"
-  },
-  {
-    "handle": "KentaTada",
-    "name": "Kenta Tada",
-    "title": "Member"
-  },
-  {
-    "handle": "michael-bowen-sc",
-    "name": "Mike Bowen",
-    "title": "Member"
-  },
-  {
     "handle": "abebars",
     "name": "Ahmed Bebars",
     "title": "Member"
   },
   {
-    "handle": "kgamanji",
-    "name": "Katie Gamanji",
+    "handle": "",
+    "name": "Alolita Sharma",
+    "title": "Member"
+  },
+  {
+    "handle": "",
+    "name": "Ben Somogyi",
     "title": "Member"
   },
   {
@@ -50,13 +20,38 @@
     "title": "Member"
   },
   {
-    "handle": "aparna-subramanian",
-    "name": "Aparna Subramanian",
+    "handle": "jrsapi",
+    "name": "Joseph Sandoval",
+    "title": "TAB Vice Chair"
+  },
+  {
+    "handle": "",
+    "name": "Katie Gamanji",
     "title": "Member"
   },
   {
-    "handle": "ride808",
-    "name": "ride808",
+    "handle": "KentaTada",
+    "name": "Kenta Tada",
+    "title": "Member"
+  },
+  {
+    "handle": "",
+    "name": "Michael Amundson",
+    "title": "Member"
+  },
+  {
+    "handle": "",
+    "name": "Mike Bowen",
+    "title": "Member"
+  },
+  {
+    "handle": "rochaporto",
+    "name": "Ricardo Rocha",
+    "title": "TAB Chair"
+  },
+  {
+    "handle": "gnawux",
+    "name": "Xu Wang",
     "title": "Member"
   }
 ]

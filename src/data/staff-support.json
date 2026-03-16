@@ -6,6 +6,23 @@
       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/audra-montenegro.jpg"
     }
   ],
+  "governing-board": [
+    {
+      "handle": "jeefy",
+      "name": "Jeffrey Sica",
+      "imageUrl": "https://www.cncf.io/wp-content/uploads/2019/12/1553737099718.jpg"
+    },
+    {
+      "handle": "mrbobbytables",
+      "name": "Bob Killen",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/bob-killen.jpg"
+    },
+    {
+      "handle": "krook",
+      "name": "Daniel Krook",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/daniel-krook.jpg"
+    }
+  ],
   "kubestronauts": [
     {
       "handle": "huats",
@@ -44,35 +61,26 @@
       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/Shellea_Williams.jpeg"
     }
   ],
-  "toc": [
+  "marketing": [
     {
-      "handle": "mrbobbytables",
-      "name": "Bob Killen",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/bob-killen.jpg"
+      "name": "Eliza Power",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/eliza-power.jpg",
+      "profileUrl": "https://www.linkedin.com/in/eliza-power-413809219/"
     },
     {
-      "handle": "riaankleinhans",
-      "name": "riaankleinhans"
+      "name": "Mary Phan",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/mary-phan.jpeg",
+      "profileUrl": "https://www.linkedin.com/in/phanmary/"
     },
     {
-      "handle": "idvoretskyi",
-      "name": "Ihor Dvoretskyi",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/ihor-dvoretskyi.jpeg"
+      "name": "Kaitlin Thornhill",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/kaitlin-thornhill.jpg",
+      "profileUrl": "https://www.linkedin.com/in/kaitlin-thornhill-935a322b/"
     },
     {
-      "handle": "krook",
-      "name": "Daniel Krook",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/daniel-krook.jpg"
-    },
-    {
-      "handle": "jeefy",
-      "name": "Jeffrey Sica",
-      "imageUrl": "https://www.cncf.io/wp-content/uploads/2019/12/1553737099718.jpg"
-    },
-    {
-      "handle": "nate-double-u",
-      "name": "Nate Waddington",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/nate-waddington.jpg"
+      "name": "Haley White",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/haley-white.jpg",
+      "profileUrl": "https://www.linkedin.com/in/haleywhite20/"
     }
   ],
   "tab": [
@@ -102,43 +110,35 @@
       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/joanna-lee.jpg"
     }
   ],
-  "governing-board": [
-    {
-      "handle": "jeefy",
-      "name": "Jeffrey Sica",
-      "imageUrl": "https://www.cncf.io/wp-content/uploads/2019/12/1553737099718.jpg"
-    },
+  "toc": [
     {
       "handle": "mrbobbytables",
       "name": "Bob Killen",
       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/bob-killen.jpg"
     },
     {
+      "handle": "riaankleinhans",
+      "name": "riaankleinhans"
+    },
+    {
+      "handle": "idvoretskyi",
+      "name": "Ihor Dvoretskyi",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/ihor-dvoretskyi.jpeg"
+    },
+    {
       "handle": "krook",
       "name": "Daniel Krook",
       "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/daniel-krook.jpg"
-    }
-  ],
-  "marketing": [
-    {
-      "name": "Eliza Power",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/eliza-power.jpg",
-      "profileUrl": "https://www.linkedin.com/in/eliza-power-413809219/"
     },
     {
-      "name": "Mary Phan",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/mary-phan.jpeg",
-      "profileUrl": "https://www.linkedin.com/in/phanmary/"
+      "handle": "jeefy",
+      "name": "Jeffrey Sica",
+      "imageUrl": "https://www.cncf.io/wp-content/uploads/2019/12/1553737099718.jpg"
     },
     {
-      "name": "Kaitlin Thornhill",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/kaitlin-thornhill.jpg",
-      "profileUrl": "https://www.linkedin.com/in/kaitlin-thornhill-935a322b/"
-    },
-    {
-      "name": "Haley White",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/haley-white.jpg",
-      "profileUrl": "https://www.linkedin.com/in/haleywhite20/"
+      "handle": "nate-double-u",
+      "name": "Nate Waddington",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/nate-waddington.jpg"
     }
   ]
 }
