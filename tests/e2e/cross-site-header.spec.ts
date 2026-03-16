@@ -18,6 +18,14 @@
 
 import { test, expect, type Page } from '@playwright/test';
 
+// Cross-site tests require all 3 dev servers running simultaneously (ports 4322/4323/4324).
+// Set CROSS_SITE_TEST=true to enable. Skipped in standard CI (only one server runs per repo).
+test.beforeEach(async ({}, testInfo) => {
+  if (process.env['CROSS_SITE_TEST'] !== 'true') {
+    testInfo.skip(true, 'Requires CROSS_SITE_TEST=true and all 3 servers on ports 4322/4323/4324');
+  }
+});
+
 const SITES = [
   { name: 'projects', url: 'http://localhost:4322/projects-website/' },
   { name: 'people',   url: 'http://localhost:4323/people-website/' },
