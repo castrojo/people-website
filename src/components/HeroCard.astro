@@ -19,7 +19,7 @@ interface Props {
 
 const HERO_COLORS: Record<string, string> = {
   'Ambassadors':         'var(--color-ambassador, #0086FF)',
-  'Kubestronaut':        'var(--color-kubestronaut, #FFB300)',
+  'Kubestronaut':        'var(--color-kubestronaut, #0086FF)',
   'Golden-Kubestronaut': 'var(--color-golden, #C9A000)',
   'Maintainer':          '#4A90D9',
   'Memorial':            '#8B7355',
@@ -30,7 +30,7 @@ const HERO_COLORS: Record<string, string> = {
 
 const HERO_SHADOW_COLORS: Record<string, string> = {
   'Ambassadors':         '0, 134, 255',
-  'Kubestronaut':        '255, 179, 0',
+  'Kubestronaut':        '0, 134, 255',
   'Golden-Kubestronaut': '201, 160, 0',
   'Maintainer':          '74, 144, 217',
   'Memorial':            '139, 115, 85',
@@ -47,7 +47,7 @@ const HERO_LOGOS: Record<string, string> = {
 };
 
 // Categories whose brand color is light (amber/gold) — use dark label text instead of white.
-const DARK_LABEL_TEXT = new Set(['Kubestronaut', 'Golden-Kubestronaut']);
+const DARK_LABEL_TEXT = new Set(['Golden-Kubestronaut']);
 
 const { person, label, categoryKey, baseUrl } = Astro.props;
 const color      = HERO_COLORS[categoryKey]       ?? 'var(--color-accent-emphasis)';
