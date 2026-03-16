@@ -49,30 +49,31 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
         <div class="header-left">
           <div class="logo-title">
             <span class="cncf-logo-wrapper" aria-hidden="true">
-              <CNCFLogoColor class="logo-light" width={56} height={56} />
-              <CNCFLogoWhite class="logo-dark" width={56} height={56} />
+              <CNCFLogoColor class="logo-light" width={42} height={42} />
+              <CNCFLogoWhite class="logo-dark" width={42} height={42} />
             </span>
             <div class="title-block">
               <h1 class="site-title">
                 <a href={baseUrl} id="home-link" class="home-link">CNCF People</a>
               </h1>
-              <p class="site-subtitle" id="rotating-slogan" aria-live="polite">Built for the love of the game</p>
             </div>
           </div>
-          <div class="nav-group">
-            <SiteSwitcher activeSite="people" />
-            <div class="search-wrapper">
-              <slot name="search" />
-            </div>
+        </div>
+        <div class="nav-group">
+          <SiteSwitcher activeSite="people" />
+          <div class="search-wrapper">
+            <input type="search" id="search-input" class="search-input" placeholder="Search by name, company, or location… (/)" aria-label="Search people" autocomplete="off" />
+            <span class="search-count" id="search-count"></span>
+            <button id="search-clear" class="search-clear" aria-label="Clear search" title="Clear search">✕</button>
           </div>
         </div>
         <div class="header-actions">
           <ThemeToggle />
           <button
             id="help-button"
-            class="keyboard-help-button"
-            aria-label="Keyboard shortcuts"
-            title="Keyboard shortcuts (Press ?)"
+            class="icon-button"
+            aria-label="Keyboard shortcuts (?)"
+            title="Keyboard shortcuts (?)"
           >?</button>
         </div>
       </div>
@@ -117,25 +118,18 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 </html>
 
 <script>
-  const SLOGANS = [
-    "Built for the love of the game",
-    "Welcome to indie cloud native",
-    "Built for the love of the game. Welcome to indie cloud native",
-    "Discover the CNCF cloud native ecosystem",
-    "Community-driven, community-powered",
-  ];
-
-  const slogan = document.getElementById('rotating-slogan');
-  if (slogan && SLOGANS.length > 1) {
-    let idx = 0;
-    setInterval(() => {
-      slogan.classList.add('fade');
-      setTimeout(() => {
-        idx = (idx + 1) % SLOGANS.length;
-        slogan.textContent = SLOGANS[idx];
-        slogan.classList.remove('fade');
-      }, 600);
-    }, 12000);
+  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+  const searchClear = document.getElementById('search-clear') as HTMLButtonElement | null;
+  if (searchInput && searchClear) {
+    searchInput.addEventListener('input', () => {
+      searchClear.style.display = searchInput.value ? 'flex' : 'none';
+    });
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.style.display = 'none';
+      searchInput.dispatchEvent(new Event('input'));
+      searchInput.focus();
+    });
   }
 
   document.getElementById('help-button')?.addEventListener('click', () => {
@@ -311,7 +305,7 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 2.5rem;
     padding-bottom: 1rem;
   }
 
@@ -319,56 +313,35 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.5rem;
-    flex: 1;
+    flex-shrink: 0;
   }
 
-  .logo-title { display: flex; align-items: center; gap: 0.875rem; }
+  .logo-title { display: flex; align-items: center; gap: 0.5rem; }
 
   .nav-group {
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    flex: 1;
-    max-width: 600px;
+    flex-direction: row;
     align-items: center;
+    gap: 0.75rem;
+    flex: 1;
   }
 
   .nav-group .search-wrapper {
-    width: 100%;
+    width: auto;
   }
 
   .title-block {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* Constrain block height to match logo so text fills it neatly */
-    height: 56px;
-    gap: 0;
-    text-align: center;
+    align-items: center;
+    height: 42px;
   }
 
   .header-actions { display: flex; gap: 0.5rem; align-items: center; }
 
-  .site-title { font-size: 1.5rem; font-weight: 700; margin: 0; line-height: 1.1; }
+  .site-title { font-size: 1.375rem; font-weight: 700; margin: 0; line-height: 1.1; }
 
   .home-link { color: var(--color-text-primary); text-decoration: none; transition: color 0.2s; }
   .home-link:hover { color: var(--color-text-link); }
-
-  .site-subtitle {
-    color: var(--color-text-secondary);
-    font-size: 0.8125rem;
-    margin: 0;
-    line-height: 1.3;
-    font-style: italic;
-    transition: opacity 0.6s ease;
-    /* Prevent text wrapping from shifting the search box */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 280px;
-  }
-  .site-subtitle.fade { opacity: 0; }
 
   /* Section / category tab nav */
   .section-nav {
@@ -413,29 +386,61 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
   .cncf-logo-wrapper .logo-dark { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
   [data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
-  .cncf-logo-wrapper svg { width: 56px; height: 56px; }
+  .cncf-logo-wrapper svg { width: 42px; height: 42px; }
 
-  .keyboard-help-button {
-    background: var(--color-bg-secondary);
+  .icon-button {
+    background: none;
     border: 1px solid var(--color-border-default);
     border-radius: 6px;
-    padding: 0.5rem;
+    padding: 0.4rem 0.75rem;
     cursor: pointer;
+    font-size: 0.875rem;
     color: var(--color-text-secondary);
-    font-size: 1rem;
-    font-weight: 600;
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease;
-    margin-left: 1rem;
   }
-  .keyboard-help-button:hover {
+
+  .search-wrapper { position: relative; }
+  .search-input {
+    width: 360px;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
     background: var(--color-bg-default);
     color: var(--color-text-primary);
-    border-color: var(--color-text-primary);
+    font-size: 0.875rem;
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-cncf-blue);
+    box-shadow: 0 0 0 2px var(--color-cncf-blue);
+  }
+  .search-count {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+  }
+  .search-clear {
+    position: absolute;
+    right: 0.35rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.35rem;
+    border-radius: 4px;
+  }
+  .search-clear:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-tertiary);
   }
 
   .page-layout {

@@ -300,16 +300,6 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
 ---
 
 <PeopleLayout pageTitle="CNCF People" feedUrl={feedUrl}>
-  <div slot="search" class="search-bar">
-    <input
-      type="search"
-      id="search-input"
-      placeholder="Search by name, company, or location…"
-      class="search-input"
-      autocomplete="off"
-    />
-  </div>
-
   <Fragment slot="sidebar">
     <InfoBox
       title="Meet the Community"
@@ -839,21 +829,6 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
     border-left: 3px solid #6b7280;
     border-radius: 6px;
   }
-
-  .search-bar { width: 100%; }
-  .search-input {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--color-border-default);
-    border-radius: 6px;
-    background: var(--color-bg-secondary);
-    color: var(--color-text-primary);
-    font-size: 0.9375rem;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .search-input:focus { border-color: var(--color-accent-emphasis); }
-  .search-input::placeholder { color: var(--color-text-tertiary); }
 
   .filter-controls { display: flex; flex-direction: column; gap: 0.5rem; }
   .filter-select {
