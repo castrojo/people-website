@@ -152,13 +152,13 @@ test.describe('header — desktop (1280×800)', () => {
     expect(fontSize).toBeCloseTo(14, 0);
   });
 
-  test('active tab uses accent-emphasis color (not plain text or cncf-blue)', async ({ page }) => {
+  test('active tab uses cncf-blue color (#0086ff)', async ({ page }) => {
     const color = await page.evaluate(() => {
       const active = document.querySelector('.section-link.active');
       return active ? getComputedStyle(active).color : null;
     });
-    // rgb(9, 105, 218) = #0969da (light mode accent-emphasis)
-    expect(color).toBe('rgb(9, 105, 218)');
+    // rgb(0, 134, 255) = #0086ff (cncf-blue — canonical per cncf-dev skill)
+    expect(color).toBe('rgb(0, 134, 255)');
   });
 
   test('header is sticky positioned', async ({ page }) => {
