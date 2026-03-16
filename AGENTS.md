@@ -51,31 +51,40 @@ Key files:
 - `src/lib/maintainer-loader.ts` — maintainer tab renderer
 - `src/layouts/PeopleLayout.astro` — gold standard layout reference
 
-## Important: Privacy Rules
+## Data Files in src/data/ (20 files — backlog to consolidate)
 
-NEVER expose `email` or `wechat` fields from people.json. Run before any deploy:
-```bash
-grep -r email dist/ && grep -r wechat dist/  # must return empty
-```
+Generated/gitignored (rebuilt by Go sync):
+- `changelog.json` (sharded into changelog-0/1/2/3.json + changelog-meta.json)
+- `changelog-0.json`, `changelog-1.json`, `changelog-2.json`, `changelog-3.json`
+- `changelog-meta.json`
+- `heroes.json`
+- `stats.json`
+- `people-index.json`
+- `landscape_logos.json`
+- `maintainers.json`
+- `feed.xml`
 
-## Architectural Backlog (improvements from simpler-site design)
+Committed (manually maintained):
+- `staff-support.json` — CNCF staff sections (maintainers, toc, tab, governing-board, marketing, ambassadors, kubestronauts)
+- `memorial.json`
+- `people-emeritus.json`
+- `leadership.json` (gb, toc, tab, marketing roles)
+- `gb.json`, `toc.json`, `tab.json`, `marketing.json`
+- `staff-assignments.json`
 
-These items are NOT regressions — they are planned improvements identified when
-designing projects-website and endusers-website with simpler architecture:
+## Architectural Backlog (planned improvements)
 
-1. **Extract person-renderer.ts** — eliminate PersonCard.astro + feed-loader.ts duality
-   (~765 duplicate lines). This is the #1 source of bugs: any card change must be
-   made in both files or they drift.
+These are tracked gaps — not regressions — identified when designing the simpler projects/endusers architecture:
 
-2. **Extract tabs to tabs.ts** with Vitest unit tests
+1. **[HIGH] Extract person-renderer.ts** — `PersonCard.astro` + `feed-loader.ts` duplicate ~765 lines of card HTML. Any card change must be made in BOTH files or they drift. This is the #1 source of bugs. Extract to single `src/lib/person-renderer.ts` mirroring `project-renderer.ts` pattern.
 
-3. **Switch logo fetch** from landscape.yml (YAML parsing) to full.json (JSON, same data)
+2. **[HIGH] Extract keyboard.ts and tabs.ts** — Unlike projects/endusers which have `src/lib/keyboard.ts` and `src/lib/tabs.ts` as standalone modules with unit tests, people-website embeds this logic in `PeopleLayout.astro`. Extract to separate files, add Vitest unit tests.
 
-4. **Consolidate JSON data files** — currently 20+:
-   heroes.json, stats.json, people-index.json, staff-support.json, landscape_logos.json,
-   maintainers.json, api_cache.json, etc. Many can be merged or eliminated.
+3. **[MEDIUM] Consolidate JSON data files** — 20+ data files in `src/data/`. Many role-specific files (`gb.json`, `toc.json`, `tab.json`, `marketing.json`, `staff-assignments.json`) could be unified into one `leadership.json`. The changelog sharding (0-3) is a workaround for file size — evaluate if still needed.
 
-5. **Shared CSS variables as importable files** (currently inline in PeopleLayout.astro)
+4. **[MEDIUM] Extract CSS to src/styles/** — Unlike projects-website which has `variables.css` + `layout.css` + `cards.css` as separate importable files, people-website has all CSS inline in `PeopleLayout.astro`. Extract to `src/styles/` directory.
+
+5. **[LOW] Switch logo source from landscape.yml to full.json** — logos currently fetched from YAML, same data available in full.json as JSON. Simplifies parsing.
 
 ## Skills
 
