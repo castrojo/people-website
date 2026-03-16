@@ -1117,6 +1117,21 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
       import('../lib/hero-confetti').then(({ preloadOnHover }) => preloadOnHover(card));
     }
   }, { once: true });
+
+  // Staff minicards: starburst on click (fire & let navigation proceed).
+  document.addEventListener('click', (e: MouseEvent) => {
+    const card = (e.target as Element)?.closest('.staff-support-card');
+    if (!card) return;
+    import('../lib/hero-confetti').then(({ fireStarburst }) => fireStarburst(card));
+  });
+
+  // PersonCard / MaintainerCard: fountain using the card's accent color.
+  document.addEventListener('click', (e: MouseEvent) => {
+    const card = (e.target as Element)?.closest('.person-card, .maintainer-card');
+    if (!card) return;
+    // Let normal link navigation happen (name, handle, company) — confetti fires alongside.
+    import('../lib/hero-confetti').then(({ fireFountain }) => fireFountain(card));
+  });
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const typeFilter  = document.getElementById('type-filter') as HTMLSelectElement;
   const catFilter   = document.getElementById('category-filter') as HTMLSelectElement;

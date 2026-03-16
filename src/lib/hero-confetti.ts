@@ -89,6 +89,64 @@ export function fireHearts(card: Element): void {
   confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 120 });
 }
 
+// Starburst for staff minicards: 360° explosion of stars and sparkles.
+export function fireStarburst(card: Element): void {
+  const now = Date.now();
+  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
+  lastFired.set(card, now);
+
+  const rect = card.getBoundingClientRect();
+  const origin = {
+    x: (rect.left + rect.width / 2) / window.innerWidth,
+    y: (rect.top + rect.height / 2) / window.innerHeight,
+  };
+
+  const star    = confetti.shapeFromText({ text: '⭐', scalar: 2.5 });
+  const sparkle = confetti.shapeFromText({ text: '✨', scalar: 2.5 });
+
+  confetti({
+    origin,
+    colors: ['#0086FF', '#FFB300', '#D62293', '#00A86B', '#93EAFF'],
+    shapes: [star, sparkle, star],
+    scalar: 2.5,
+    gravity: 0.65,
+    ticks: 210,
+    particleCount: 22,
+    spread: 360,
+    startVelocity: 28,
+  });
+}
+
+// Fountain for PersonCard/MaintainerCard: uses the card's accent color.
+export function fireFountain(card: Element): void {
+  const now = Date.now();
+  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
+  lastFired.set(card, now);
+
+  const rect = card.getBoundingClientRect();
+  const origin = {
+    x: (rect.left + rect.width / 2) / window.innerWidth,
+    y: (rect.top + rect.height * 0.3) / window.innerHeight,
+  };
+
+  // Read the card's category accent color; fall back to CNCF blue.
+  const accent = (getComputedStyle(card as HTMLElement).getPropertyValue('--card-accent') || '#0086FF').trim();
+  const colors = [accent, '#0086FF', accent, '#93EAFF', accent + 'BB'];
+
+  confetti({
+    origin,
+    colors,
+    shapes: ['square', 'circle', 'square'],
+    scalar: 1.0,
+    gravity: 1.5,
+    ticks: 190,
+    particleCount: 45,
+    spread: 55,
+    startVelocity: 38,
+    angle: 90,
+  });
+}
+
 export function fireConfetti(card: Element): void {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
