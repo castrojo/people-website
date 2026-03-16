@@ -34,9 +34,12 @@ interface HeaderGeometry {
   // Logo
   logoTop: number;
   logoHeight: number;
+  logoRight: number;   // right edge of the logo — used to compute logo→title gap
+  logoWidth: number;   // must be exactly 42px
   // Title block
   titleTop: number;
   titleHeight: number;
+  titleLeft: number;   // left edge of title text block — gap from logoRight should be ~8px (0.5rem)
   // header-left block (logo+title together)
   headerLeftWidth: number;
   // SiteSwitcher pill group
@@ -82,8 +85,11 @@ async function measureHeader(page: Page): Promise<HeaderGeometry> {
       headerBottom:     header.bottom,
       logoTop:          logo.top,
       logoHeight:       logo.height,
+      logoRight:        logo.right,
+      logoWidth:        logo.width,
       titleTop:         title.top,
       titleHeight:      title.height,
+      titleLeft:        title.left,
       headerLeftWidth:  headerLeft.width,
       switcherTop:      switcher.top,
       switcherLeft:     switcher.left,
@@ -421,6 +427,50 @@ test.describe('cross-site header computed styles', () => {
         `${site.name}: header-left should be exactly 240px, got ${width}px`
       ).toBeCloseTo(240, 0);
     }
+  });
+
+  test('CNCF logo is exactly 42×42 on all sites', async ({ page }) => {
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const size = await page.evaluate(() => {
+        // Works for both <img> and inline <svg> logos
+        const el = document.querySelector('.cncf-logo-wrapper img, .cncf-logo-wrapper svg');
+        if (!el) throw new Error('Missing logo element');
+        const r = el.getBoundingClientRect();
+        return { w: Math.round(r.width), h: Math.round(r.height) };
+      });
+      expect(size.w, `${site.name}: logo width should be exactly 42px, got ${size.w}px`).toBe(42);
+      expect(size.h, `${site.name}: logo height should be exactly 42px, got ${size.h}px`).toBe(42);
+    }
+  });
+
+  test('logo-to-title gap is consistent across all sites (0.5rem ≈ 8px)', async ({ page }) => {
+    // This test catches spacing regressions between the CNCF logo and the site title text.
+    // The gap must be the same on all 3 sites — visually the logo lockup should be identical.
+    const gaps: Record<string, number> = {};
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const gap = await page.evaluate(() => {
+        const logo  = document.querySelector('.cncf-logo-wrapper');
+        const title = document.querySelector('.title-block');
+        if (!logo || !title) throw new Error('Missing .cncf-logo-wrapper or .title-block');
+        return title.getBoundingClientRect().left - logo.getBoundingClientRect().right;
+      });
+      gaps[site.name] = gap;
+      // 0.5rem = 8px at base 16px font. Allow ±3px tolerance for subpixel rendering.
+      expect(gap,
+        `${site.name}: logo-to-title gap should be ~8px (0.5rem), got ${gap.toFixed(1)}px — check gap on .logo-title in layout.css`
+      ).toBeGreaterThanOrEqual(4);
+      expect(gap,
+        `${site.name}: logo-to-title gap should be ~8px (0.5rem), got ${gap.toFixed(1)}px — excessive gap suggests logo or title-block has unexpected width`
+      ).toBeLessThanOrEqual(14);
+    }
+    // Cross-site consistency: all gaps within ±2px of each other
+    const [proj, people, endusers] = [gaps['projects'], gaps['people'], gaps['endusers']];
+    assertWithinTolerance('logo→title gap: people vs projects',   proj, people,   2);
+    assertWithinTolerance('logo→title gap: endusers vs projects', proj, endusers, 2);
   });
 
   test('localhost navigation URLs are set when running on localhost', async ({ page }) => {
