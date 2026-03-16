@@ -84,6 +84,8 @@ export function fireHearts(card: Element): void {
   confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 60 });
   confetti({ ...base, particleCount: 15, spread: 60,  startVelocity: 28, angle: 120 });
 }
+
+export function fireConfetti(card: Element): void {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
   lastFired.set(card, now);
