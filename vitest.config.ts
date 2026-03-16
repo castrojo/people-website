@@ -4,5 +4,14 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['tests/unit/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary'],
+      include: ['src/lib/**/*.ts'],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+      },
+    },
   },
 });
