@@ -81,7 +81,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
 
   const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `
     <div class="stats-row">
-      ${p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}
+      ${p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" style="width:14px;height:14px;object-fit:contain;flex-shrink:0"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}
       ${p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect width="16" height="2" rx="1" y="0"/><rect width="16" height="2" rx="1" y="4"/><rect width="16" height="2" rx="1" y="8"/><rect width="10" height="2" rx="1" y="12"/></svg></span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}
       ${p.publicRepos ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="14" height="14" rx="2"/><path d="M4 8h8M4 5h8M4 11h5"/></svg></span><span class="stat-val">${p.publicRepos}</span><span class="stat-label">repos</span></span>` : ''}
     </div>` : '';
@@ -102,7 +102,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
 
   const rightCol = (programLogo || p.location) ? `
     <div class="card-right">
-      ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy">` : ''}
+      ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy" style="height:48px;width:auto;opacity:0.9">` : ''}
       ${p.location ? `<span class="location-right">${esc(p.countryFlag ?? '')} ${esc(p.location)}</span>` : ''}
     </div>` : '';
 

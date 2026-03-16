@@ -801,19 +801,20 @@ func WriteStaffSupport(outDir string, people []models.RawPerson) error {
 // BackfillFromCache patches Pronouns, Location, and YearsContributing into changelog.json
 // events that are missing them, using data from the GitHub API cache. Only updates fields
 // that are currently empty/zero. Does not perform new API fetches — caller is responsible
-// for pre-populating the cache.
-func BackfillFromCache(outDir string, cache *apicache.Cache) error {
+// for pre-populating the cache. Returns the patched events so callers can regenerate
+// derived files (e.g. people-index.json) with the enriched data.
+func BackfillFromCache(outDir string, cache *apicache.Cache) ([]models.Event, error) {
 	outPath := filepath.Join(outDir, "changelog.json")
 	raw, err := os.ReadFile(outPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil
+			return nil, nil
 		}
-		return err
+		return nil, err
 	}
 	var events []models.Event
 	if err := json.Unmarshal(raw, &events); err != nil {
-		return err
+		return nil, err
 	}
 	changed := false
 	for i, e := range events {
@@ -845,11 +846,11 @@ func BackfillFromCache(outDir string, cache *apicache.Cache) error {
 		}
 	}
 	if !changed {
-		return nil
+		return events, nil
 	}
 	data, err := json.MarshalIndent(events, "", "  ")
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return os.WriteFile(outPath, data, 0o644)
+	return events, os.WriteFile(outPath, data, 0o644)
 }

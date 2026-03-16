@@ -429,6 +429,13 @@ func main() {
 					events[t.idx].Person.AvatarURL = stats.AvatarURL
 					events[t.idx].Person.Contributions = stats.Contributions
 					events[t.idx].Person.PublicRepos = stats.PublicRepos
+					if events[t.idx].Person.Pronouns == "" && stats.Pronouns != "" {
+						events[t.idx].Person.Pronouns = stats.Pronouns
+					}
+					if events[t.idx].Person.Location == "" && stats.Location != "" {
+						events[t.idx].Person.Location = stats.Location
+						events[t.idx].Person.CountryFlag = models.CountryFlag(stats.Location)
+					}
 					mu.Unlock()
 				}
 				return nil
@@ -489,9 +496,14 @@ func main() {
 	}
 
 	// Backfill pronouns + GitHub location into existing changelog events from cache.
+	// Re-write people-index.json afterwards so it reflects the enriched data.
 	if apiCache != nil {
-		if err := writer.BackfillFromCache(outDir, apiCache); err != nil {
+		if backfilled, err := writer.BackfillFromCache(outDir, apiCache); err != nil {
 			log.Printf("warn: backfill from cache: %v", err)
+		} else if len(backfilled) > 0 {
+			if err := writer.WritePeopleIndex(outDir, backfilled); err != nil {
+				log.Printf("warn: re-write people-index after backfill: %v", err)
+			}
 		}
 	}
 }
