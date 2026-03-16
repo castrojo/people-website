@@ -5,9 +5,9 @@ interface Props {
 const { activeSite } = Astro.props;
 
 const sites = [
-  { key: 'people',   label: 'CNCF People',    url: 'https://castrojo.github.io/people-website/' },
-  { key: 'projects', label: 'CNCF Projects',  url: 'https://castrojo.github.io/projects-website/' },
-  { key: 'endusers', label: 'CNCF End Users', url: 'https://castrojo.github.io/endusers-website/' },
+  { key: 'people',   label: 'People',    url: 'https://castrojo.github.io/people-website/' },
+  { key: 'projects', label: 'Projects',  url: 'https://castrojo.github.io/projects-website/' },
+  { key: 'endusers', label: 'End Users', url: 'https://castrojo.github.io/endusers-website/' },
 ];
 ---
 <nav class="site-switcher" aria-label="Indie Cloud Native sites">
@@ -36,14 +36,14 @@ const sites = [
     border-radius: 6px;
     transition: all 0.15s ease;
   }
-  .switcher-pill:hover {
-    color: var(--color-text-primary, #24292f);
-    background: var(--color-bg-default, #ffffff);
-  }
   .switcher-pill.active {
+    color: #ffffff;
+    background: #0086FF;
+    box-shadow: 0 1px 3px rgba(0, 134, 255, 0.3);
+    font-weight: 600;
+  }
+  .switcher-pill:hover:not(.active) {
     color: var(--color-text-primary, #24292f);
     background: var(--color-bg-default, #ffffff);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-weight: 600;
   }
 </style>

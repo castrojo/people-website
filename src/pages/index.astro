@@ -1328,6 +1328,11 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
         const link = card?.querySelector<HTMLAnchorElement>('a[href]');
         if (link) { e.preventDefault(); window.open(link.href, '_blank', 'noopener'); }
       }
+      if (e.key === '[') {
+        window.location.href = 'https://castrojo.github.io/endusers-website/';
+      } else if (e.key === ']') {
+        window.location.href = 'https://castrojo.github.io/projects-website/';
+      }
     }
   });
 </script>

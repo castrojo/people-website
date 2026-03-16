@@ -331,6 +331,11 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     gap: 0.35rem;
     flex: 1;
     max-width: 600px;
+    align-items: center;
+  }
+
+  .nav-group .search-wrapper {
+    width: 100%;
   }
 
   .title-block {
@@ -340,9 +345,8 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     /* Constrain block height to match logo so text fills it neatly */
     height: 56px;
     gap: 0;
+    text-align: center;
   }
-
-  .search-wrapper { width: 100%; }
 
   .header-actions { display: flex; gap: 0.5rem; align-items: center; }
 
