@@ -30,8 +30,7 @@ html {
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex-shrink: 0;
-  min-width: 200px;
+  flex: 0 0 240px;
 }
 
 .logo-title {
