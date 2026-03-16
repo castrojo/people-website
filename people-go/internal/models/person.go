@@ -66,8 +66,10 @@ func (p RawPerson) GitHubHandle() string {
 		return ""
 	}
 	handle := strings.TrimPrefix(trimmed, GitHubBase)
-	// Reject handles that look like paths (e.g. org/repo)
-	if strings.Contains(handle, "/") {
+	// Reject handles that look like paths (e.g. org/repo) or malformed URLs
+	// (e.g. user?tab=repos, user.github.io). GitHub usernames only allow
+	// alphanumeric and hyphens — any of these characters indicates bad data.
+	if strings.ContainsAny(handle, "/.?") {
 		return ""
 	}
 	return handle
