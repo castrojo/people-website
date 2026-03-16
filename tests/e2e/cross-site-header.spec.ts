@@ -438,4 +438,19 @@ test.describe('cross-site header computed styles', () => {
       }
     }
   });
+
+  test('site-title white-space is nowrap on all sites — title must never wrap', async ({ page }) => {
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const ws = await page.evaluate(() => {
+        const el = document.querySelector('.site-title');
+        return el ? getComputedStyle(el).whiteSpace : null;
+      });
+      expect(
+        ws,
+        `${site.name}: .site-title must have white-space: nowrap — add it to layout.css`,
+      ).toBe('nowrap');
+    }
+  });
 });
