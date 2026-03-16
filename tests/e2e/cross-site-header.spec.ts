@@ -236,3 +236,206 @@ test.describe('cross-site header geometry — 1440×900 (wider viewport)', () =>
     }
   });
 });
+
+test.describe('cross-site header computed styles', () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  interface HeaderStyles {
+    // Typography
+    siteTitleFontSize:   string;
+    siteTitleFontWeight: string;
+    siteTitleFontFamily: string;
+    // Search input
+    searchFontSize:      string;
+    searchBorderRadius:  string;
+    searchWidth:         string;
+    // Section-nav tabs
+    sectionLinkFontSize:   string;
+    sectionLinkFontWeight: string; // active tab
+    // SiteSwitcher
+    switcherBorderRadius: string;
+    activePillBackground: string;
+    // Header background
+    headerBackground: string;
+    // Section-nav min-height (no wrap check)
+    sectionNavDisplay: string;
+    sectionNavFlexWrap: string;
+  }
+
+  async function measureStyles(page: Page): Promise<HeaderStyles> {
+    return page.evaluate(() => {
+      const cs = (sel: string) => {
+        const el = document.querySelector(sel);
+        if (!el) throw new Error(`Missing element: ${sel}`);
+        return getComputedStyle(el);
+      };
+
+      const titleStyle   = cs('.site-title');
+      const searchStyle  = cs('#search-input');
+      const navLinkStyle = cs('.section-link');
+      const activeLinkStyle = cs('.section-link.active');
+      const switcherStyle   = cs('.site-switcher');
+      const activePillStyle = cs('.switcher-pill.active');
+      const headerStyle     = cs('.site-header');
+      const navStyle        = cs('.section-nav');
+
+      return {
+        siteTitleFontSize:     titleStyle.fontSize,
+        siteTitleFontWeight:   titleStyle.fontWeight,
+        siteTitleFontFamily:   titleStyle.fontFamily,
+        searchFontSize:        searchStyle.fontSize,
+        searchBorderRadius:    searchStyle.borderRadius,
+        searchWidth:           searchStyle.width,
+        sectionLinkFontSize:   navLinkStyle.fontSize,
+        sectionLinkFontWeight: activeLinkStyle.fontWeight,
+        switcherBorderRadius:  switcherStyle.borderRadius,
+        activePillBackground:  activePillStyle.backgroundColor,
+        headerBackground:      headerStyle.backgroundColor,
+        sectionNavDisplay:     navStyle.display,
+        sectionNavFlexWrap:    navStyle.flexWrap,
+      };
+    });
+  }
+
+  test('font-family is identical across all three sites', async ({ page }) => {
+    const styles: HeaderStyles[] = [];
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      styles.push(await measureStyles(page));
+    }
+    const [proj, people, endusers] = styles;
+
+    expect(people.siteTitleFontFamily,
+      `people font-family should match projects: ${proj.siteTitleFontFamily}`
+    ).toBe(proj.siteTitleFontFamily);
+    expect(endusers.siteTitleFontFamily,
+      `endusers font-family should match projects: ${proj.siteTitleFontFamily}`
+    ).toBe(proj.siteTitleFontFamily);
+  });
+
+  test('site-title font-size and font-weight are identical', async ({ page }) => {
+    const styles: HeaderStyles[] = [];
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      styles.push(await measureStyles(page));
+    }
+    const [proj, people, endusers] = styles;
+
+    expect(people.siteTitleFontSize).toBe(proj.siteTitleFontSize);
+    expect(endusers.siteTitleFontSize).toBe(proj.siteTitleFontSize);
+    expect(people.siteTitleFontWeight).toBe(proj.siteTitleFontWeight);
+    expect(endusers.siteTitleFontWeight).toBe(proj.siteTitleFontWeight);
+  });
+
+  test('search input font-size, border-radius, and width are identical', async ({ page }) => {
+    const styles: HeaderStyles[] = [];
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      styles.push(await measureStyles(page));
+    }
+    const [proj, people, endusers] = styles;
+
+    expect(people.searchFontSize).toBe(proj.searchFontSize);
+    expect(endusers.searchFontSize).toBe(proj.searchFontSize);
+    expect(people.searchBorderRadius).toBe(proj.searchBorderRadius);
+    expect(endusers.searchBorderRadius).toBe(proj.searchBorderRadius);
+    expect(people.searchWidth).toBe(proj.searchWidth);
+    expect(endusers.searchWidth).toBe(proj.searchWidth);
+  });
+
+  test('section-link tab font-size is identical and active tab font-weight matches', async ({ page }) => {
+    const styles: HeaderStyles[] = [];
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      styles.push(await measureStyles(page));
+    }
+    const [proj, people, endusers] = styles;
+
+    expect(people.sectionLinkFontSize).toBe(proj.sectionLinkFontSize);
+    expect(endusers.sectionLinkFontSize).toBe(proj.sectionLinkFontSize);
+    expect(people.sectionLinkFontWeight).toBe(proj.sectionLinkFontWeight);
+    expect(endusers.sectionLinkFontWeight).toBe(proj.sectionLinkFontWeight);
+  });
+
+  test('active SiteSwitcher pill background is CNCF blue on all sites', async ({ page }) => {
+    const styles: HeaderStyles[] = [];
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      styles.push(await measureStyles(page));
+    }
+    const [proj, people, endusers] = styles;
+
+    // All three active pills should be rgb(0, 134, 255) = #0086FF
+    expect(proj.activePillBackground).toBe('rgb(0, 134, 255)');
+    expect(people.activePillBackground).toBe('rgb(0, 134, 255)');
+    expect(endusers.activePillBackground).toBe('rgb(0, 134, 255)');
+  });
+
+  test('section-nav does not flex-wrap on any site', async ({ page }) => {
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const { display, flexWrap } = await page.evaluate(() => {
+        const nav = document.querySelector('.section-nav');
+        if (!nav) throw new Error('Missing .section-nav');
+        const cs = getComputedStyle(nav);
+        return { display: cs.display, flexWrap: cs.flexWrap };
+      });
+      expect(display, `${site.name}: section-nav display`).toBe('flex');
+      expect(flexWrap, `${site.name}: section-nav must not wrap`).toBe('nowrap');
+    }
+  });
+
+  test('section-nav does not visually wrap at 375px mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const wrapped = await page.evaluate(() => {
+        const nav = document.querySelector('.section-nav');
+        if (!nav) return false;
+        const buttons = Array.from(nav.querySelectorAll('.section-link'));
+        if (buttons.length < 2) return false;
+        const firstTop = buttons[0].getBoundingClientRect().top;
+        return buttons.some(b => Math.abs(b.getBoundingClientRect().top - firstTop) > 4);
+      });
+      expect(wrapped, `${site.name}: section-nav should not visually wrap at 375px`).toBe(false);
+    }
+  });
+
+  test('header-left is exactly 240px wide on all sites', async ({ page }) => {
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const width = await page.evaluate(() => {
+        const el = document.querySelector('.header-left');
+        if (!el) throw new Error('Missing .header-left');
+        return el.getBoundingClientRect().width;
+      });
+      expect(width,
+        `${site.name}: header-left should be exactly 240px, got ${width}px`
+      ).toBeCloseTo(240, 0);
+    }
+  });
+
+  test('localhost navigation URLs are set when running on localhost', async ({ page }) => {
+    // Verify SiteSwitcher pills point to localhost when served from localhost
+    for (const site of SITES) {
+      await page.goto(site.url);
+      await page.waitForLoadState('networkidle');
+      const pillHrefs = await page.evaluate(() =>
+        Array.from(document.querySelectorAll<HTMLAnchorElement>('.switcher-pill[href]'))
+          .map(a => a.href)
+      );
+      // Every pill link should point to localhost (not castrojo.github.io)
+      for (const href of pillHrefs) {
+        expect(href, `${site.name}: SiteSwitcher pill should link to localhost`).toContain('localhost');
+      }
+    }
+  });
+});
