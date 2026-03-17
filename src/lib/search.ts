@@ -86,9 +86,7 @@ export async function searchPeople(
   }));
 }
 
-/**
- * Preload the search index in the background (call on page load to warm it up).
- */
+/** Preload the search index in the background (call on page load to warm it up). */
 export function preloadSearchIndex(baseUrl: string): void {
   ensureLoaded(baseUrl).catch(() => { /* silent — lazy load on first search */ });
 }

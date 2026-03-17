@@ -17,22 +17,8 @@ interface RawBanner {
 }
 
 /**
- * Minimal inline parser for banners.yml.
- *
- * Handles exactly this structure (no js-yaml dependency needed):
- *
- *   - name: "Foo"
- *     link: "https://..."
- *     images:
- *       light-theme: "https://..."
- *       dark-theme: "https://..."
- *
- * Rules:
- * - Lines starting with "- " begin a new banner object
- * - Key-value lines: `  key: value` (leading whitespace ignored)
- * - Nested `images:` block: next lines with deeper indent are sub-keys
- * - Values may be quoted with single or double quotes (stripped)
- * - Blank lines and comment lines (#) are ignored
+ * Minimal inline YAML parser for banners.yml (no js-yaml dependency).
+ * Handles list items with name/link/images keys; strips quotes; ignores blanks and comments.
  */
 export function parseBannersYaml(yamlText: string): RawBanner[] {
   const banners: RawBanner[] = [];
