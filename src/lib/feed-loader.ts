@@ -11,12 +11,8 @@ interface Person {
   location?: string; linkedin?: string; twitter?: string; youtube?: string;
   website?: string; bluesky?: string; mastodon?: string; certDirectory?: string;
   category: string[]; projects?: string[];
-  avatarUrl?: string;
-  contributions?: number;
-  publicRepos?: number;
-  yearsContributing?: number;
-  countryFlag?: string;
-  primaryBadge?: string;
+  avatarUrl?: string; contributions?: number; publicRepos?: number;
+  yearsContributing?: number; countryFlag?: string; primaryBadge?: string;
 }
 interface Event { id: string; type: string; timestamp: string; person: Person; changes?: Change[]; }
 
@@ -30,6 +26,8 @@ const CATEGORY_MAP: Record<string, { name: string; color: string }> = {
   'Governing Board':               { name: 'Governing Board',      color: 'var(--color-board, #E65100)' },
   'Marketing Committee':           { name: 'Marketing Committee',  color: 'var(--color-board, #E65100)' },
 };
+
+const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
 
 const PROGRAM_LOGOS: Record<string, string> = {
   'Kubestronaut':                  `${BASE}/program-logos/kubestronaut.svg`,
@@ -58,7 +56,6 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const cats = p.category ?? [];
   const primaryCat = cats[0] ?? '';
   // Use pre-computed primaryBadge from backend; fall back to category scan for older events
-  const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
   const logoKey = p.primaryBadge
     ? (PROGRAM_LOGOS[p.primaryBadge] ? p.primaryBadge : undefined)
     : LOGO_PRIORITY.find(c => cats.includes(c));
@@ -67,8 +64,6 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '';
   const typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
   const date = new Date(e.timestamp);
-  const formattedDate = date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
-  const formattedTime = date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' });
   const year = new Date().getFullYear();
 
   const catBadges = cats.map(cat => {
@@ -145,7 +140,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
     ${rightCol}
   </div>
   <div class="card-footer">
-    <time datetime="${esc(e.timestamp)}" class="timestamp">${esc(formattedDate)} · ${esc(formattedTime)}</time>
+    <time datetime="${esc(e.timestamp)}" class="timestamp">${esc(date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }))} · ${esc(date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' }))}</time>
     <div class="social-links">${socialLinks}</div>
   </div>
 </article>`;
