@@ -16,6 +16,7 @@ interface ProjectDetail {
 interface SafeMaintainer {
   name: string;
   handle: string;
+  avatarUrl?: string;
   company?: string;
   location?: string;
   countryFlag?: string;
@@ -62,9 +63,9 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>): string {
+export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>): string {
   const profileUrl = `https://github.com/${esc(m.handle)}`;
-  const avatarUrl  = `https://avatars.githubusercontent.com/${esc(m.handle)}?s=128`;
+  const avatarUrl  = m.avatarUrl || `https://avatars.githubusercontent.com/${esc(m.handle)}?s=128`;
   const accentColor = MATURITY_COLOR[m.maturity] ?? '#8b949e';
   const cncfLogoUrl = `${BASE}/program-logos/cncf.svg`;
   const currentYear = new Date().getFullYear();
@@ -110,7 +111,8 @@ function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>):
   <div class="card-accent-bar"></div>
   <div class="card-body">
     <a href="${profileUrl}" class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
-      <img class="avatar" src="${avatarUrl}" width="64" height="64" alt="${esc(m.name)}" loading="lazy" />
+      <img class="avatar" src="${avatarUrl}" width="64" height="64" alt="${esc(m.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+      <div class="avatar-placeholder" style="display:none">${esc(m.name.charAt(0).toUpperCase())}</div>
     </a>
     <div class="card-main">
       <div class="card-identity-row">

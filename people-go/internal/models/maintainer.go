@@ -18,9 +18,10 @@ type SafeMaintainer struct {
 	Location          string          `json:"location,omitempty"`
 	CountryFlag       string          `json:"countryFlag,omitempty"`
 	Bio               string          `json:"bio,omitempty"`
-	Projects          []string        `json:"projects"`                  // names only, kept for compat
-	ProjectDetails    []ProjectDetail `json:"projectDetails,omitempty"`  // name + maturity per project
-	Maturity          string          `json:"maturity"`                  // highest maturity across projects
+	Projects          []string        `json:"projects"`                 // names only, kept for compat
+	ProjectDetails    []ProjectDetail `json:"projectDetails,omitempty"` // name + maturity per project
+	Maturity          string          `json:"maturity"`                 // highest maturity across projects
+	AvatarURL         string          `json:"avatarUrl,omitempty"`
 	OwnersURL         string          `json:"ownersUrl,omitempty"`
 	LogoURL           string          `json:"logoUrl,omitempty"`
 	UpdatedAt         time.Time       `json:"updatedAt,omitempty"`

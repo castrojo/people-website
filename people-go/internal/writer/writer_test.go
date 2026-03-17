@@ -140,6 +140,28 @@ func TestCategoryBalancedPick_NoDuplicates(t *testing.T) {
 	}
 }
 
+// TestCategoryBalancedPick_MaintainerAvatarURL verifies that when a SafeMaintainer
+// with a known handle is converted to SafePerson for the Everyone rotation,
+// the resulting SafePerson carries a populated AvatarURL (GitHub CDN URL).
+func TestCategoryBalancedPick_MaintainerAvatarURL(t *testing.T) {
+	maintainers := []models.SafeMaintainer{
+		{Name: "Ana Tester", Handle: "anatester", AvatarURL: "https://avatars.githubusercontent.com/anatester"},
+	}
+
+	result := categoryBalancedPick(nil, nil, maintainers, 8)
+
+	if len(result) == 0 {
+		t.Fatal("expected at least one result for a single maintainer")
+	}
+	got := result[0]
+	if got.AvatarURL != "https://avatars.githubusercontent.com/anatester" {
+		t.Errorf("AvatarURL = %q; want %q", got.AvatarURL, "https://avatars.githubusercontent.com/anatester")
+	}
+	if got.Handle != "anatester" {
+		t.Errorf("Handle = %q; want %q", got.Handle, "anatester")
+	}
+}
+
 // TestCategoryBalancedPick_DiversityGuaranteed verifies that when she/her or they/them
 // people exist in the pools, at least one appears in the result.
 func TestCategoryBalancedPick_DiversityGuaranteed(t *testing.T) {

@@ -705,6 +705,7 @@ func categoryBalancedPick(ambassadors, kubestronauts []models.SafePerson, mainta
 			Bio:               m.Bio,
 			Category:          []string{"Maintainer"},
 			YearsContributing: m.YearsContributing,
+			AvatarURL:         m.AvatarURL,
 		})
 	}
 	for _, p := range dailyPick(maintSafe, maintQuota) {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-17T15:01:15.195687381Z",
+  "generatedAt": "2026-03-17T15:53:25.336264452Z",
   "everyone": [
     {
       "name": "Cristher Castro",
@@ -117,7 +117,8 @@
       "company": "Red Hat",
       "category": [
         "Maintainer"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/varodrig"
     },
     {
       "name": "Abhinandan Purkait",
@@ -125,7 +126,8 @@
       "company": "DataCore Software",
       "category": [
         "Maintainer"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/abhinandan-purkait"
     }
   ],
   "ambassadors": [
@@ -531,6 +533,7 @@
         }
       ],
       "maturity": "Sandbox",
+      "avatarUrl": "https://avatars.githubusercontent.com/divolgin",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/schemahero.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -548,6 +551,7 @@
         }
       ],
       "maturity": "Sandbox",
+      "avatarUrl": "https://avatars.githubusercontent.com/timostamm",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/connect-rpc.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -565,6 +569,7 @@
         }
       ],
       "maturity": "Graduated",
+      "avatarUrl": "https://avatars.githubusercontent.com/andresnico",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/crossplane.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -582,6 +587,7 @@
         }
       ],
       "maturity": "Incubating",
+      "avatarUrl": "https://avatars.githubusercontent.com/pugangxa",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/kubeflow.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -599,6 +605,7 @@
         }
       ],
       "maturity": "Sandbox",
+      "avatarUrl": "https://avatars.githubusercontent.com/fekete-robert",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
     {
@@ -614,6 +621,7 @@
         }
       ],
       "maturity": "Incubating",
+      "avatarUrl": "https://avatars.githubusercontent.com/onprem",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/thanos.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -631,6 +639,7 @@
         }
       ],
       "maturity": "Sandbox",
+      "avatarUrl": "https://avatars.githubusercontent.com/henrywang",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/bootc.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     },
@@ -648,6 +657,7 @@
         }
       ],
       "maturity": "Sandbox",
+      "avatarUrl": "https://avatars.githubusercontent.com/yujinkim-msft",
       "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/akri.svg",
       "updatedAt": "0001-01-01T00:00:00Z"
     }

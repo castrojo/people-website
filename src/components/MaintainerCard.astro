@@ -7,6 +7,7 @@ interface ProjectDetail {
 interface SafeMaintainer {
   name: string;
   handle: string;
+  avatarUrl?: string;
   company?: string;
   location?: string;
   countryFlag?: string;
@@ -34,7 +35,7 @@ const MATURITY_COLOR: Record<string, string> = {
 const { maintainer, projectLogos } = Astro.props;
 const accentColor = MATURITY_COLOR[maintainer.maturity] ?? '#8b949e';
 const profileUrl = `https://github.com/${maintainer.handle}`;
-const avatarUrl = `https://avatars.githubusercontent.com/${maintainer.handle}?s=128`;
+const avatarUrl = maintainer.avatarUrl || `https://avatars.githubusercontent.com/${maintainer.handle}?s=128`;
 const currentYear = new Date().getFullYear();
 const base = (import.meta.env.BASE_URL ?? '/people-website').replace(/\/$/, '');
 const cncfLogoUrl = `${base}/program-logos/cncf.svg`;
@@ -60,7 +61,8 @@ function resolveChipLogo(project: string, logos: Record<string, string> | undefi
   <div class="card-accent-bar"></div>
   <div class="card-body">
     <a href={profileUrl} class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
-      <img class="avatar" src={avatarUrl} width="64" height="64" alt={maintainer.name} loading="lazy" />
+      <img class="avatar" src={avatarUrl} width="64" height="64" alt={maintainer.name} loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+      <div class="avatar-placeholder" style="display:none">{maintainer.name.charAt(0).toUpperCase()}</div>
     </a>
     <div class="card-main">
       <div class="card-identity-row">
