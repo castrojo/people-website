@@ -59,16 +59,24 @@ export function preloadOnHover(card: Element): void {
 const lastFired = new WeakMap<Element, number>();
 const DEBOUNCE_MS = 300;
 
-export function fireHearts(card: Element): void {
+function tryDebounce(card: Element): boolean {
   const now = Date.now();
-  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
+  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return false;
   lastFired.set(card, now);
+  return true;
+}
 
+function cardOrigin(card: Element, yFraction = 0.5) {
   const rect = card.getBoundingClientRect();
-  const origin = {
+  return {
     x: (rect.left + rect.width / 2) / window.innerWidth,
-    y: (rect.top + rect.height / 2) / window.innerHeight,
+    y: (rect.top + rect.height * yFraction) / window.innerHeight,
   };
+}
+
+export function fireHearts(card: Element): void {
+  if (!tryDebounce(card)) return;
+  const origin = cardOrigin(card);
 
   const blueHeart = confetti.shapeFromText({ text: '💙', scalar: 4 });
   const redHeart  = confetti.shapeFromText({ text: '❤️', scalar: 4 });
@@ -91,15 +99,8 @@ export function fireHearts(card: Element): void {
 
 // Starburst for staff minicards: 360° explosion of stars and sparkles.
 export function fireStarburst(card: Element): void {
-  const now = Date.now();
-  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
-  lastFired.set(card, now);
-
-  const rect = card.getBoundingClientRect();
-  const origin = {
-    x: (rect.left + rect.width / 2) / window.innerWidth,
-    y: (rect.top + rect.height / 2) / window.innerHeight,
-  };
+  if (!tryDebounce(card)) return;
+  const origin = cardOrigin(card);
 
   const star    = confetti.shapeFromText({ text: '⭐', scalar: 2.5 });
   const sparkle = confetti.shapeFromText({ text: '✨', scalar: 2.5 });
@@ -119,15 +120,8 @@ export function fireStarburst(card: Element): void {
 
 // Fountain for PersonCard/MaintainerCard: uses the card's accent color.
 export function fireFountain(card: Element): void {
-  const now = Date.now();
-  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
-  lastFired.set(card, now);
-
-  const rect = card.getBoundingClientRect();
-  const origin = {
-    x: (rect.left + rect.width / 2) / window.innerWidth,
-    y: (rect.top + rect.height * 0.3) / window.innerHeight,
-  };
+  if (!tryDebounce(card)) return;
+  const origin = cardOrigin(card, 0.3);
 
   // Read the card's category accent color; fall back to CNCF blue.
   const accent = (getComputedStyle(card as HTMLElement).getPropertyValue('--card-accent') || '#0086FF').trim();
@@ -148,15 +142,8 @@ export function fireFountain(card: Element): void {
 }
 
 export function fireConfetti(card: Element): void {
-  const now = Date.now();
-  if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return;
-  lastFired.set(card, now);
-
-  const rect = card.getBoundingClientRect();
-  const origin = {
-    x: (rect.left + rect.width / 2) / window.innerWidth,
-    y: (rect.top + rect.height / 2) / window.innerHeight,
-  };
+  if (!tryDebounce(card)) return;
+  const origin = cardOrigin(card);
 
   const base = {
     origin,
