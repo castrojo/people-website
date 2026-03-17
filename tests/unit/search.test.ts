@@ -92,4 +92,74 @@ describe('searchPeople — with loaded index', () => {
     const results = await searchPeople('Alice', 'http://localhost/', 3);
     expect(results.length).toBeLessThanOrEqual(3);
   });
+
+  it('returns empty array for a query with no matches', async () => {
+    vi.resetModules();
+
+    const mockPeople = [
+      { name: 'Jane Doe', handle: 'janedoe', company: 'CNCF', category: ['Ambassadors'] },
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockPeople),
+    }));
+
+    const { searchPeople } = await import('../../src/lib/search');
+    const results = await searchPeople('zzznomatchzzz', 'http://localhost/');
+    expect(results).toEqual([]);
+  });
+
+  it('matches by company name', async () => {
+    vi.resetModules();
+
+    const mockPeople = [
+      { name: 'Carlos Ruiz', handle: 'cruiz', company: 'RedHatInc', category: ['Kubestronaut'] },
+      { name: 'Other Person', handle: 'other', company: 'UnrelatedCorp', category: ['Ambassadors'] },
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockPeople),
+    }));
+
+    const { searchPeople } = await import('../../src/lib/search');
+    const results = await searchPeople('RedHatInc', 'http://localhost/');
+    expect(results.map(r => r.name)).toContain('Carlos Ruiz');
+  });
+
+  it('matches by location field', async () => {
+    vi.resetModules();
+
+    const mockPeople = [
+      { name: 'Mei Chen', handle: 'meichen', location: 'Shanghai', category: ['Ambassadors'] },
+      { name: 'Other Person', handle: 'other', location: 'London', category: ['Kubestronaut'] },
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockPeople),
+    }));
+
+    const { searchPeople } = await import('../../src/lib/search');
+    const results = await searchPeople('Shanghai', 'http://localhost/');
+    expect(results.map(r => r.name)).toContain('Mei Chen');
+  });
+
+  it('matches by GitHub handle', async () => {
+    vi.resetModules();
+
+    const mockPeople = [
+      { name: 'Dev Person', handle: 'uniquehandle42', category: ['Kubestronaut'] },
+    ];
+
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockPeople),
+    }));
+
+    const { searchPeople } = await import('../../src/lib/search');
+    const results = await searchPeople('uniquehandle42', 'http://localhost/');
+    expect(results.map(r => r.name)).toContain('Dev Person');
+  });
 });
