@@ -277,4 +277,53 @@ describe('renderCard — person card HTML', () => {
     expect(html).toContain('href="https://youtube.com/@kaitoy"');
     expect(html).toContain('YouTube');
   });
+
+  it('escapes HTML special characters in name to prevent XSS', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, name: '<script>alert("xss")</script>' } };
+    const html = renderCard(event as any, {});
+    expect(html).not.toContain('<script>');
+    expect(html).toContain('&lt;script&gt;');
+  });
+
+  it('escapes HTML special characters in bio to prevent XSS', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, bio: 'Hello & <world>' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('Hello &amp; &lt;world&gt;');
+    expect(html).not.toContain('<world>');
+  });
+
+  it('renders project chip with landscape logo img when logo is provided', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, projects: ['Prometheus'] } };
+    const logos = { Prometheus: 'https://logos.example.com/prometheus.svg' };
+    const html = renderCard(event as any, logos);
+    expect(html).toContain('projects-row');
+    expect(html).toContain('Prometheus');
+    expect(html).toContain('src="https://logos.example.com/prometheus.svg"');
+  });
+
+  it('renders certDirectory link when certDirectory is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, certDirectory: 'https://cncf.io/certs/kaitoy' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('href="https://cncf.io/certs/kaitoy"');
+    expect(html).toContain('CNCF Cert Directory');
+  });
+
+  it('renders multiple category badges for multi-category person', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, category: ['Kubestronaut', 'Ambassadors'] } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('Kubestronaut');
+    expect(html).toContain('Ambassador');
+  });
+
+  it('renders data-categories attribute with pipe-separated lowercase categories', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, category: ['Kubestronaut', 'Ambassadors'] } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('data-categories="kubestronaut|ambassadors"');
+  });
 });
