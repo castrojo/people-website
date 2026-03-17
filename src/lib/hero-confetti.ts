@@ -32,13 +32,13 @@ export function preloadOnHover(card: Element): void {
   card.addEventListener('touchstart', loadLogoShapes, { once: true, passive: true });
 }
 const lastFired = new WeakMap<Element, number>(), DEBOUNCE_MS = 300;
-function tryDebounce(card: Element): boolean {
+export function tryDebounce(card: Element): boolean {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return false;
   lastFired.set(card, now);
   return true;
 }
-function cardOrigin(card: Element, yFraction = 0.5) {
+export function cardOrigin(card: Element, yFraction = 0.5) {
   const rect = card.getBoundingClientRect();
   return {
     x: (rect.left + rect.width / 2) / window.innerWidth,
