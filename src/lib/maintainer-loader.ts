@@ -57,11 +57,7 @@ export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, st
 export async function initMaintainerLoader(staticCount: number, preloadedLogos?: Record<string, string>) {
   const feed = document.getElementById('maintainer-feed');
   if (!feed) return;
-  let allMaintainers: SafeMaintainer[] = [];
-  let logos: Record<string, string> = preloadedLogos ?? {};
-  let nextIdx = staticCount;
-  let loading = false;
-  let done = false;
+  let allMaintainers: SafeMaintainer[] = [], logos: Record<string, string> = preloadedLogos ?? {}, nextIdx = staticCount, loading = false, done = false;
   function appendBatch() {
     if (loading || done) return;
     loading = true;

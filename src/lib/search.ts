@@ -1,38 +1,15 @@
 // search.ts — global people search; lazy-loads people-index.json on first keypress.
-
 import MiniSearch from 'minisearch';
-
 interface SafePerson {
-  name: string;
-  handle?: string;
-  github?: string;
-  imageUrl?: string;
-  avatarUrl?: string;
-  bio?: string;
-  pronouns?: string;
-  company?: string;
-  location?: string;
-  countryFlag?: string;
-  primaryBadge?: string;
-  category: string[];
-  projects?: string[];
-  contributions?: number;
-  yearsContributing?: number;
+  name: string; handle?: string; github?: string; imageUrl?: string; avatarUrl?: string;
+  bio?: string; pronouns?: string; company?: string; location?: string; countryFlag?: string;
+  primaryBadge?: string; category: string[]; projects?: string[];
+  contributions?: number; yearsContributing?: number;
 }
-
-interface IndexedPerson extends SafePerson {
-  id: number;
-  categoryStr: string; // flattened for search
-}
-
-export interface SearchResult extends SafePerson {
-  score: number;
-  terms: string[];
-}
-
+interface IndexedPerson extends SafePerson { id: number; categoryStr: string; }
+export interface SearchResult extends SafePerson { score: number; terms: string[]; }
 let miniSearch: MiniSearch | null = null;
 let loadPromise: Promise<void> | null = null;
-
 async function ensureLoaded(baseUrl: string): Promise<void> {
   if (miniSearch) return;
   if (loadPromise) return loadPromise;
@@ -61,7 +38,6 @@ async function ensureLoaded(baseUrl: string): Promise<void> {
   })();
   return loadPromise;
 }
-
 /** Search all people; returns up to `limit` results sorted by relevance. Lazy-loads the index. */
 export async function searchPeople(
   query: string,
@@ -79,7 +55,6 @@ export async function searchPeople(
     category: (category as string[] | undefined) ?? [],
   }));
 }
-
 /** Preload the search index in the background (call on page load to warm it up). */
 export function preloadSearchIndex(baseUrl: string): void {
   ensureLoaded(baseUrl).catch(() => { /* silent — lazy load on first search */ });
