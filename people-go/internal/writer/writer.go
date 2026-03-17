@@ -629,6 +629,98 @@ func dailyPickDiverse(items []models.SafePerson, n int) []models.SafePerson {
 	return result
 }
 
+// categoryBalancedPick builds the "Everyone" hero rotation by picking a balanced
+// mix from three source pools: Ambassadors, Kubestronauts, and Maintainers.
+//
+// The split for n=8 is: 3 Ambassadors + 3 Kubestronauts + 2 Maintainers.
+// For other values of n the quota scales proportionally (ambassadors and
+// kubestronauts each get n*3/8, maintainers get the remainder).
+//
+// Diversity (she/her or they/them) is guaranteed within each SafePerson pool via
+// dailyPickDiverse. Maintainers have no Pronouns field so they use dailyPick.
+//
+// Deduplication: a person appearing in both ambassador and kubestronaut pools is
+// only included once (ambassador slot wins). Maintainers are converted to
+// SafePerson with Category ["Maintainer"] so they are distinguishable.
+func categoryBalancedPick(ambassadors, kubestronauts []models.SafePerson, maintainers []models.SafeMaintainer, n int) []models.SafePerson {
+	if n <= 0 {
+		return []models.SafePerson{}
+	}
+
+	// Quota: ambassadors and kubestronauts each get 3/8 of slots; maintainers get 2/8.
+	ambQuota := n * 3 / 8
+	kubeQuota := n * 3 / 8
+	maintQuota := n - ambQuota - kubeQuota // remainder goes to maintainers
+
+	// Clamp quotas to available pool sizes.
+	if ambQuota > len(ambassadors) {
+		ambQuota = len(ambassadors)
+	}
+	if kubeQuota > len(kubestronauts) {
+		kubeQuota = len(kubestronauts)
+	}
+	if maintQuota > len(maintainers) {
+		maintQuota = len(maintainers)
+	}
+
+	// Pick from ambassador pool.
+	picked := make([]models.SafePerson, 0, n)
+	seen := make(map[string]struct{})
+
+	for _, p := range dailyPickDiverse(ambassadors, ambQuota) {
+		key := p.Handle
+		if key == "" {
+			key = p.Name
+		}
+		if _, dup := seen[key]; !dup {
+			seen[key] = struct{}{}
+			picked = append(picked, p)
+		}
+	}
+
+	// Pick from kubestronaut pool — skip anyone already picked as ambassador.
+	for _, p := range dailyPickDiverse(kubestronauts, kubeQuota+len(ambassadors)) {
+		if len(picked)-ambQuota >= kubeQuota {
+			break
+		}
+		key := p.Handle
+		if key == "" {
+			key = p.Name
+		}
+		if _, dup := seen[key]; !dup {
+			seen[key] = struct{}{}
+			picked = append(picked, p)
+		}
+	}
+
+	// Convert maintainers to SafePerson and append.
+	maintSafe := make([]models.SafePerson, 0, len(maintainers))
+	for _, m := range maintainers {
+		maintSafe = append(maintSafe, models.SafePerson{
+			Name:              m.Name,
+			Handle:            m.Handle,
+			Company:           m.Company,
+			Location:          m.Location,
+			CountryFlag:       m.CountryFlag,
+			Bio:               m.Bio,
+			Category:          []string{"Maintainer"},
+			YearsContributing: m.YearsContributing,
+		})
+	}
+	for _, p := range dailyPick(maintSafe, maintQuota) {
+		key := p.Handle
+		if key == "" {
+			key = p.Name
+		}
+		if _, dup := seen[key]; !dup {
+			seen[key] = struct{}{}
+			picked = append(picked, p)
+		}
+	}
+
+	return picked
+}
+
 // WriteHeroRotations writes the daily hero rotation to heroes.json.
 // leadershipHandles is a slice of GitHub handles for the fixed CNCF Leadership section.
 func WriteHeroRotations(outDir string, events []models.Event, maintainers []models.SafeMaintainer, leadershipHandles []string) error {
@@ -698,7 +790,7 @@ func WriteHeroRotations(outDir string, events []models.Event, maintainers []mode
 
 	rotations := HeroRotations{
 		GeneratedAt:         time.Now().UTC(),
-		Everyone:            dailyPickDiverse(allPeople, 8),
+		Everyone:            categoryBalancedPick(pools["Ambassadors"], pools["Kubestronaut"], maintainers, 8),
 		Ambassadors:         dailyPickDiverse(pools["Ambassadors"], 8),
 		Kubestronauts:       dailyPickDiverse(pools["Kubestronaut"], 4),
 		GoldenKubestronauts: dailyPickDiverse(pools["Golden-Kubestronaut"], 4),
