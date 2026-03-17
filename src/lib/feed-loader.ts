@@ -94,43 +94,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
     p.bluesky       ? `<a href="${esc(p.bluesky)}"       target="_blank" rel="noopener noreferrer" class="social-link" title="Bluesky"            aria-label="Bluesky">${BSKY_ICON}</a>` : '',
   ].join('');
 
-  return `<article class="person-card" data-id="${esc(e.id)}" data-type="${esc(e.type)}" data-category="${esc(primaryCat.toLowerCase())}" data-categories="${esc(cats.map(c=>c.toLowerCase()).join('|'))}" style="--card-accent:${catInfo.color}">
-  <div class="card-accent-bar"></div>
-  <div class="card-body">
-    <div class="card-main">
-      <div class="card-identity">
-        <a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="avatar-link">
-          ${avatarSrc
-            ? `<img src="${esc(avatarSrc)}" alt="${esc(p.name)}" class="avatar" loading="lazy" width="64" height="64">`
-            : `<div class="avatar avatar-placeholder" aria-hidden="true">${esc(p.name.charAt(0))}</div>`}
-        </a>
-        <div class="identity-info">
-          <div class="name-row">
-            <a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="person-name">${esc(p.name)}</a>
-            ${p.handle ? `<a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="handle">@${esc(p.handle)}</a>` : ''}
-            ${p.pronouns ? `<span class="pronouns">(${esc(p.pronouns)})</span>` : ''}
-          </div>
-          ${p.company ? `<div class="company-row">${p.companyLandscapeUrl
-            ? `<a href="${esc(p.companyLandscapeUrl)}" target="_blank" rel="noopener noreferrer" class="company-chip company-chip-link">${esc(p.company)}</a>`
-            : `<span class="company-chip">${esc(p.company)}</span>`}</div>` : ''}
-          ${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : ''}
-          <div class="badges">
-            <span class="badge badge-${esc(e.type)}">${esc(typeLabel)}</span>
-            ${catBadges}
-          </div>
-        </div>
-      </div>
-      ${statsRow}
-      ${projectsRow}
-      ${changesHtml}
-    </div>
-    ${rightCol}
-  </div>
-  <div class="card-footer">
-    <time datetime="${esc(e.timestamp)}" class="timestamp">${esc(date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }))} · ${esc(date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' }))}</time>
-    <div class="social-links">${socialLinks}</div>
-  </div>
-</article>`;
+  return `<article class="person-card" data-id="${esc(e.id)}" data-type="${esc(e.type)}" data-category="${esc(primaryCat.toLowerCase())}" data-categories="${esc(cats.map(c=>c.toLowerCase()).join('|'))}" style="--card-accent:${catInfo.color}"><div class="card-accent-bar"></div><div class="card-body"><div class="card-main"><div class="card-identity"><a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="avatar-link">${avatarSrc ? `<img src="${esc(avatarSrc)}" alt="${esc(p.name)}" class="avatar" loading="lazy" width="64" height="64">` : `<div class="avatar avatar-placeholder" aria-hidden="true">${esc(p.name.charAt(0))}</div>`}</a><div class="identity-info"><div class="name-row"><a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="person-name">${esc(p.name)}</a>${p.handle ? `<a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="handle">@${esc(p.handle)}</a>` : ''}${p.pronouns ? `<span class="pronouns">(${esc(p.pronouns)})</span>` : ''}</div>${p.company ? `<div class="company-row">${p.companyLandscapeUrl ? `<a href="${esc(p.companyLandscapeUrl)}" target="_blank" rel="noopener noreferrer" class="company-chip company-chip-link">${esc(p.company)}</a>` : `<span class="company-chip">${esc(p.company)}</span>`}</div>` : ''}${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : ''}<div class="badges"><span class="badge badge-${esc(e.type)}">${esc(typeLabel)}</span>${catBadges}</div></div></div>${statsRow}${projectsRow}${changesHtml}</div>${rightCol}</div><div class="card-footer"><time datetime="${esc(e.timestamp)}" class="timestamp">${esc(date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }))} · ${esc(date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' }))}</time><div class="social-links">${socialLinks}</div></div></article>`;
 }
 
 function dateHeader(ts: string): string {
