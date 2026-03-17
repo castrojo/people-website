@@ -164,12 +164,6 @@ export async function initFeedLoader(staticCount: number, landscapeLogos: Record
   let loading = false;
   let done = false;
 
-  async function loadData() {
-    const res = await fetch(DATA_URL);
-    allEvents = await res.json() as Event[];
-    done = nextIdx >= allEvents.length;
-  }
-
   function appendBatch() {
     if (loading || done) return;
     loading = true;
@@ -200,7 +194,9 @@ export async function initFeedLoader(staticCount: number, landscapeLogos: Record
   sentinel.id = 'feed-sentinel';
   feed.appendChild(sentinel);
 
-  await loadData();
+  const res = await fetch(DATA_URL);
+  allEvents = await res.json() as Event[];
+  done = nextIdx >= allEvents.length;
 
   const observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) appendBatch();
