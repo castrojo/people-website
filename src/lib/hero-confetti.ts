@@ -77,21 +77,14 @@ function cardOrigin(card: Element, yFraction = 0.5) {
 export function fireHearts(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
-
-  const blueHeart = confetti.shapeFromText({ text: '💙', scalar: 4 });
-  const redHeart  = confetti.shapeFromText({ text: '❤️', scalar: 4 });
-  // Alternate blue and red hearts so roughly half are each colour.
-  const shapes = [blueHeart, redHeart, blueHeart, redHeart];
-
+  const b = confetti.shapeFromText({ text: '💙', scalar: 4 });
+  const r = confetti.shapeFromText({ text: '❤️', scalar: 4 });
   const base = {
     origin,
     colors: ['#0086FF', '#CC0000', '#93EAFF', '#FF4444'],
-    shapes,
-    scalar: 4,
-    gravity: 0.8,
-    ticks: 280,
+    shapes: [b, r, b, r],
+    scalar: 4, gravity: 0.8, ticks: 280,
   };
-
   confetti({ ...base, particleCount: 15, spread: 100, startVelocity: 40, angle: 90 });
   confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 60 });
   confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 120 });
@@ -101,44 +94,21 @@ export function fireHearts(card: Element): void {
 export function fireStarburst(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
-
-  const star    = confetti.shapeFromText({ text: '⭐', scalar: 2.5 });
+  const star = confetti.shapeFromText({ text: '⭐', scalar: 2.5 });
   const sparkle = confetti.shapeFromText({ text: '✨', scalar: 2.5 });
-
-  confetti({
-    origin,
-    colors: ['#0086FF', '#FFB300', '#D62293', '#00A86B', '#93EAFF'],
-    shapes: [star, sparkle, star],
-    scalar: 2.5,
-    gravity: 0.65,
-    ticks: 210,
-    particleCount: 22,
-    spread: 360,
-    startVelocity: 28,
-  });
+  confetti({ origin, colors: ['#0086FF', '#FFB300', '#D62293', '#00A86B', '#93EAFF'],
+    shapes: [star, sparkle, star], scalar: 2.5, gravity: 0.65, ticks: 210,
+    particleCount: 22, spread: 360, startVelocity: 28 });
 }
 
 // Fountain for PersonCard/MaintainerCard: uses the card's accent color.
 export function fireFountain(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card, 0.3);
-
-  // Read the card's category accent color; fall back to CNCF blue.
   const accent = (getComputedStyle(card as HTMLElement).getPropertyValue('--card-accent') || '#0086FF').trim();
-  const colors = [accent, '#0086FF', accent, '#93EAFF', accent + 'BB'];
-
-  confetti({
-    origin,
-    colors,
-    shapes: ['square', 'circle', 'square'],
-    scalar: 1.0,
-    gravity: 1.5,
-    ticks: 190,
-    particleCount: 45,
-    spread: 55,
-    startVelocity: 38,
-    angle: 90,
-  });
+  confetti({ origin, colors: [accent, '#0086FF', accent, '#93EAFF', accent + 'BB'],
+    shapes: ['square', 'circle', 'square'], scalar: 1.0, gravity: 1.5, ticks: 190,
+    particleCount: 45, spread: 55, startVelocity: 38, angle: 90 });
 }
 
 export function fireConfetti(card: Element): void {
