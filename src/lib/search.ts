@@ -23,11 +23,7 @@ async function ensureLoaded(baseUrl: string): Promise<void> {
       storeFields: ['name', 'handle', 'github', 'imageUrl', 'avatarUrl', 'company',
                     'location', 'countryFlag', 'primaryBadge', 'category',
                     'pronouns', 'yearsContributing', 'contributions'],
-      searchOptions: {
-        fuzzy: 0.2,
-        prefix: true,
-        boost: { name: 3, handle: 2, company: 1.5 },
-      },
+      searchOptions: { fuzzy: 0.2, prefix: true, boost: { name: 3, handle: 2, company: 1.5 } },
     });
     const indexed: IndexedPerson[] = people.map((p, i) => ({
       ...p,
