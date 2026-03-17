@@ -78,22 +78,11 @@ export async function searchPeople(
   await ensureLoaded(baseUrl);
   if (!miniSearch) return [];
   const raw = miniSearch.search(query);
-  return raw.slice(0, limit).map(r => ({
-    name: r.name as string,
-    handle: r.handle as string | undefined,
-    github: r.github as string | undefined,
-    imageUrl: r.imageUrl as string | undefined,
-    avatarUrl: r.avatarUrl as string | undefined,
-    company: r.company as string | undefined,
-    location: r.location as string | undefined,
-    countryFlag: r.countryFlag as string | undefined,
-    primaryBadge: r.primaryBadge as string | undefined,
-    category: (r.category as string[] | undefined) ?? [],
-    pronouns: r.pronouns as string | undefined,
-    yearsContributing: r.yearsContributing as number | undefined,
-    contributions: r.contributions as number | undefined,
-    score: r.score,
-    terms: r.terms,
+  return raw.slice(0, limit).map(({ score, terms, category, ...rest }) => ({
+    ...(rest as Omit<SearchResult, 'score' | 'terms' | 'category'>),
+    score,
+    terms,
+    category: (category as string[] | undefined) ?? [],
   }));
 }
 
