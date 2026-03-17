@@ -11,19 +11,10 @@ interface ProjectDetail {
 }
 
 interface SafeMaintainer {
-  name: string;
-  handle: string;
-  avatarUrl?: string;
-  company?: string;
-  location?: string;
-  countryFlag?: string;
-  bio?: string;
-  projects: string[];
-  projectDetails?: ProjectDetail[];
-  maturity: string;
-  ownersUrl?: string;
-  logoUrl?: string;
-  yearsContributing?: number;
+  name: string; handle: string; avatarUrl?: string; company?: string;
+  location?: string; countryFlag?: string; bio?: string;
+  projects: string[]; projectDetails?: ProjectDetail[];
+  maturity: string; ownersUrl?: string; logoUrl?: string; yearsContributing?: number;
 }
 
 const MATURITY_COLOR: Record<string, string> = {
