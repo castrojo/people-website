@@ -4,13 +4,69 @@
     <link>https://castrojo.github.io/people-website/</link>
     <description>Activity feed — who&#39;s joining the cloud native community</description>
     <managingEditor> (CNCF People)</managingEditor>
-    <pubDate>Mon, 16 Mar 2026 12:28:57 -0400</pubDate>
+    <pubDate>Tue, 17 Mar 2026 10:34:40 -0400</pubDate>
     <item>
-      <title>updated Orlin Vasilev</title>
-      <link>https://github.com/OrlinVasilev</link>
+      <title>added Youngjin In</title>
+      <link>https://github.com/geniein?tab=repositories</link>
       <description></description>
-      <guid>5363032e-3164-4765-8298-a2eb9126daab</guid>
-      <pubDate>Mon, 16 Mar 2026 16:28:57 +0000</pubDate>
+      <guid>1838aa42-0cf6-45c6-949d-c45d2411c6b2</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>added Bellal Mohamed Yassine</title>
+      <link>https://github.com/bellalyassine.com</link>
+      <description></description>
+      <guid>b8c70cdb-5a5a-4c64-bd74-a39c36a18d72</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>added Raham Shaik</title>
+      <link>https://github.com/RAHAMSHAIK007?tab=repositories</link>
+      <description></description>
+      <guid>cda1e601-ba7f-4a1e-8d0e-576a6d7ce5d2</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>added Yugandhar Suthari</title>
+      <link>https://github.com/yrsuthari.github.io</link>
+      <description></description>
+      <guid>4fb8c117-0b0d-4fbf-bbad-4e453c292220</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>removed Youngjin In</title>
+      <link>https://github.com/geniein?tab=repositories</link>
+      <description></description>
+      <guid>bdd7b0cb-a275-4c0f-a0f1-9b640546e74b</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>removed Raham Shaik</title>
+      <link>https://github.com/RAHAMSHAIK007?tab=repositories</link>
+      <description></description>
+      <guid>9505dc87-bf04-4b35-bf61-7789c6ec6c08</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>removed Joohwan Kim</title>
+      <link>https://github.com/K-JooHwan?tab=repositories</link>
+      <description></description>
+      <guid>ecc1f697-dc71-49f7-b69d-3931cae21f1e</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>removed Yugandhar Suthari</title>
+      <link>https://github.com/yrsuthari.github.io</link>
+      <description></description>
+      <guid>092c2e58-925d-45c3-a723-61a012dea70a</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>removed Bellal Mohamed Yassine</title>
+      <link>https://github.com/bellalyassine.com</link>
+      <description></description>
+      <guid>4efb6377-727e-44ad-8fcc-8bb3a3a568bf</guid>
+      <pubDate>Tue, 17 Mar 2026 14:34:40 +0000</pubDate>
     </item>
   </channel>
 </rss>

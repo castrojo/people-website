@@ -227,7 +227,18 @@ func main() {
 
 		leadershipHandles := loadLeadershipHandles(outDir)
 		heroMaintainers, _ := writer.LoadMaintainers(outDir)
-		if err := writer.WriteHeroRotations(outDir, events, heroMaintainers, leadershipHandles); err != nil {
+		// Use the full changelog (not just the delta) so all categories are represented
+		// in hero rotations. On a day where only Kubestronauts changed, the delta has no
+		// Ambassadors, leaving that pool empty. Reading back the written changelog.json
+		// gives the full history the same way the no-change path does (line ~276).
+		heroEvents := events
+		if fullRaw, err2 := os.ReadFile(outDir + "/changelog.json"); err2 == nil {
+			var fullEvents []models.Event
+			if err2 := json.Unmarshal(fullRaw, &fullEvents); err2 == nil {
+				heroEvents = fullEvents
+			}
+		}
+		if err := writer.WriteHeroRotations(outDir, heroEvents, heroMaintainers, leadershipHandles); err != nil {
 			log.Printf("warn: write hero rotations: %v", err)
 		}
 
@@ -566,4 +577,3 @@ func loadLeadershipHandles(outDir string) []string {
 	}
 	return cfg.Handles
 }
-

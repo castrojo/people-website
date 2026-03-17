@@ -1,5 +1,56 @@
 [
   {
+    "name": "Jakub Scholz",
+    "handle": "scholzj",
+    "company": "Cloudera",
+    "projects": [
+      "Strimzi"
+    ],
+    "projectDetails": [
+      {
+        "name": "Strimzi",
+        "maturity": "Incubating"
+      }
+    ],
+    "maturity": "Incubating",
+    "ownersUrl": "https://github.com/strimzi/strimzi-kafka-operator/blob/master/MAINTAINERS",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/strimzi.svg",
+    "updatedAt": "2026-03-17T14:34:39.532367767Z"
+  },
+  {
+    "name": "Alessio Pragliola",
+    "handle": "al-pragliola",
+    "company": "Red Hat",
+    "projects": [
+      "Kubeflow"
+    ],
+    "projectDetails": [
+      {
+        "name": "Kubeflow",
+        "maturity": "Incubating"
+      }
+    ],
+    "maturity": "Incubating",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/kubeflow.svg",
+    "updatedAt": "2026-03-17T14:34:39.532367767Z"
+  },
+  {
+    "name": "Anshuman Pandey",
+    "handle": "pandeyanshuman",
+    "company": "Uber",
+    "projects": [
+      "Cadence"
+    ],
+    "projectDetails": [
+      {
+        "name": "Cadence",
+        "maturity": "Sandbox"
+      }
+    ],
+    "maturity": "Sandbox",
+    "updatedAt": "2026-03-17T14:34:39.532367767Z"
+  },
+  {
     "name": "Antonio Ojea",
     "handle": "aojea",
     "company": "Google",
@@ -9614,24 +9665,6 @@
     ],
     "maturity": "Graduated",
     "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/in-toto.svg",
-    "updatedAt": "0001-01-01T00:00:00Z"
-  },
-  {
-    "name": "Jakub Scholz",
-    "handle": "scholzj",
-    "company": "Red Hat",
-    "projects": [
-      "Strimzi"
-    ],
-    "projectDetails": [
-      {
-        "name": "Strimzi",
-        "maturity": "Incubating"
-      }
-    ],
-    "maturity": "Incubating",
-    "ownersUrl": "https://github.com/strimzi/strimzi-kafka-operator/blob/master/MAINTAINERS",
-    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/strimzi.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35120,38 +35153,6 @@
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
-    "name": "Ignat Tubylov",
-    "handle": "tubignat",
-    "company": "Uber",
-    "projects": [
-      "Cadence"
-    ],
-    "projectDetails": [
-      {
-        "name": "Cadence",
-        "maturity": "Sandbox"
-      }
-    ],
-    "maturity": "Sandbox",
-    "updatedAt": "0001-01-01T00:00:00Z"
-  },
-  {
-    "name": "Ilya Ozherelyev",
-    "handle": "3vilhamster",
-    "company": "Uber",
-    "projects": [
-      "Cadence"
-    ],
-    "projectDetails": [
-      {
-        "name": "Cadence",
-        "maturity": "Sandbox"
-      }
-    ],
-    "maturity": "Sandbox",
-    "updatedAt": "0001-01-01T00:00:00Z"
-  },
-  {
     "name": "Jakob Haahr Taankvist",
     "handle": "jakobht",
     "company": "Uber",
@@ -35216,40 +35217,8 @@
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
-    "name": "Sankari Gopalakrishnan",
-    "handle": "sankari165",
-    "company": "Uber",
-    "projects": [
-      "Cadence"
-    ],
-    "projectDetails": [
-      {
-        "name": "Cadence",
-        "maturity": "Sandbox"
-      }
-    ],
-    "maturity": "Sandbox",
-    "updatedAt": "0001-01-01T00:00:00Z"
-  },
-  {
     "name": "Shijie Sheng",
     "handle": "shijiesheng",
-    "company": "Uber",
-    "projects": [
-      "Cadence"
-    ],
-    "projectDetails": [
-      {
-        "name": "Cadence",
-        "maturity": "Sandbox"
-      }
-    ],
-    "maturity": "Sandbox",
-    "updatedAt": "0001-01-01T00:00:00Z"
-  },
-  {
-    "name": "Steven Littiebrant",
-    "handle": "groxx",
     "company": "Uber",
     "projects": [
       "Cadence"
@@ -35497,6 +35466,7 @@
     ],
     "maturity": "Sandbox",
     "ownersUrl": "https://github.com/NVIDIA/KAI-Scheduler/blob/main/MAINTAINERS.md",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35513,6 +35483,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35529,6 +35500,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35545,6 +35517,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35561,6 +35534,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35577,6 +35551,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35593,6 +35568,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35609,6 +35585,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   },
   {
@@ -35625,6 +35602,7 @@
       }
     ],
     "maturity": "Sandbox",
+    "logoUrl": "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/cncf.svg",
     "updatedAt": "0001-01-01T00:00:00Z"
   }
 ]

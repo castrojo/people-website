@@ -1,5 +1,193 @@
 [
   {
+    "id": "1838aa42-0cf6-45c6-949d-c45d2411c6b2",
+    "type": "added",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Youngjin In",
+      "github": "https://github.com/geniein?tab=repositories",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/youngjin-in.jpg",
+      "bio": "I am a DevOps engineer contributing to smart factory development. I’m passionate about information security and eager to deepen my knowledge of public cloud environments.",
+      "pronouns": "He/Him",
+      "company": "Hyundai Autoever",
+      "location": "Seongnam-si, Gyeonggi-do, South Korea",
+      "countryFlag": "🇰🇷",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/%EC%98%81%EC%A7%84-%EC%9D%B8-a749ba343/",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "b8c70cdb-5a5a-4c64-bd74-a39c36a18d72",
+    "type": "added",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Bellal Mohamed Yassine",
+      "github": "https://github.com/bellalyassine.com",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/bellal-mohamed-yassine.jpg",
+      "bio": "Platform engineer/Devops",
+      "location": "Paris, France",
+      "countryFlag": "🇫🇷",
+      "primaryBadge": "Golden-Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/bellalyassine",
+      "twitter": "https://twitter.com/x.com/bellalyassinem",
+      "youtube": "https://www.youtube.com/@bellalyassinem",
+      "website": "https://bellalyassine.com",
+      "certDirectory": "https://certdirectory.io/profile/58227d1a-7120-4c2e-a4d1-dcd4b1a64ec7",
+      "category": [
+        "Kubestronaut",
+        "Golden-Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "cda1e601-ba7f-4a1e-8d0e-576a6d7ce5d2",
+    "type": "added",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Raham Shaik",
+      "github": "https://github.com/RAHAMSHAIK007?tab=repositories",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/raham-shaik.jpg",
+      "bio": "My Name is Raham, A passionate Cloud and DevOps Engineer and Trainer who loves to teach new trends and stuff to my students. Till now i've trained more than 10,000 Students and working Professionals to Achieve their dream job and in my free time i'm busy in making the content. As of now havent got any chance to participate on CNCF meetings but hoping soon. link to my article: https://www.linkedin.com/pulse/day-1-k8s-from-zero-1-raham-shaik-6odec",
+      "pronouns": "He/Him",
+      "location": "Hyderabad, Telangana, India",
+      "countryFlag": "🇮🇳",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/raham-shaik-813317201/",
+      "certDirectory": "https://certdirectory.io/profile/8bf8a504-7eaa-4edc-be3b-ca674a2281f3",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "4fb8c117-0b0d-4fbf-bbad-4e453c292220",
+    "type": "added",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Yugandhar Suthari",
+      "github": "https://github.com/yrsuthari.github.io",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/yugandhar-suthari.jpg",
+      "bio": "I’m Yugandhar Suthari, a platform engineer with interests in Kubernetes, DevSecOps, SRE, infrastructure automation, and cloud security. I actively contribute to the CNCF project Kyverno, focusing on policy-driven governance in Kubernetes environments. I share hands-on content and insights through my blog allthingsincloud.com and my YouTube channel AllThingsInCloud, covering real-world scenarios in platform engineering and cloud-native security.",
+      "location": "Raleigh, NC,  United States",
+      "countryFlag": "🇺🇸",
+      "primaryBadge": "Golden-Kubestronaut",
+      "youtube": "https://www.youtube.com/@AllThingsInCloud",
+      "website": "https://allthingsincloud.com",
+      "certDirectory": "https://certdirectory.io/profile/7f5d3149-5555-4ec9-a356-0086684e8c2c",
+      "category": [
+        "Kubestronaut",
+        "Golden-Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "bdd7b0cb-a275-4c0f-a0f1-9b640546e74b",
+    "type": "removed",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Youngjin In",
+      "github": "https://github.com/geniein?tab=repositories",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/youngjin-in.jpg",
+      "bio": "I am a DevOps engineer contributing to smart factory development. I’m passionate about information security and eager to deepen my knowledge of public cloud environments.",
+      "pronouns": "He/Him",
+      "company": "Hyundai Autoever",
+      "location": "Seongnam-si, Gyeonggi-do, South Korea",
+      "countryFlag": "🇰🇷",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/%EC%98%81%EC%A7%84-%EC%9D%B8-a749ba343/",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "9505dc87-bf04-4b35-bf61-7789c6ec6c08",
+    "type": "removed",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Raham Shaik",
+      "github": "https://github.com/RAHAMSHAIK007?tab=repositories",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/raham-shaik.jpg",
+      "bio": "My Name is Raham, A passionate Cloud and DevOps Engineer and Trainer who loves to teach new trends and stuff to my students. Till now i've trained more than 10,000 Students and working Professionals to Achieve their dream job and in my free time i'm busy in making the content. As of now havent got any chance to participate on CNCF meetings but hoping soon. link to my article: https://www.linkedin.com/pulse/day-1-k8s-from-zero-1-raham-shaik-6odec",
+      "pronouns": "He/Him",
+      "location": "Hyderabad, Telangana, India",
+      "countryFlag": "🇮🇳",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/raham-shaik-813317201/",
+      "certDirectory": "https://certdirectory.io/profile/8bf8a504-7eaa-4edc-be3b-ca674a2281f3",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "ecc1f697-dc71-49f7-b69d-3931cae21f1e",
+    "type": "removed",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Joohwan Kim",
+      "github": "https://github.com/K-JooHwan?tab=repositories",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/phippy.jpg",
+      "bio": "hello. I work as a security engineer, specializing in cloud services and Kubernetes.  I have built 3rd-party security solutions based on CNCF's various security platforms and am currently working on the latest trends, DevSecOps and Zero Trust-based solutions.",
+      "pronouns": "He/Him",
+      "company": "SK Shieldus",
+      "location": "Seongnam-si, Gyeonggi-do, South Korea",
+      "countryFlag": "🇰🇷",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/joohwan-kim-952430264",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "092c2e58-925d-45c3-a723-61a012dea70a",
+    "type": "removed",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Yugandhar Suthari",
+      "github": "https://github.com/yrsuthari.github.io",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/yugandhar-suthari.jpg",
+      "bio": "I’m Yugandhar Suthari, a platform engineer with interests in Kubernetes, DevSecOps, SRE, infrastructure automation, and cloud security. I actively contribute to the CNCF project Kyverno, focusing on policy-driven governance in Kubernetes environments. I share hands-on content and insights through my blog allthingsincloud.com and my YouTube channel AllThingsInCloud, covering real-world scenarios in platform engineering and cloud-native security.",
+      "location": "Raleigh, NC,  United States",
+      "countryFlag": "🇺🇸",
+      "primaryBadge": "Golden-Kubestronaut",
+      "youtube": "https://www.youtube.com/@AllThingsInCloud",
+      "website": "https://allthingsincloud.com",
+      "certDirectory": "https://certdirectory.io/profile/7f5d3149-5555-4ec9-a356-0086684e8c2c",
+      "category": [
+        "Kubestronaut",
+        "Golden-Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "4efb6377-727e-44ad-8fcc-8bb3a3a568bf",
+    "type": "removed",
+    "timestamp": "2026-03-17T14:34:40.158620304Z",
+    "person": {
+      "name": "Bellal Mohamed Yassine",
+      "github": "https://github.com/bellalyassine.com",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/bellal-mohamed-yassine.jpg",
+      "bio": "Platform engineer/Devops",
+      "location": "Paris, France",
+      "countryFlag": "🇫🇷",
+      "primaryBadge": "Golden-Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/bellalyassine",
+      "twitter": "https://twitter.com/x.com/bellalyassinem",
+      "youtube": "https://www.youtube.com/@bellalyassinem",
+      "website": "https://bellalyassine.com",
+      "certDirectory": "https://certdirectory.io/profile/58227d1a-7120-4c2e-a4d1-dcd4b1a64ec7",
+      "category": [
+        "Kubestronaut",
+        "Golden-Kubestronaut"
+      ]
+    }
+  },
+  {
     "id": "5363032e-3164-4765-8298-a2eb9126daab",
     "type": "updated",
     "timestamp": "2026-03-16T16:28:57.462741209Z",

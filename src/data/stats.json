@@ -1,16 +1,16 @@
 {
-  "total": 3662,
-  "added": 3662,
-  "removed": 0,
+  "total": 3661,
+  "added": 3666,
+  "removed": 5,
   "updated": 1,
   "countries": 145,
-  "companies": 1679,
+  "companies": 1678,
   "categories": {
     "Ambassadors": 300,
     "End User TAB": 11,
     "Golden-Kubestronaut": 363,
     "Governing Board": 23,
-    "Kubestronaut": 3318,
+    "Kubestronaut": 3317,
     "Marketing Committee": 3,
     "Staff": 39,
     "Technical Oversight Committee": 12

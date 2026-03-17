@@ -1,5 +1,221 @@
 [
   {
+    "id": "35c93017-bfde-4d66-a6a1-135338887cc3",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Muhammad Herwindra Berlian",
+      "handle": "herwinz",
+      "github": "https://github.com/herwinz/",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/muhammad-herwindra-berlian.jpg",
+      "bio": "I’m a DevOps Engineer with an M.Eng background, specializing in Kubernetes, automation, and multi-cloud platforms. Experience in cloud-native system design, build, and improvement using GitOps and Terraform as part of platform modernization and cloud migration. I also teach and mentor engineers who want to grow in cloud computing technologies.",
+      "pronouns": "He/Him",
+      "location": "Sidoarjo, East Java, Indonesia",
+      "countryFlag": "🇮🇩",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/herwindra/",
+      "certDirectory": "https://certdirectory.io/profile/herwin/",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/herwinz"
+    }
+  },
+  {
+    "id": "efb099f2-d4b6-4690-a684-583051862eb8",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Bálint József Jánvári",
+      "handle": "dzsibi",
+      "github": "https://github.com/dzsibi",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/balint-jozsef-janvari.jpg",
+      "bio": "I was bored and I wanted the jacket.",
+      "location": "Budapest, Hungary",
+      "countryFlag": "🇭🇺",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/dzsibi/",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/dzsibi"
+    }
+  },
+  {
+    "id": "6eb9c436-82ad-4a24-9e47-f650b34c0747",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Vishnu R Dixit",
+      "handle": "Rvdixit23",
+      "github": "https://github.com/Rvdixit23",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/vishnu-r-dixit.jpg",
+      "bio": "Cluster Admin, Garden Admin, Gamer, History Logger",
+      "company": "Morgan Stanley",
+      "location": "Varanasi, Uttar Pradesh, India",
+      "countryFlag": "🇮🇳",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/vishnu-r-dixit-1ba909199/",
+      "youtube": "https://www.youtube.com/@VishnuDixit",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Rvdixit23"
+    }
+  },
+  {
+    "id": "527ddddf-78e9-40b8-aa7e-699a037de58a",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Alexander Rainchik",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/alexander-rainchik.jpg",
+      "bio": "Infrastructure Engineer with over 10 years of experience, specializing in Kubernetes, Kafka and cloud solutions",
+      "pronouns": "He/Him",
+      "company": "Nexters ($GDEV)",
+      "location": "Larnaca, Cyprus",
+      "countryFlag": "🇨🇾",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/alexander-rainchik-0a404bb4",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "940cec54-6e7f-4bd0-9351-5ac6ec93008c",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Cristian Daniel Bayona",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/cristian-daniel-bayona.jpg",
+      "bio": "Multicloud Cloud native apps deployment and security specialist. The events that I normally attend as speaker are app security ones AppWorld, CyberProtector and Segurinfo",
+      "pronouns": "He/Him",
+      "company": "F5",
+      "location": "Bogota, Colombia",
+      "countryFlag": "🇨🇴",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/cbayonag/",
+      "twitter": "https://x.com/cdbayonag",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "5d5b7de1-9b0d-42c2-be05-2fcc40bf806e",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "W. Jenks Gibbons",
+      "handle": "jgibbons-cp",
+      "github": "https://github.com/jgibbons-cp",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/w-jenks-gibbons.jpg",
+      "bio": "A Solutions Engineer with extensive experience in observability and security. Current professional interests: k8s, o11y, selling. Current personal interests: family, dogs and books. Medium blog: https://medium.com/@jenksgibbons",
+      "company": "Datadog",
+      "location": "New York, United States",
+      "countryFlag": "🇺🇸",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/wjenksgibbons/",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jgibbons-cp"
+    }
+  },
+  {
+    "id": "619637d7-a29d-4983-8951-8884a4ada3dc",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Jack Ho Wan Want",
+      "handle": "jackhww",
+      "github": "https://github.com/jackhww",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/jack-ho-wan-want.jpg",
+      "bio": "I am a Cloud Engineer specializing in Kubernetes and Cloud-Native technologies, focusing on building and operating reliable platforms.My day-to-day work spans Kubernetes, cloud infrastructure, and AI/ML Ops, helping teams run scalable workloads in production.Outside of work, I enjoy tinkering with embedded systems and hardware projects. I’m also passionate about repair and reuse, using my background in Mechatronics to extend hardware lifespans and reduce e-waste.",
+      "pronouns": "He/Him",
+      "location": "Singapore, Singapore",
+      "countryFlag": "🇸🇬",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/jackhww/",
+      "website": "https://jackhww.me",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jackhww"
+    }
+  },
+  {
+    "id": "67cee321-4603-4fe3-b280-31b6957b6198",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Nandar Phyo",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/nandar-phyo.jpg",
+      "bio": "Platform Engineer focused on building secure, scalable, and highly automated cloud-native platforms. Lifelong learner with a strong passion for Infrastructure as Code, Kubernetes, and the CNCF ecosystem.",
+      "pronouns": "She/Her",
+      "company": "Hitachi High-Tech",
+      "location": "Tokyo, Japan",
+      "countryFlag": "🇯🇵",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/nandar-phyo-05660114a?utm_source=share\u0026utm_campaign=share_via\u0026utm_content=profile\u0026utm_medium=ios_app",
+      "certDirectory": "https://certdirectory.io/profile/d8ed1c91-870a-43bf-b01a-ea1498123307",
+      "category": [
+        "Kubestronaut"
+      ]
+    }
+  },
+  {
+    "id": "be0c1b72-8e6d-41fc-9e18-94d18fa1b616",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Phil Huang",
+      "handle": "pichuang",
+      "github": "https://github.com/pichuang",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/phil-huang.jpg",
+      "bio": "I am an active member of the Cloud Native Taiwan User Group (https://www.facebook.com/groups/cloudnative.tw) at Taiwan with extensive experience and skills. I am passionate about sharing my knowledge and experiences, irregularly organizing Meetup events (https://community.cncf.io/kcd-taiwan/) to provide professional expertise on Kubernetes and CNCF technologies. In addition, I also run my own blog, where I share practical information and experiences related to Kubernetes and container technologies. Please feel free to visit my blog at https://blog.pichuang.com.twWhy I am excited to be an ambassador: I'm excited to be an ambassador because I believe in the program's value and the chance to connect with like-minded individuals. It's rewarding to represent the program's values and contribute to the community's awareness and adoption of the technology.Sessionize: https://sessionize.com/pichuang",
+      "pronouns": "He/Him",
+      "company": "Microsoft",
+      "location": "Taipei, Taiwan",
+      "countryFlag": "🇹🇼",
+      "primaryBadge": "Ambassadors",
+      "linkedin": "https://www.linkedin.com/in/phil-huang-09b09895/",
+      "twitter": "https://twitter.com/pichuang_tw",
+      "youtube": "https://www.youtube.com/@pichuang-tw",
+      "website": "https://blog.pichuang.com.tw/",
+      "category": [
+        "Ambassadors"
+      ],
+      "projects": [
+        "Harbor",
+        "Kubernetes"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/pichuang"
+    }
+  },
+  {
+    "id": "b5ffd30c-994e-4a96-a1df-08b95d20dad7",
+    "type": "added",
+    "timestamp": "2026-03-15T21:37:31.987107101Z",
+    "person": {
+      "name": "Suranga Nisiwasala",
+      "handle": "suranga-nisiwasala",
+      "github": "https://github.com/suranga-nisiwasala",
+      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/suranga-nisiwasala.jpg",
+      "bio": "With 9+ years of experience, I work as a Lead Site Reliability Engineer, specializing in architecting and maintaining mission-critical systems powered by CNCF ecosystem tools and industry-standard open-source technologies.  I believe in improving system resilience and efficiency by reducing architectural complexity without compromising business requirements or operational stability. My present focus is on embedding cloud-native technologies early in the design process to build scalable, secure, and highly available deployments.",
+      "pronouns": "He/Him",
+      "location": "Kandy, Sri Lanka",
+      "countryFlag": "🇱🇰",
+      "primaryBadge": "Kubestronaut",
+      "linkedin": "https://www.linkedin.com/in/suranganisiwasla/",
+      "category": [
+        "Kubestronaut"
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/suranga-nisiwasala"
+    }
+  },
+  {
     "id": "1f5a1438-0ad0-4423-bf84-72f6aec0bdb3",
     "type": "added",
     "timestamp": "2026-03-15T21:37:31.987107101Z",
@@ -16,7 +232,8 @@
       "linkedin": "https://www.linkedin.com/in/milan-radisic-b4843a142/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/alkalax"
     }
   },
   {
@@ -37,7 +254,8 @@
       "linkedin": "https://www.linkedin.com/in/bertrand-nau/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bnau"
     }
   },
   {
@@ -60,7 +278,8 @@
       "website": "https://dbodky.me",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mocdaniel"
     }
   },
   {
@@ -101,7 +320,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ducnguyenhuynh"
     }
   },
   {
@@ -122,7 +342,8 @@
       "website": "https://henriquealexandre.vercel.app/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/henrique-alexandre"
     }
   },
   {
@@ -161,7 +382,8 @@
       "certDirectory": "https://certdirectory.io/profile/742cbd9d-3be7-48be-9e51-70f7c52726a2",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/eltrovert"
     }
   },
   {
@@ -240,7 +462,8 @@
       "certDirectory": "https://certdirectory.io/profile/e8764899-45d2-4744-8b04-6cc469d43df3",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/fharris"
     }
   },
   {
@@ -342,7 +565,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mathewthe2"
     }
   },
   {
@@ -357,7 +581,8 @@
       "pronouns": "she/her;they/them",
       "linkedin": "https://www.linkedin.com/in/pritianka/",
       "twitter": "https://twitter.com/pritianka",
-      "category": []
+      "category": [],
+      "avatarUrl": "https://avatars.githubusercontent.com/pritianka"
     }
   },
   {
@@ -378,7 +603,8 @@
       "certDirectory": "https://certdirectory.io/profile/01614dee-84e6-4f9d-9ced-4566c843438d",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/shyamjestin"
     }
   },
   {
@@ -437,7 +663,8 @@
       "website": "https://lansible.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/wilmardo"
     }
   },
   {
@@ -457,7 +684,8 @@
       "linkedin": "https://www.linkedin.com/in/marcus-pamelia-5986911/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/pamelia"
     }
   },
   {
@@ -487,7 +715,8 @@
         "ko",
         "Kubernetes",
         "Operator Framework"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/aliok"
     }
   },
   {
@@ -510,7 +739,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/canltu"
     }
   },
   {
@@ -551,7 +781,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bdllerena"
     }
   },
   {
@@ -611,7 +842,8 @@
         "zot",
         "Virtual Kubelet",
         "Notary Project"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Davidffry"
     }
   },
   {
@@ -634,7 +866,8 @@
       "website": "https://tortel.li",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kriive"
     }
   },
   {
@@ -656,7 +889,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/luca-banzato"
     }
   },
   {
@@ -677,7 +911,8 @@
       "linkedin": "https://www.linkedin.com/in/simone-bruzzese/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sbruzzese902"
     }
   },
   {
@@ -699,7 +934,8 @@
       "website": "https://sametustaoglu.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sametustaoglu"
     }
   },
   {
@@ -719,7 +955,8 @@
       "bluesky": "https://bsky.app/profile/chira001.bsky.social",
       "category": [
         "Technical Oversight Committee"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/chira001"
     }
   },
   {
@@ -739,7 +976,8 @@
       "linkedin": "https://www.linkedin.com/in/ei-ei-phyo-905441156/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/eieiphyoaung"
     }
   },
   {
@@ -760,7 +998,8 @@
       "linkedin": "https://www.linkedin.com/in/hallefalves/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/hallefcalves"
     }
   },
   {
@@ -901,7 +1140,8 @@
         "Kured",
         "OpenTelemetry",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/JorTurFer"
     }
   },
   {
@@ -922,7 +1162,8 @@
       "linkedin": "https://www.linkedin.com/in/jaimes-joschko",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/106106"
     }
   },
   {
@@ -944,7 +1185,8 @@
       "website": "https://www.kiowy.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/JeromeMSD"
     }
   },
   {
@@ -984,7 +1226,8 @@
       "certDirectory": "https://certdirectory.io/profile/khalilnouisser",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/khalilnouisser"
     }
   },
   {
@@ -1115,7 +1358,8 @@
       "website": "https://marschall.systems",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/geilername"
     }
   },
   {
@@ -1136,7 +1380,8 @@
       "linkedin": "https://www.linkedin.com/in/tommy-johannessen/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/abaddon82"
     }
   },
   {
@@ -1251,7 +1496,8 @@
       "website": "https://artpropp.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/artpropp"
     }
   },
   {
@@ -1275,7 +1521,8 @@
       "certDirectory": "https://certdirectory.io/profile/1a506eac-364d-46a8-bb53-ab6159e68f0b",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/rockybhanu"
     }
   },
   {
@@ -1298,7 +1545,8 @@
       "certDirectory": "https://certdirectory.io/profile/545bd7e3-30db-46aa-8861-7d31afc5d894",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tboerger"
     }
   },
   {
@@ -1319,7 +1567,8 @@
       "linkedin": "https://www.linkedin.com/in/benjamin-schimke/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bschimke95"
     }
   },
   {
@@ -1341,7 +1590,8 @@
       "twitter": "https://www.twitter.com/CloudNativChris",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ChristopherHanson"
     }
   },
   {
@@ -1438,7 +1688,8 @@
       "certDirectory": "https://certdirectory.io/profiles?p=f1bd30cd-753e-4300-9f51-e261ba267c05",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jiwonp7747"
     }
   },
   {
@@ -1460,7 +1711,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/olemathias"
     }
   },
   {
@@ -1482,7 +1734,8 @@
       "website": "https://delaet.dev",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jan-delaet"
     }
   },
   {
@@ -1559,7 +1812,8 @@
       "certDirectory": "https://certdirectory.io/profile/823b2f7e-df46-43e8-b717-05b0afc17a71",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Sofoniasm"
     }
   },
   {
@@ -1695,7 +1949,8 @@
       "youtube": "https://www.youtube.com/@DevKTOps",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kaungthant1083"
     }
   },
   {
@@ -1714,7 +1969,8 @@
       "linkedin": "https://www.linkedin.com/in/amarinovszki/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ma1112"
     }
   },
   {
@@ -1734,7 +1990,8 @@
       "linkedin": "https://www.linkedin.com/in/ivan-t-devops/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ivantymofiichuk"
     }
   },
   {
@@ -1755,7 +2012,8 @@
       "website": "https://www.automiq.nl",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mpepping"
     }
   },
   {
@@ -1799,7 +2057,8 @@
       "certDirectory": "https://certdirectory.io/profile/f5584dfd-ac28-44d0-8953-3398252ef0e5",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/movinsilva"
     }
   },
   {
@@ -1850,7 +2109,8 @@
         "Helm",
         "prometheus",
         "kratix"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Kikiodazie"
     }
   },
   {
@@ -1871,7 +2131,8 @@
       "certDirectory": "https://certdirectory.io/profile/b1534f54-44f1-417c-93a0-9af07d8aea66",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/MinWooPark-dotcom"
     }
   },
   {
@@ -1988,7 +2249,8 @@
       "certDirectory": "https://certdirectory.io/profile/7043b233-a28e-4ed0-8d25-116d955932b6",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/patrickeasters"
     }
   },
   {
@@ -2008,7 +2270,8 @@
       "primaryBadge": "Kubestronaut",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ym1024"
     }
   },
   {
@@ -2029,7 +2292,8 @@
       "linkedin": "https://www.linkedin.com/in/julian-wachter-geb-l%C3%B6ffler-8b7851191",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Breee"
     }
   },
   {
@@ -2086,7 +2350,8 @@
       "linkedin": "https://www.linkedin.com/in/matt-holmes1/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mattholmes15"
     }
   },
   {
@@ -2109,7 +2374,8 @@
       "website": "https://blog.douglasluna.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/douglasluna"
     }
   },
   {
@@ -2186,7 +2452,8 @@
       "certDirectory": "https://certdirectory.io/profile/a0064441-f30b-4815-861e-84c75f988f02",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/nadjbabidaniel"
     }
   },
   {
@@ -2209,7 +2476,8 @@
       "website": "http://www.ahmedsa.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Ahmed-Saeed"
     }
   },
   {
@@ -2267,7 +2535,8 @@
       "linkedin": "https://www.linkedin.com/in/joetechholmes/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jack78901"
     }
   },
   {
@@ -2290,7 +2559,8 @@
       "certDirectory": "https://certdirectory.io/profile/ce1d424b-d73b-46f6-ac13-9b5258f766fb",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/pabpereza"
     }
   },
   {
@@ -2351,7 +2621,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tvonhacht-apple"
     }
   },
   {
@@ -2391,7 +2662,8 @@
       "linkedin": "https://www.linkedin.com/in/anmol-mishra-92ab67188/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/anmol-hpe"
     }
   },
   {
@@ -2493,7 +2765,8 @@
       "website": "https://kennygt51.dev/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kennygt51"
     }
   },
   {
@@ -2533,7 +2806,8 @@
       "website": "https://hackanooga.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/enxoco"
     }
   },
   {
@@ -2554,7 +2828,8 @@
       "linkedin": "https://www.linkedin.com/in/zachariah-stevenson",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/zstevenson-payments"
     }
   },
   {
@@ -2576,7 +2851,8 @@
       "twitter": "https://x.com/abhishekbehera",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/abhi15behera"
     }
   },
   {
@@ -2647,7 +2923,8 @@
         "Submariner",
         "Thanos",
         "Litmus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/espotti"
     }
   },
   {
@@ -2668,7 +2945,8 @@
       "linkedin": "https://www.linkedin.com/in/jacob-crawford-446064124/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jacobcrawford"
     }
   },
   {
@@ -2759,7 +3037,8 @@
       "linkedin": "https://www.linkedin.com/in/dustin-e-55113b16",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/duemerz"
     }
   },
   {
@@ -2790,7 +3069,8 @@
         "Prometheus",
         "Envoy",
         "Open Policy Agent (OPA)"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/akelity"
     }
   },
   {
@@ -2810,7 +3090,8 @@
       "linkedin": "https://www.linkedin.com/in/peterturnerlondon/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Syntax753"
     }
   },
   {
@@ -2931,7 +3212,8 @@
       "website": "https://kiowy.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/armandboutet"
     }
   },
   {
@@ -2953,7 +3235,8 @@
       "twitter": "https://x.com/mhilldevsecops",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/michael-hill-devsecops"
     }
   },
   {
@@ -3056,7 +3339,8 @@
         "Service Mesh Interface (SMI)",
         "TensorFlow",
         "Thanos"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Sagar2366"
     }
   },
   {
@@ -3097,7 +3381,8 @@
       "certDirectory": "https://www.credly.com/users/chidanand-mandolkar.fcc1a7c5/edit#credly",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/chida14"
     }
   },
   {
@@ -3118,7 +3403,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/gikvin"
     }
   },
   {
@@ -3138,7 +3424,8 @@
       "linkedin": "https://www.linkedin.com/in/igor-nikolovski-3a890224",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/inikolovski"
     }
   },
   {
@@ -3199,7 +3486,8 @@
       "twitter": "https://www.linkedin.com/in/yashwanthks/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/yashwanthkumarsuruneni"
     }
   },
   {
@@ -3294,7 +3582,8 @@
       "certDirectory": "https://certdirectory.io/profile/3f69e418-7a93-49bd-b582-4b534f08653f",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kpython"
     }
   },
   {
@@ -3314,7 +3603,8 @@
       "linkedin": "https://www.linkedin.com/in/trescst/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/trescst"
     }
   },
   {
@@ -3335,7 +3625,8 @@
       "linkedin": "https://www.linkedin.com/in/christoph-linse-a29662221",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/c-linse"
     }
   },
   {
@@ -3357,7 +3648,8 @@
       "twitter": "https://x.com/ghaering",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ghaering"
     }
   },
   {
@@ -3377,7 +3669,8 @@
       "linkedin": "https://www.linkedin.com/in/yashsgandhi",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ysg410"
     }
   },
   {
@@ -3398,7 +3691,8 @@
       "linkedin": "https://www.linkedin.com/in/mks895599/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mks895599"
     }
   },
   {
@@ -3442,7 +3736,8 @@
       "linkedin": "https://www.linkedin.com/in/aswint22/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/aswint22"
     }
   },
   {
@@ -3486,7 +3781,8 @@
       "website": "https://www.claven.io/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ClavenHQ"
     }
   },
   {
@@ -3509,7 +3805,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sherons"
     }
   },
   {
@@ -3544,7 +3841,8 @@
         "Kubernetes",
         "Prometheus",
         "SPIRE"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/linsun"
     }
   },
   {
@@ -3587,7 +3885,8 @@
       "certDirectory": "https://certdirectory.io/profile/9049b44b-d0f5-4c2f-a7ab-a1c92068f29e",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tuladhar"
     }
   },
   {
@@ -3664,7 +3963,8 @@
       "linkedin": "https://www.linkedin.com/in/patrick-di-fazio/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/BlessedRebuS"
     }
   },
   {
@@ -3687,7 +3987,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/depeche-io"
     }
   },
   {
@@ -3745,7 +4046,8 @@
       "linkedin": "https://www.linkedin.com/in/hamid-oke-oluwafemi",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/oluwafemiHamidoke"
     }
   },
   {
@@ -3771,7 +4073,8 @@
         "Kyverno",
         "K8sGPT",
         "Kubernetes"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/YashPimple"
     }
   },
   {
@@ -3792,7 +4095,8 @@
       "certDirectory": "https://certdirectory.io/profile/97b94012-40ea-490c-a0da-6b21cbdaf103",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/rydrafi13"
     }
   },
   {
@@ -3813,7 +4117,8 @@
       "linkedin": "https://www.linkedin.com/in/raphael-taguemkam-t/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/RaphDevOps"
     }
   },
   {
@@ -3831,7 +4136,8 @@
       "linkedin": "https://www.linkedin.com/in/sebastian-scheele/",
       "category": [
         "Governing Board"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/scheeles"
     }
   },
   {
@@ -3872,7 +4178,8 @@
       "certDirectory": "https://certdirectory.io/profile/3b67a043-bffc-407e-91ec-13d9e61547c6",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/MurabitoB"
     }
   },
   {
@@ -3914,7 +4221,8 @@
       "certDirectory": "https://certdirectory.io/profile/bb155467-7914-45ce-972b-3419e654762d",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bellofils"
     }
   },
   {
@@ -3936,7 +4244,8 @@
       "website": "https://amdadulbari.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/amdadulbari"
     }
   },
   {
@@ -3957,7 +4266,8 @@
       "linkedin": "https://www.linkedin.com/in/radoslav-rachev-6b8701b7",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/rrachev"
     }
   },
   {
@@ -3979,7 +4289,8 @@
       "certDirectory": "https://certdirectory.io/profile/adisak-lomsingh",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/masakioui"
     }
   },
   {
@@ -4000,7 +4311,8 @@
       "linkedin": "https://www.linkedin.com/in/balaji-kamal-kannadassan-0780028",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bkannadassan"
     }
   },
   {
@@ -4111,7 +4423,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/yegli"
     }
   },
   {
@@ -4136,7 +4449,8 @@
       ],
       "projects": [
         "Kubernetes"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/cblecker"
     }
   },
   {
@@ -4158,7 +4472,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/munishsuri"
     }
   },
   {
@@ -4218,7 +4533,8 @@
       "certDirectory": "https://certdirectory.io/profile/1e5df61e-0990-48e2-a4d3-48cce7e9f476",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/abx123"
     }
   },
   {
@@ -4260,7 +4576,8 @@
       "website": "https://zahariev.pro",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/shekeriev"
     }
   },
   {
@@ -4300,7 +4617,8 @@
       "website": "https://www.kostavro.eu/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Kostavro"
     }
   },
   {
@@ -4381,7 +4699,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/UMMAN2005"
     }
   },
   {
@@ -4439,7 +4758,8 @@
       "certDirectory": "https://certdirectory.io/profile/f592e8e6-7dad-4bf8-b169-c59f5b6dc6b7",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/strwrd"
     }
   },
   {
@@ -4553,7 +4873,8 @@
       "website": "https://ginloen.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ginloen"
     }
   },
   {
@@ -4595,7 +4916,8 @@
       "website": "https://blog.zwindler.fr",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/zwindler"
     }
   },
   {
@@ -4616,7 +4938,8 @@
       "linkedin": "https://www.linkedin.com/in/viallikavoo/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/viallikavoo"
     }
   },
   {
@@ -4636,7 +4959,8 @@
       "website": "https://krea.to",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kreatoo"
     }
   },
   {
@@ -4699,7 +5023,8 @@
       "certDirectory": "https://certdirectory.io/profile/b55d3c8b-29fb-4447-aeab-b9bff59b65af",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/femothedon"
     }
   },
   {
@@ -4762,7 +5087,8 @@
         "Kepler",
         "Kubernetes",
         "OpenGitOps"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/nikimanoledaki"
     }
   },
   {
@@ -4799,7 +5125,8 @@
       "linkedin": "https://www.linkedin.com/in/emidioneto/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/emdneto"
     }
   },
   {
@@ -4820,7 +5147,8 @@
       "certDirectory": "https://certdirectory.io/profile/2f22a1a6-6a5c-4bc1-8dd4-315eff5e55c1",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/evertonsa"
     }
   },
   {
@@ -4857,7 +5185,8 @@
       "linkedin": "https://www.linkedin.com/in/austin-m-28887b121",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/austinmarten1"
     }
   },
   {
@@ -4878,7 +5207,8 @@
       "twitter": "https://x.com/baturayozcan",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/baturayozcan"
     }
   },
   {
@@ -4937,7 +5267,8 @@
       "website": "https://0xzer0x.github.io/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/0xzer0x"
     }
   },
   {
@@ -4978,7 +5309,8 @@
       "twitter": "https://twitter.com/LoriLorusso",
       "category": [
         "Ambassadors"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/LoriLorusso"
     }
   },
   {
@@ -5001,7 +5333,8 @@
       "certDirectory": "https://certdirectory.io/profile/aa277c6f-68e5-4fdf-9ac4-93dfcd78c7f3",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Kratostau"
     }
   },
   {
@@ -5054,7 +5387,8 @@
         "Kubernetes",
         "KubeFlow",
         "Kserve"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/raravena80"
     }
   },
   {
@@ -5131,7 +5465,8 @@
       "linkedin": "https://www.linkedin.com/in/petrcernohouz/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/petrcernohouz"
     }
   },
   {
@@ -5174,7 +5509,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/rim-k"
     }
   },
   {
@@ -5280,7 +5616,8 @@
         "Kyverno",
         "Linkerd",
         "Meshery"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/AnnieTalvasto"
     }
   },
   {
@@ -5339,7 +5676,8 @@
       "twitter": "https://x.com/bageljp",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bageljp"
     }
   },
   {
@@ -5360,7 +5698,8 @@
       "linkedin": "https://www.linkedin.com/in/oktaysavdi",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/oktaysavdi"
     }
   },
   {
@@ -5381,7 +5720,8 @@
       "website": "https://abdullahcosgun.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/acsgn"
     }
   },
   {
@@ -5419,7 +5759,8 @@
       "linkedin": "https://www.linkedin.com/in/tschoch/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tschoch"
     }
   },
   {
@@ -5447,7 +5788,8 @@
         "Kubernetes",
         "Chaos Mesh",
         "OpenTelemetry"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tfinardi"
     }
   },
   {
@@ -5582,7 +5924,8 @@
       "linkedin": "https://www.linkedin.com/in/yashkumar-barot-9a803a130/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Yash-barot25"
     }
   },
   {
@@ -5622,7 +5965,8 @@
       "twitter": "https://twitter.com/TwitchiH",
       "category": [
         "Ambassadors"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/richih"
     }
   },
   {
@@ -5683,7 +6027,8 @@
       "certDirectory": "https://certdirectory.io/profile/69501f04-2277-42f0-a10d-ad2d823f6793",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mario26rgl"
     }
   },
   {
@@ -5705,7 +6050,8 @@
       "website": "https://www.tuguldur.dev",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tuguldur-dev"
     }
   },
   {
@@ -5779,7 +6125,8 @@
       "linkedin": "https://www.linkedin.com/in/bearp/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/B3arp"
     }
   },
   {
@@ -5799,7 +6146,8 @@
       "linkedin": "https://www.linkedin.com/in/ibeliakov/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/weisdd"
     }
   },
   {
@@ -5820,7 +6168,8 @@
       "certDirectory": "https://certdirectory.io/profile/0e4def54-381b-414b-a13d-67b9f25db324",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/praveenchigurupati7"
     }
   },
   {
@@ -5878,7 +6227,8 @@
       "twitter": "https://www.twitter.com/MileyFu",
       "category": [
         "Ambassadors"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/MileyFu"
     }
   },
   {
@@ -5898,7 +6248,8 @@
       "linkedin": "https://www.linkedin.com/in/roberto-tagliabue/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Robyt96"
     }
   },
   {
@@ -5940,7 +6291,8 @@
       "linkedin": "https://www.linkedin.com/in/ben-de-haan-65423441/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/bendehaan"
     }
   },
   {
@@ -5988,7 +6340,8 @@
         "Open Cluster Management",
         "Operator Framework",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/reggie-k"
     }
   },
   {
@@ -6050,7 +6403,8 @@
       "certDirectory": "https://certdirectory.io/profile/8e606625-2d4d-483c-82e6-6708640b3dcd",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/BojikoAndre"
     }
   },
   {
@@ -6072,7 +6426,8 @@
       "website": "https://yewolf.fr",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/yyewolf"
     }
   },
   {
@@ -6094,7 +6449,8 @@
       "website": "https://localhop.eu/~jlh/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/JustinLex"
     }
   },
   {
@@ -6115,7 +6471,8 @@
       "linkedin": "https://www.linkedin.com/in/roberto-gomez-prieto-5ba6b990",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/rogompri"
     }
   },
   {
@@ -6135,7 +6492,8 @@
       "linkedin": "https://www.linkedin.com/in/dibyajyotihazra/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/dhazra-infoblox"
     }
   },
   {
@@ -6157,7 +6515,8 @@
       "certDirectory": "https://certdirectory.io/profile/a89ff97d-f621-461a-95d5-07afe52c2f0b",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/doubando"
     }
   },
   {
@@ -6228,7 +6587,8 @@
         "Strimzi",
         "Thanos",
         "zot"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/joshgav"
     }
   },
   {
@@ -6271,7 +6631,8 @@
       "projects": [
         "containerd",
         "Kubernetes"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/dims"
     }
   },
   {
@@ -6337,7 +6698,8 @@
         "Prometheus",
         "Volcano",
         "WasmEdge"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/huanwei"
     }
   },
   {
@@ -6416,7 +6778,8 @@
       "website": "https://schnatterer.info/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/schnatterer"
     }
   },
   {
@@ -6438,7 +6801,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kmhk-ab"
     }
   },
   {
@@ -6458,7 +6822,8 @@
       "linkedin": "https://www.linkedin.com/in/julia-okuniewska",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jokuniew"
     }
   },
   {
@@ -6480,7 +6845,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/yetisage"
     }
   },
   {
@@ -6539,7 +6905,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/lenisha"
     }
   },
   {
@@ -6590,7 +6957,8 @@
         "OpenMetrics",
         "OpenTelemetry",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Nancy-Chauhan"
     }
   },
   {
@@ -6634,7 +7002,8 @@
       "website": "https://artfewell.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/afewell"
     }
   },
   {
@@ -6661,7 +7030,8 @@
       "projects": [
         "Kubernetes",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jeefy"
     }
   },
   {
@@ -6722,7 +7092,8 @@
       "linkedin": "https://www.linkedin.com/in/robert-volkmann/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/robertvolkmann"
     }
   },
   {
@@ -6841,7 +7212,8 @@
       "certDirectory": "https://certdirectory.io/profile/idebeijer",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/idebeijer"
     }
   },
   {
@@ -6880,7 +7252,8 @@
       "linkedin": "https://www.linkedin.com/in/lorenzo-bassi96",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/lorenzobassi96"
     }
   },
   {
@@ -6900,7 +7273,8 @@
       "linkedin": "https://www.linkedin.com/in/josh-t-406240181/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/taylorjo02"
     }
   },
   {
@@ -6920,7 +7294,8 @@
       "linkedin": "https://www.linkedin.com/feed/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/to-fumi"
     }
   },
   {
@@ -6941,7 +7316,8 @@
       "website": "https://jfr92.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jfr992"
     }
   },
   {
@@ -6963,7 +7339,8 @@
       "certDirectory": "https://certdirectory.io/profile/3884975e-12c4-46d0-8213-3e666e638d2e",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/awsdataarchitect"
     }
   },
   {
@@ -6986,7 +7363,8 @@
       "certDirectory": "https://certdirectory.io/profile/c28be793-693f-4cb8-b999-fa1f4a716d48",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/TanguyBaudrin"
     }
   },
   {
@@ -7026,7 +7404,8 @@
       "linkedin": "https://www.linkedin.com/in/phanindra-sangers-0225a516a/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/phanindra-sangers"
     }
   },
   {
@@ -7046,7 +7425,8 @@
       "linkedin": "https://www.linkedin.com/in/volodymyr-lviv/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/vpohyla"
     }
   },
   {
@@ -7088,7 +7468,8 @@
       "website": "https://www.fklein.me",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/fklein82"
     }
   },
   {
@@ -7111,7 +7492,8 @@
       "website": "https://pontus.ullgren.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ullgren"
     }
   },
   {
@@ -7158,7 +7540,8 @@
         "Argo",
         "Helm",
         "etcd"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sshiv5768"
     }
   },
   {
@@ -7199,7 +7582,8 @@
       "linkedin": "https://www.linkedin.com/in/eleni-grosdouli-85a1a5116",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/egrosdou01"
     }
   },
   {
@@ -7280,7 +7664,8 @@
       "certDirectory": "https://certdirectory.io/profile/56cde9ac-f8bd-44c3-9cb9-938028516380",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kamel2k"
     }
   },
   {
@@ -7343,7 +7728,8 @@
         "Open Policy Agent (OPA)",
         "Prometheus",
         "Thanos"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ronitblenz"
     }
   },
   {
@@ -7403,7 +7789,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mikejoh"
     }
   },
   {
@@ -7425,7 +7812,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/cooloo9871"
     }
   },
   {
@@ -7483,7 +7871,8 @@
       "certDirectory": "https://certdirectory.io/profile/3ce9d1f1-28a7-4240-8906-4f0cbe30f24c",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sharker3312"
     }
   },
   {
@@ -7502,7 +7891,8 @@
       "linkedin": "https://www.linkedin.com/in/noe-thalheim/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/noeleont"
     }
   },
   {
@@ -7615,7 +8005,8 @@
       "linkedin": "https://www.linkedin.com/in/srihari-nagaram/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/snagaram3"
     }
   },
   {
@@ -7656,7 +8047,8 @@
         "NATS",
         "Open Policy Agent (OPA)",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/IronCore864"
     }
   },
   {
@@ -7676,7 +8068,8 @@
       "linkedin": "https://www.linkedin.com/in/gabrielamnavarro/?locale=en_US",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/gabrielanavarro"
     }
   },
   {
@@ -7698,7 +8091,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/cloudtechworks"
     }
   },
   {
@@ -7768,7 +8162,8 @@
         "Prometheus",
         "TensorFlow",
         "Thanos"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/wrkode"
     }
   },
   {
@@ -7789,7 +8184,8 @@
       "website": "https://hko.sh/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/hkolvenbach"
     }
   },
   {
@@ -7836,7 +8232,8 @@
         "Karmada",
         "Kubernetes",
         "KubeVela"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/khanhtc1202"
     }
   },
   {
@@ -7875,7 +8272,8 @@
       "website": "https://sites.google.com/view/gajananan",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/gajananan"
     }
   },
   {
@@ -7915,7 +8313,8 @@
       "certDirectory": "https://certdirectory.io/profile/602278c4-cf10-4a16-bfe6-d200b722c1ed",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/davivcgarcia"
     }
   },
   {
@@ -7974,7 +8373,8 @@
         "Open Policy Agent (OPA)",
         "wasmCloud",
         "WasmEdge"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Iceber"
     }
   },
   {
@@ -7995,7 +8395,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kmusard"
     }
   },
   {
@@ -8054,7 +8455,8 @@
       "linkedin": "https://www.linkedin.com/in/kerem-izgöl-6514b8a3",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/keremizgol"
     }
   },
   {
@@ -8103,7 +8505,8 @@
         "OpenTracing",
         "Prometheus",
         "Rook"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/falconcr"
     }
   },
   {
@@ -8140,7 +8543,8 @@
       "website": "https://medium.com/@lhziim",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mhazem-bouaziz"
     }
   },
   {
@@ -8162,7 +8566,8 @@
       "website": "https://devops-james.tistory.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jangh-lee"
     }
   },
   {
@@ -8202,7 +8607,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/grothesk"
     }
   },
   {
@@ -8242,7 +8648,8 @@
       "linkedin": "https://www.linkedin.com/in/fireflycons/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/fireflycons"
     }
   },
   {
@@ -8284,7 +8691,8 @@
       "certDirectory": "https://certdirectory.io/profile/429e1b40-1af3-4858-9c68-39cf056ddb9a",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jamalaitahmed"
     }
   },
   {
@@ -8305,7 +8713,8 @@
       "linkedin": "https://www.linkedin.com/in/m%C3%BCcahit-%C3%BCndemir-20a184161/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/muecahit94"
     }
   },
   {
@@ -8326,7 +8735,8 @@
       "linkedin": "https://www.linkedin.com/in/areum-choi9",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/reumachoi"
     }
   },
   {
@@ -8367,7 +8777,8 @@
       "website": "https://kubernaut.eu/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/tnorlin"
     }
   },
   {
@@ -8407,7 +8818,8 @@
       "certDirectory": "https://certdirectory.io/profile/87da064d-1998-483f-8daa-0a2a4b90f84c",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/esleirter"
     }
   },
   {
@@ -8526,7 +8938,8 @@
       "youtube": "https://www.youtube.com/@devops-boot-camp",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/100daysofdevops"
     }
   },
   {
@@ -8548,7 +8961,8 @@
       "youtube": "https://www.youtube.com/@ajitinamdartech",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ajitinamdar-tech"
     }
   },
   {
@@ -8569,7 +8983,8 @@
       "linkedin": "https://www.linkedin.com/in/alexandrecadima/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/alecadima"
     }
   },
   {
@@ -8591,7 +9006,8 @@
       "youtube": "https://www.youtube.com/@kasaustin",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/lusoal"
     }
   },
   {
@@ -8758,7 +9174,8 @@
       "youtube": "https://www.youtube.com/@gremlinsec506",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/nikakostava"
     }
   },
   {
@@ -8779,7 +9196,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/syed-x7"
     }
   },
   {
@@ -8836,7 +9254,8 @@
       "linkedin": "https://www.linkedin.com/in/laurent-thil-5697161b",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/lathil"
     }
   },
   {
@@ -8934,7 +9353,8 @@
       "website": "https://www.masagu.dev",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mariasalcedo"
     }
   },
   {
@@ -8958,7 +9378,8 @@
       "website": "https://www.goondy.com",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ZiadGoondy"
     }
   },
   {
@@ -9055,7 +9476,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/zweckj"
     }
   },
   {
@@ -9132,7 +9554,8 @@
       "linkedin": "https://www.linkedin.com/in/cannellariccardo/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/speziato"
     }
   },
   {
@@ -9189,7 +9612,8 @@
       "certDirectory": "https://certdirectory.io/profile/alex-croteau",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/acrilex1"
     }
   },
   {
@@ -9237,7 +9661,8 @@
         "Linkerd",
         "OpenTelemetry",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/javaducky"
     }
   },
   {
@@ -9258,7 +9683,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/inc-ali"
     }
   },
   {
@@ -9302,7 +9728,8 @@
       "certDirectory": "https://certdirectory.io/profile/1f38487a-80e6-4349-bc92-997919993669",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/AymanZahran"
     }
   },
   {
@@ -9336,7 +9763,8 @@
         "Kubernetes",
         "Linkerd",
         "Prometheus"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kaspernissen"
     }
   },
   {
@@ -9367,7 +9795,8 @@
         "Kubernetes",
         "OpenTelemetry",
         "OpenEBS"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/prithvi1307"
     }
   },
   {
@@ -9390,7 +9819,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/samene"
     }
   },
   {
@@ -9411,7 +9841,8 @@
       "website": "https://idif.net/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Sebastian-Prokesch"
     }
   },
   {
@@ -9431,7 +9862,8 @@
       "certDirectory": "https://certdirectory.io/profile/e793bed5-00e9-4991-85fd-a7659b99781c",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/melcloud"
     }
   },
   {
@@ -9453,7 +9885,8 @@
       "certDirectory": "https://certdirectory.io/profile/6323440b-3a5c-4cd1-924d-eae98eb3763f",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/yanzakha"
     }
   },
   {
@@ -9493,7 +9926,8 @@
       "certDirectory": "https://certdirectory.io/profile/3eaf27d7-88a7-4f71-851d-49b05c01c953",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/edwinbermudez91"
     }
   },
   {
@@ -9553,7 +9987,8 @@
       "certDirectory": "https://certdirectory.io/profile/89558bea-fbdc-44da-af24-ed3b44d4ed8d",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/javierguzman"
     }
   },
   {
@@ -9620,7 +10055,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/TBeijen"
     }
   },
   {
@@ -9644,7 +10080,8 @@
       "certDirectory": "https://certdirectory.io/profile/7043b233-a28e-4ed0-8d25-116d955932b6",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/Itchimonji"
     }
   },
   {
@@ -9692,7 +10129,8 @@
         "KubeEdge",
         "Kubernetes",
         "Volcano"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/kevin-wangzefeng"
     }
   },
   {
@@ -9733,7 +10171,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/PLeS207"
     }
   },
   {
@@ -9754,7 +10193,8 @@
       "youtube": "https://www.youtube.com/@amlcoftherockies",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/chasecadet"
     }
   },
   {
@@ -9784,7 +10224,8 @@
         "OpenTracing",
         "Prometheus",
         "Thanos"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jkowall"
     }
   },
   {
@@ -9863,7 +10304,8 @@
       "linkedin": "https://in.linkedin.com/in/preetpal97",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/preet-7"
     }
   },
   {
@@ -9890,7 +10332,8 @@
       ],
       "projects": [
         "kubernetes"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/azaynul10"
     }
   },
   {
@@ -9910,7 +10353,8 @@
       "certDirectory": "https://certdirectory.io/?p=55ea79cc-4fc9-4f4e-bf25-8bbdb18e64f6",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/gyarlabs"
     }
   },
   {
@@ -9991,7 +10435,8 @@
       "certDirectory": "https://certdirectory.io/profile/8135fe79-205e-44b7-8886-6be7335c042f",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/jocasantos"
     }
   },
   {
@@ -10032,7 +10477,8 @@
       "certDirectory": "https://certdirectory.io/profile/3eb278ca-2c54-439d-a5a8-171f9ffa3484",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/PatrykMLOps"
     }
   },
   {
@@ -10057,7 +10503,8 @@
       "projects": [
         "Kubernetes",
         "Istio"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/ebinbabu"
     }
   },
   {
@@ -10077,7 +10524,8 @@
       "linkedin": "https://www.linkedin.com/in/wouterdamman/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/TheIronRock95"
     }
   },
   {
@@ -10097,7 +10545,8 @@
       "category": [
         "Kubestronaut",
         "Golden-Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/mttrb"
     }
   },
   {
@@ -10138,7 +10587,8 @@
       "certDirectory": "https://certdirectory.io/profile/1b261a17-63b5-4d55-bbab-2ef4ffc4c0e9",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/humbeatbox"
     }
   },
   {
@@ -10214,7 +10664,8 @@
       "linkedin": "https://www.linkedin.com/in/matthew-rodgers-92181112b",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/maviger"
     }
   },
   {
@@ -10235,7 +10686,8 @@
       "website": "https://letstalkaboutdevops.com/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/elfarsaouiomar"
     }
   },
   {
@@ -10256,7 +10708,8 @@
       "certDirectory": "https://certdirectory.io/profile/b6cd1d6e-8f54-4e53-9201-69664635358e",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/IZAR23537"
     }
   },
   {
@@ -10295,7 +10748,8 @@
       "linkedin": "https://www.linkedin.com/in/workwithjoel/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/zhews"
     }
   },
   {
@@ -10317,7 +10771,8 @@
       "certDirectory": "https://certdirectory.io/profile/27988e30-0596-4e16-8b73-07b1ac98c6bc",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/zahlenhelfer"
     }
   },
   {
@@ -10338,7 +10793,8 @@
       "linkedin": "https://www.linkedin.com/in/uroshercog/",
       "category": [
         "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/uroshercog"
     }
   },
   {
@@ -10357,198 +10813,8 @@
       "linkedin": "https://www.linkedin.com/in/sanadhisutandi/",
       "category": [
         "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "05c999a4-f6be-4002-9633-8a7f9fca8a8c",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Jacopo Binosi",
-      "handle": "bainos",
-      "github": "https://github.com/bainos",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/jacopo-binosi.jpg",
-      "bio": "I first encountered Linux at university, and from that moment, I never looked back. It was then that I realized Linux would be my lifelong \"familiar.\"  I enjoy solving problems and making things work the way I want. This, combined with my passion for Linux, led me to a career as a Systems Engineer after earning my Bachelor's degree in Physics. Time flew by, and I transitioned to the Cloud... and to Neovim (I’ve always been a daily Vim user and a fan of CLI tools in general).  Today, I’m deeply into Kubernetes, but I still use Vim, Ubuntu, Debian, Arch, and occasionally work with some legacy infrastructure. Now that I’m a \"Kubestronaut,\" I see this as a fresh starting point, without forgetting the tools that got me here.",
-      "pronouns": "He/Him",
-      "company": "Musixmatch SPA",
-      "location": "Bologna, Italy",
-      "countryFlag": "🇮🇹",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/jacopobinosi/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "17b12865-50ab-4538-85c1-ab4493cc893c",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Thibault Sourdin",
-      "handle": "tsourdin",
-      "github": "https://github.com/tsourdin",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/thibault-sourdin.jpg",
-      "bio": "I’m a cloud engineer with 2 years of production experience on Kubernetes. My background includes embedded systems (building embedded Linux distributions), which shaped my interest in understanding systems beneath their abstractions. I enjoy diving into Kubernetes internals, Linux, networking, and security to design reliable infrastructures.",
-      "pronouns": "He/Him",
-      "location": "Nantes, France",
-      "countryFlag": "🇫🇷",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/thibault-s-778329221/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "fb07dd20-af1a-497e-b981-d2b0aca75016",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Anis Hannachi",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/anis-hannachi.jpg",
-      "bio": "Platform \u0026 DevOps engineer with strong hands-on experience operating Kubernetes platforms using Helm and GitOps with Argo CD. I work across the full DevOps stack, from cluster operations and platform architecture to CI/CD, automation and observability. My background spans on-premise, hybrid, and cloud environments, where I focus on building scalable and maintainable Kubernetes-based systems. I enjoy designing platform architectures, automating workflows, and enabling teams to run production workloads efficiently.",
-      "location": "Vincennes, France",
-      "countryFlag": "🇫🇷",
-      "primaryBadge": "Golden-Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/anis-hannachi/",
-      "category": [
-        "Kubestronaut",
-        "Golden-Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "322be07d-1741-45ba-8297-490118914186",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Peter West",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/peter-west.jpg",
-      "bio": "I've worked in the IT industry for 35 years and have held a variety of roles during this time.  More recently i've worked extensively with Kubernetes and AWS whilst automating using languages such as Python and Go.  Although I don't currently use Kubernetes as part of my day to day work I find it incredibly interesting so keep my hand in by running clusters at home which are then used for various projects.",
-      "pronouns": "He/Him",
-      "location": "Cleethorpes, North East Lincolnshire, United Kingdom",
-      "countryFlag": "🇬🇧",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/peterjwest74/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "48bff0b4-1eca-48bd-ba3e-b78c86d07cab",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Phoo Phoo Thet Lyar Tun",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/phoo-phoo-thet-lyar-tun.jpg",
-      "bio": "I am a cloud-native architect specializing in CNCF technologies, multi-cloud infrastructure, Infrastructure as Code (IaC), Service Mesh (Istio and Cilium), Container Orchestration (Kubernetes) and GitOps. I attended KubeDay Singapore 2023, staying up to date with the latest trends in cloud-native computing.",
-      "pronouns": "She/Her",
-      "location": "Bangkok, Thailand",
-      "countryFlag": "🇹🇭",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/phoophoo-thetlyartun",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "0bce565c-4183-42fe-a992-a68ebbde75dc",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Than Htike Phyo",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/than-htike-phyo.jpg",
-      "bio": "I am a Network Security professional specializing in secure enterprise and hybrid infrastructure design, with strong expertise in next-generation firewalls, SD-WAN, SASE, and Zero Trust architectures. I work extensively with cloud-native and Kubernetes environments, focusing on CNCF technologies such as Kubernetes, service mesh, and cloud security integration. My experience spans secure campus networking, micro-segmentation, and integrating security into DevOps and container platforms. I am passionate about bridging traditional network security with modern cloud-native architectures. I regularly share insights and technical deep dives on infrastructure security and Kubernetes security best practices.",
-      "pronouns": "He/Him",
-      "company": "Techdata Pte Ltd",
-      "location": "Singapore, SIngapore",
-      "countryFlag": "🇸🇬",
-      "primaryBadge": "Kubestronaut",
-      "certDirectory": "https://www.credly.com/users/phyo-lay",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "89204e3b-8390-472f-b459-d57878ece978",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Momoko Murakami",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/momoko-murakami.jpg",
-      "bio": "I am a Cloud Security Engineer specializing in designing, implementing, and operating security solutions for multi-cloud environments, including AWS, Google Cloud, and Kubernetes. I also leverage Infrastructure as Code (IaC) for secure, automated deployments.",
-      "pronouns": "She/Her",
-      "company": "iret, Inc.",
-      "location": "Tokyo, Japan",
-      "countryFlag": "🇯🇵",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/m-murakami/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "eabcc00c-0b30-4706-9fe3-73d62b6c1cd2",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Tony Prawiro Hadimulyono",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/tony-prawiro-hadimulyono.jpg",
-      "bio": "Tony is a tech enthusiast who loves cloud computing, containers, DevOps, and open-source technologies. He works as a cybersecurity engineer, focusing on making cloud and DevOps platforms secure. In his job, Tony collaborates with others to create threat models, suggest security controls, and develop security monitoring use cases for SIEM systems.  Tony enjoys learning new things and has earned certifications from AWS, Microsoft Azure, Google Cloud, ISC2 CSSLP, and CNCF/Linux Foundation Kubernetes. He is now learning about Machine Learning and Generative AI, with the goal of using AI to enhance the security of cloud and DevOps platforms.",
-      "company": "Standard Chartered Bank",
-      "location": "Singapore, Singapore",
-      "countryFlag": "🇸🇬",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/thadimulyono/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "f79da8bf-b6de-48b5-8d98-aaf29d0d852e",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Woravit Ariyakunatorn",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/woravit-ariyakunatorn.jpg",
-      "bio": "With over a decade of experience in IT, I specialize in cloud architecture, DevOps, and automation. I enjoy experimenting with Kubernetes and other cloud-native technologies both professionally and as a hobby. My interests include designing secure, scalable infrastructure and building modern solutions using AWS, Kubernetes, and serverless platforms. Outside of technology, I’m passionate about fishing and exploring the outdoors.",
-      "pronouns": "He/Him",
-      "company": "Accor",
-      "location": "Bangkok, Thailand",
-      "countryFlag": "🇹🇭",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/wariyakunatorn/",
-      "category": [
-        "Kubestronaut"
-      ]
-    }
-  },
-  {
-    "id": "5552d497-4903-4e39-887b-fb3591a8a04e",
-    "type": "added",
-    "timestamp": "2026-03-15T21:37:31.987107101Z",
-    "person": {
-      "name": "Amit Kumar Gupta",
-      "handle": "amitdctm",
-      "github": "https://github.com/amitdctm/",
-      "imageUrl": "https://raw.githubusercontent.com/cncf/people/main/images/amit-kumar-gupta.jpg",
-      "bio": "Working in harmony as a Platform Engineer, leveraging Terraform \u0026 Kubernetes expertise to design and deliver secure, scalable, and reliable infrastructure on AWS Cloud. Supporting a well-established client by provisioning platform information systems, enabling Kubernetes-based workloads for seamless communication and operational efficiency. Beyond cloud-native engineering, I'm actively exploring Generative AI, continuously expanding my skillset to stay ahead in the evolving tech landscape. Pursuing industry-recognised certifications to solidify my expertise and stand out in a competitive field. Please follow me on https://www.linkedin.com/in/amitdctm/, https://github.com/amitdctm and https://gitlab.com/documentum-stack",
-      "pronouns": "He/Him",
-      "company": "Capgemini UK Plc.",
-      "location": "Sutton, Surrey, England, United Kingdom",
-      "countryFlag": "🇬🇧",
-      "primaryBadge": "Kubestronaut",
-      "linkedin": "https://www.linkedin.com/in/amitdctm/",
-      "category": [
-        "Kubestronaut"
-      ]
+      ],
+      "avatarUrl": "https://avatars.githubusercontent.com/sanadhis"
     }
   }
 ]
