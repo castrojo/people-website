@@ -8,8 +8,7 @@ interface SafePerson {
 }
 interface IndexedPerson extends SafePerson { id: number; categoryStr: string; }
 export interface SearchResult extends SafePerson { score: number; terms: string[]; }
-let miniSearch: MiniSearch | null = null;
-let loadPromise: Promise<void> | null = null;
+let miniSearch: MiniSearch | null = null, loadPromise: Promise<void> | null = null;
 async function ensureLoaded(baseUrl: string): Promise<void> {
   if (miniSearch) return;
   if (loadPromise) return loadPromise;

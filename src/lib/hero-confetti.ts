@@ -10,8 +10,7 @@ const CNCF_LOGO_URLS = [
   'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/keda.svg',            'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/open-telemetry.svg',
 ];
 const CNCF_COLORS = ['#0086FF', '#D62293', '#93EAFF', '#FFB300', '#00A86B', '#7B2FBE'];
-let logoShapes: confetti.Shape[] | null = null;
-let loadingLogos = false;
+let logoShapes: confetti.Shape[] | null = null, loadingLogos = false;
 function loadLogoShapes(): void {
   if (loadingLogos || logoShapes !== null) return;
   loadingLogos = true;
@@ -32,8 +31,7 @@ export function preloadOnHover(card: Element): void {
   card.addEventListener('mouseenter', loadLogoShapes, { once: true });
   card.addEventListener('touchstart', loadLogoShapes, { once: true, passive: true });
 }
-const lastFired = new WeakMap<Element, number>();
-const DEBOUNCE_MS = 300;
+const lastFired = new WeakMap<Element, number>(), DEBOUNCE_MS = 300;
 function tryDebounce(card: Element): boolean {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return false;

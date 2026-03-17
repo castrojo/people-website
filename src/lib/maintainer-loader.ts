@@ -33,11 +33,8 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, string>): string {
-  const profileUrl = `https://github.com/${esc(m.handle)}`;
-  const avatarUrl  = m.avatarUrl || `https://avatars.githubusercontent.com/${esc(m.handle)}?s=128`;
-  const accentColor = MATURITY_COLOR[m.maturity] ?? '#8b949e';
-  const cncfLogoUrl = `${BASE}/program-logos/cncf.svg`;
-  const currentYear = new Date().getFullYear();
+  const profileUrl = `https://github.com/${esc(m.handle)}`, avatarUrl = m.avatarUrl || `https://avatars.githubusercontent.com/${esc(m.handle)}?s=128`;
+  const accentColor = MATURITY_COLOR[m.maturity] ?? '#8b949e', cncfLogoUrl = `${BASE}/program-logos/cncf.svg`, currentYear = new Date().getFullYear();
   const chipProjects: ProjectDetail[] = m.projectDetails ?? m.projects.map(p => ({ name: p, maturity: m.maturity }));
   const projectChips = chipProjects.map(({ name: p, maturity: pm }) => {
     const chipColor = MATURITY_COLOR[pm] ?? '#8b949e';
