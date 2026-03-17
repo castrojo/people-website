@@ -60,3 +60,72 @@ describe('dateHeader — timestamp formatting', () => {
     expect(result).toContain('Monday');
   });
 });
+
+describe('renderCard — person card HTML', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    document.documentElement.dataset.base = '/people-website';
+  });
+
+  const baseEvent = {
+    id: 'ev-001',
+    type: 'added',
+    timestamp: '2024-06-15T10:30:00Z',
+    person: {
+      name: 'Kaito Yamamoto',
+      handle: 'kaitoy',
+      github: 'https://github.com/kaitoy',
+      avatarUrl: 'https://avatars.githubusercontent.com/kaitoy',
+      category: ['Kubestronaut'],
+    },
+  };
+
+  it('renders the person name', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('Kaito Yamamoto');
+  });
+
+  it('renders the GitHub handle with @-prefix', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('@kaitoy');
+  });
+
+  it('renders the avatar img with the avatarUrl src', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('src="https://avatars.githubusercontent.com/kaitoy"');
+  });
+
+  it('renders the + Joined badge for type "added"', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('+ Joined');
+  });
+
+  it('renders the − Left badge for type "removed"', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, type: 'removed' };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('− Left');
+  });
+
+  it('renders the Kubestronaut category badge', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('Kubestronaut');
+  });
+
+  it('renders the Kubestronaut accent color', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('--card-accent:var(--color-kubestronaut, #D62293)');
+  });
+
+  it('renders GitHub social link when github is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).toContain('href="https://github.com/kaitoy"');
+  });
+});

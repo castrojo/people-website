@@ -41,7 +41,7 @@ const CERT_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" s
 export function esc(s: string): string {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
+export function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const p = e.person, avatarSrc = p.avatarUrl || p.imageUrl || '';
   const profileUrl = p.github || (p.handle ? `https://github.com/${p.handle}` : '#');
   const cats = p.category ?? [], primaryCat = cats[0] ?? '';
