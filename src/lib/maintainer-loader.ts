@@ -35,19 +35,10 @@ const MATURITY_COLOR: Record<string, string> = {
 function resolveLogoUrl(project: string, logos: Record<string, string>): string {
   const key = project.toLowerCase();
   if (logos[key]) return logos[key];
-  // Strip ": subproject" (e.g. "Istio: Maintainers" → "Istio")
   const colonIdx = key.indexOf(':');
-  if (colonIdx > 0) {
-    const base = key.slice(0, colonIdx).trim();
-    if (logos[base]) return logos[base];
-  }
-  // Strip "(parenthetical)"
+  if (colonIdx > 0 && logos[key.slice(0, colonIdx).trim()]) return logos[key.slice(0, colonIdx).trim()];
   const parenIdx = key.indexOf('(');
-  if (parenIdx > 0) {
-    const base = key.slice(0, parenIdx).trim();
-    if (logos[base]) return logos[base];
-  }
-  // Progressively strip trailing words ("Kubernetes Steering" → "Kubernetes")
+  if (parenIdx > 0 && logos[key.slice(0, parenIdx).trim()]) return logos[key.slice(0, parenIdx).trim()];
   const parts = key.split(' ');
   for (let n = parts.length - 1; n > 0; n--) {
     const candidate = parts.slice(0, n).join(' ');
