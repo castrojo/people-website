@@ -1,31 +1,17 @@
 import confetti from 'canvas-confetti';
-
-// Curated CNCF graduated/incubating project logos — stable cross-origin SVGs.
 const CNCF_LOGO_URLS = [
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/kubernetes.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/prometheus-icon-color.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/envoy.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/argo.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/helm.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/flux.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/containerd.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/etcd.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/core-dns.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/jaeger.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/fluentd.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/harbor.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/crossplane.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/dapr.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/keda.svg',
-  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/open-telemetry.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/kubernetes.svg',      'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/prometheus-icon-color.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/envoy.svg',           'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/argo.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/helm.svg',            'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/flux.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/containerd.svg',      'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/etcd.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/core-dns.svg',        'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/jaeger.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/fluentd.svg',         'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/harbor.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/crossplane.svg',      'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/dapr.svg',
+  'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/keda.svg',            'https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/open-telemetry.svg',
 ];
-
 const CNCF_COLORS = ['#0086FF', '#D62293', '#93EAFF', '#FFB300', '#00A86B', '#7B2FBE'];
-
-// Logo shapes are loaded in the background. Once ready, subsequent clicks use them.
 let logoShapes: confetti.Shape[] | null = null;
 let loadingLogos = false;
-
 function loadLogoShapes(): void {
   if (loadingLogos || logoShapes !== null) return;
   loadingLogos = true;
@@ -41,25 +27,19 @@ function loadLogoShapes(): void {
     logoShapes = valid.length > 0 ? valid : ['square'];
   });
 }
-
 loadLogoShapes();
-
 export function preloadOnHover(card: Element): void {
   card.addEventListener('mouseenter', loadLogoShapes, { once: true });
   card.addEventListener('touchstart', loadLogoShapes, { once: true, passive: true });
 }
-
-// Per-element debounce — snappy 300ms so rapid clicks feel responsive.
 const lastFired = new WeakMap<Element, number>();
 const DEBOUNCE_MS = 300;
-
 function tryDebounce(card: Element): boolean {
   const now = Date.now();
   if ((lastFired.get(card) ?? 0) + DEBOUNCE_MS > now) return false;
   lastFired.set(card, now);
   return true;
 }
-
 function cardOrigin(card: Element, yFraction = 0.5) {
   const rect = card.getBoundingClientRect();
   return {
@@ -67,7 +47,6 @@ function cardOrigin(card: Element, yFraction = 0.5) {
     y: (rect.top + rect.height * yFraction) / window.innerHeight,
   };
 }
-
 export function fireHearts(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
@@ -83,8 +62,6 @@ export function fireHearts(card: Element): void {
   confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 60 });
   confetti({ ...base, particleCount:  8, spread:  80, startVelocity: 28, angle: 120 });
 }
-
-// Starburst for staff minicards: 360° explosion of stars and sparkles.
 export function fireStarburst(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
@@ -94,8 +71,6 @@ export function fireStarburst(card: Element): void {
     shapes: [star, sparkle, star], scalar: 2.5, gravity: 0.65, ticks: 210,
     particleCount: 22, spread: 360, startVelocity: 28 });
 }
-
-// Fountain for PersonCard/MaintainerCard: uses the card's accent color.
 export function fireFountain(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card, 0.3);
@@ -104,7 +79,6 @@ export function fireFountain(card: Element): void {
     shapes: ['square', 'circle', 'square'], scalar: 1.0, gravity: 1.5, ticks: 190,
     particleCount: 45, spread: 55, startVelocity: 38, angle: 90 });
 }
-
 export function fireConfetti(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
