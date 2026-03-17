@@ -64,3 +64,122 @@ describe('renderMaintainerCard — avatar URL', () => {
     expect(html).toMatch(/class="avatar-placeholder"[^>]*>A</);
   });
 });
+
+describe('renderMaintainerCard — card content', () => {
+  const baseMaintainer = {
+    name: 'Priya Sharma',
+    handle: 'priyasharma',
+    avatarUrl: 'https://avatars.githubusercontent.com/priyasharma',
+    projects: ['Kubernetes'],
+    maturity: 'Graduated',
+  };
+
+  beforeEach(() => {
+    vi.resetModules();
+    document.documentElement.dataset.base = '/people-website';
+  });
+
+  it('renders the person name', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const html = renderMaintainerCard(baseMaintainer, {});
+    expect(html).toContain('Priya Sharma');
+  });
+
+  it('renders the @handle link', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const html = renderMaintainerCard(baseMaintainer, {});
+    expect(html).toContain('@priyasharma');
+  });
+
+  it('renders a company chip when company is set', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const m = { ...baseMaintainer, company: 'Google' };
+    const html = renderMaintainerCard(m, {});
+    expect(html).toContain('company-chip');
+    expect(html).toContain('Google');
+  });
+
+  it('renders a bio paragraph when bio is set', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const m = { ...baseMaintainer, bio: 'Open source contributor' };
+    const html = renderMaintainerCard(m, {});
+    expect(html).toContain('class="bio"');
+    expect(html).toContain('Open source contributor');
+  });
+
+  it('renders location and country flag when set', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const m = { ...baseMaintainer, location: 'Bangalore, India', countryFlag: '🇮🇳' };
+    const html = renderMaintainerCard(m, {});
+    expect(html).toContain('location-right');
+    expect(html).toContain('Bangalore, India');
+    expect(html).toContain('🇮🇳');
+  });
+
+  it('renders the Graduated accent color #FFB300', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const html = renderMaintainerCard(baseMaintainer, {});
+    expect(html).toContain('#FFB300');
+  });
+
+  it('renders the Incubating accent color #0086FF', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const m = { ...baseMaintainer, maturity: 'Incubating' };
+    const html = renderMaintainerCard(m, {});
+    expect(html).toContain('#0086FF');
+  });
+
+  it('renders yearsContributing stats chip when set', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const currentYear = new Date().getFullYear();
+    const m = { ...baseMaintainer, yearsContributing: 4 };
+    const html = renderMaintainerCard(m, {});
+    expect(html).toContain('stats-row');
+    expect(html).toContain(`Since ${currentYear - 4}`);
+    expect(html).toContain('(4y)');
+  });
+
+  it('renders project chip names in the projects row', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const html = renderMaintainerCard(baseMaintainer, {});
+    expect(html).toContain('projects-row');
+    expect(html).toContain('Kubernetes');
+  });
+
+  it('renders Maintainer badge', async () => {
+    const { renderMaintainerCard } = await import('../../src/lib/maintainer-loader');
+    const html = renderMaintainerCard(baseMaintainer, {});
+    expect(html).toContain('Maintainer');
+    expect(html).toContain('badge-category');
+  });
+});
+
+describe('resolveLogoUrl', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    document.documentElement.dataset.base = '/people-website';
+  });
+
+  it('returns the logo URL for an exact lowercase key match', async () => {
+    const { resolveLogoUrl } = await import('../../src/lib/maintainer-loader');
+    const logos = { kubernetes: 'https://example.com/k8s.svg' };
+    expect(resolveLogoUrl('Kubernetes', logos)).toBe('https://example.com/k8s.svg');
+  });
+
+  it('returns empty string when no match is found', async () => {
+    const { resolveLogoUrl } = await import('../../src/lib/maintainer-loader');
+    expect(resolveLogoUrl('UnknownProject', {})).toBe('');
+  });
+
+  it('matches by prefix before a colon', async () => {
+    const { resolveLogoUrl } = await import('../../src/lib/maintainer-loader');
+    const logos = { prometheus: 'https://example.com/prom.svg' };
+    expect(resolveLogoUrl('Prometheus: Alertmanager', logos)).toBe('https://example.com/prom.svg');
+  });
+
+  it('matches by prefix before a parenthesis', async () => {
+    const { resolveLogoUrl } = await import('../../src/lib/maintainer-loader');
+    const logos = { helm: 'https://example.com/helm.svg' };
+    expect(resolveLogoUrl('Helm (Charts)', logos)).toBe('https://example.com/helm.svg');
+  });
+});

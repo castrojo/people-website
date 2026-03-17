@@ -15,7 +15,7 @@ const MATURITY_COLOR: Record<string, string> = {
   'Incubating': '#0086FF',
   'Sandbox':    '#8b949e',
 };
-function resolveLogoUrl(project: string, logos: Record<string, string>): string {
+export function resolveLogoUrl(project: string, logos: Record<string, string>): string {
   const key = project.toLowerCase();
   if (logos[key]) return logos[key];
   const colonIdx = key.indexOf(':');
