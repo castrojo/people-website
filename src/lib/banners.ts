@@ -52,13 +52,11 @@ export function parseBannersYaml(yamlText: string): RawBanner[] {
   const banners: RawBanner[] = [];
   let current: RawBanner | null = null;
   let inImages = false;
+  const stripQuotes = (s: string): string => s.replace(/^['"]|['"]$/g, '').trim();
 
   for (const rawLine of yamlText.split('\n')) {
     const line = rawLine.trimEnd();
     if (!line.trim() || line.trim().startsWith('#')) continue;
-
-    // Strip an optional leading quote character from values
-    const stripQuotes = (s: string): string => s.replace(/^['"]|['"]$/g, '').trim();
 
     // New top-level list item
     if (/^- /.test(line)) {
@@ -145,20 +143,9 @@ export const getActiveBanner = async (): Promise<BannerConfig | null> =>
  * Returns empty array if none available.
  */
 export async function getActiveBanners(): Promise<BannerConfig[]> {
-  const banners = await fetchBannersConfig();
-
-  if (banners.length === 0) {
-    return [];
-  }
-
-  // Filter to KubeCon events only
-  const kubeconBanners = banners.filter(banner =>
+  const kubeconBanners = (await fetchBannersConfig()).filter(banner =>
     banner.name?.includes('KubeCon') || banner.name?.includes('CloudNative')
   );
-
-  if (kubeconBanners.length === 0) {
-    return [];
-  }
 
   const configs: BannerConfig[] = [];
   for (const banner of kubeconBanners) {
