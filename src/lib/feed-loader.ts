@@ -42,20 +42,14 @@ function esc(s: string): string {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
-  const p = e.person;
-  const avatarSrc = p.avatarUrl || p.imageUrl || '';
+  const p = e.person, avatarSrc = p.avatarUrl || p.imageUrl || '';
   const profileUrl = p.github || (p.handle ? `https://github.com/${p.handle}` : '#');
-  const cats = p.category ?? [];
-  const primaryCat = cats[0] ?? '';
-  const logoKey = p.primaryBadge
-    ? (PROGRAM_LOGOS[p.primaryBadge] ? p.primaryBadge : undefined)
-    : LOGO_PRIORITY.find(c => cats.includes(c));
+  const cats = p.category ?? [], primaryCat = cats[0] ?? '';
+  const logoKey = p.primaryBadge ? (PROGRAM_LOGOS[p.primaryBadge] ? p.primaryBadge : undefined) : LOGO_PRIORITY.find(c => cats.includes(c));
   const accentKey = p.primaryBadge || LOGO_PRIORITY.find(c => cats.includes(c)) || primaryCat;
   const catInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCat] ?? { name: primaryCat, color: '#888' };
-  const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '';
-  const typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
-  const date = new Date(e.timestamp);
-  const year = new Date().getFullYear();
+  const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '', typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
+  const date = new Date(e.timestamp), year = new Date().getFullYear();
   const catBadges = cats.map(cat => { const ci = CATEGORY_MAP[cat] ?? catInfo; return `<span class="badge badge-category" style="background:${ci.color}22;color:${ci.color};border-color:${ci.color}44">${esc(ci.name ?? cat)}</span>`; }).join('');
   const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `<div class="stats-row">${
     p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" style="width:14px;height:14px;object-fit:contain;flex-shrink:0"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}${
@@ -73,7 +67,6 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const socialLinks = sl(p.certDirectory,'CNCF Cert Directory',CERT_ICON)+sl(p.youtube,'YouTube',YT_ICON)+sl(p.github,'GitHub',GH_ICON)+sl(p.linkedin,'LinkedIn',LI_ICON)+sl(p.twitter,'Twitter/X',TW_ICON)+sl(p.bluesky,'Bluesky',BSKY_ICON);
   return `<article class="person-card" data-id="${esc(e.id)}" data-type="${esc(e.type)}" data-category="${esc(primaryCat.toLowerCase())}" data-categories="${esc(cats.map(c=>c.toLowerCase()).join('|'))}" style="--card-accent:${catInfo.color}"><div class="card-accent-bar"></div><div class="card-body"><div class="card-main"><div class="card-identity"><a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="avatar-link">${avatarSrc ? `<img src="${esc(avatarSrc)}" alt="${esc(p.name)}" class="avatar" loading="lazy" width="64" height="64">` : `<div class="avatar avatar-placeholder" aria-hidden="true">${esc(p.name.charAt(0))}</div>`}</a><div class="identity-info"><div class="name-row"><a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="person-name">${esc(p.name)}</a>${p.handle ? `<a href="${esc(profileUrl)}" target="_blank" rel="noopener noreferrer" class="handle">@${esc(p.handle)}</a>` : ''}${p.pronouns ? `<span class="pronouns">(${esc(p.pronouns)})</span>` : ''}</div>${p.company ? `<div class="company-row">${p.companyLandscapeUrl ? `<a href="${esc(p.companyLandscapeUrl)}" target="_blank" rel="noopener noreferrer" class="company-chip company-chip-link">${esc(p.company)}</a>` : `<span class="company-chip">${esc(p.company)}</span>`}</div>` : ''}${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : ''}<div class="badges"><span class="badge badge-${esc(e.type)}">${esc(typeLabel)}</span>${catBadges}</div></div></div>${statsRow}${projectsRow}${changesHtml}</div>${rightCol}</div><div class="card-footer"><time datetime="${esc(e.timestamp)}" class="timestamp">${esc(date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }))} · ${esc(date.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' }))}</time><div class="social-links">${socialLinks}</div></div></article>`;
 }
-
 function dateHeader(ts: string): string {
   return new Date(ts).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
 }
