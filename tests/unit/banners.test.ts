@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { parseBannersYaml } from '../../src/lib/banners';
 
 const FULL_YAML = `
@@ -81,5 +81,85 @@ describe('parseBannersYaml', () => {
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Incomplete Banner');
     expect(result[0].images).toBeUndefined();
+  });
+});
+
+describe('fetchBannersConfig', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  it('returns parsed banners when fetch succeeds', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(FULL_YAML),
+    }));
+    const { fetchBannersConfig } = await import('../../src/lib/banners');
+    const result = await fetchBannersConfig();
+    expect(result).toHaveLength(2);
+    expect(result[0].name).toBe('KubeCon EU 2025');
+  });
+
+  it('returns empty array when fetch response is not ok', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+    }));
+    const { fetchBannersConfig } = await import('../../src/lib/banners');
+    const result = await fetchBannersConfig();
+    expect(result).toEqual([]);
+  });
+
+  it('returns empty array when fetch throws', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network error')));
+    const { fetchBannersConfig } = await import('../../src/lib/banners');
+    const result = await fetchBannersConfig();
+    expect(result).toEqual([]);
+  });
+});
+
+describe('getActiveBanners', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  it('returns only KubeCon/CloudNative banners with all required fields', async () => {
+    const yaml = `
+- name: "KubeCon EU 2025"
+  link: "https://events.linuxfoundation.org/kubecon-eu/"
+  images:
+    light-theme: "https://example.com/light.png"
+    dark-theme: "https://example.com/dark.png"
+- name: "Some Other Event"
+  link: "https://other.example.com"
+  images:
+    light-theme: "https://other.example.com/l.png"
+    dark-theme: "https://other.example.com/d.png"
+`;
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(yaml),
+    }));
+    const { getActiveBanners } = await import('../../src/lib/banners');
+    const result = await getActiveBanners();
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('KubeCon EU 2025');
+    expect(result[0].lightImage).toBe('https://example.com/light.png');
+    expect(result[0].darkImage).toBe('https://example.com/dark.png');
+  });
+
+  it('skips banners missing required fields', async () => {
+    const yaml = `
+- name: "KubeCon Incomplete"
+  link: "https://events.linuxfoundation.org/kubecon/"
+`;
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(yaml),
+    }));
+    const { getActiveBanners } = await import('../../src/lib/banners');
+    const result = await getActiveBanners();
+    expect(result).toEqual([]);
   });
 });
