@@ -25,29 +25,19 @@ async function ensureLoaded(baseUrl: string): Promise<void> {
                     'pronouns', 'yearsContributing', 'contributions'],
       searchOptions: { fuzzy: 0.2, prefix: true, boost: { name: 3, handle: 2, company: 1.5 } },
     });
-    const indexed: IndexedPerson[] = people.map((p, i) => ({
-      ...p,
-      id: i,
-      categoryStr: (p.category ?? []).join(' '),
-    }));
+    const indexed: IndexedPerson[] = people.map((p, i) => ({ ...p, id: i, categoryStr: (p.category ?? []).join(' ') }));
     miniSearch.addAll(indexed);
   })();
   return loadPromise;
 }
 /** Search all people; returns up to `limit` results sorted by relevance. Lazy-loads the index. */
-export async function searchPeople(
-  query: string,
-  baseUrl: string,
-  limit = 50
-): Promise<SearchResult[]> {
+export async function searchPeople(query: string, baseUrl: string, limit = 50): Promise<SearchResult[]> {
   if (!query.trim()) return [];
   await ensureLoaded(baseUrl);
   if (!miniSearch) return [];
   const raw = miniSearch.search(query);
   return raw.slice(0, limit).map(({ score, terms, category, ...rest }) => ({
-    ...(rest as Omit<SearchResult, 'score' | 'terms' | 'category'>),
-    score,
-    terms,
+    ...(rest as Omit<SearchResult, 'score' | 'terms' | 'category'>), score, terms,
     category: (category as string[] | undefined) ?? [],
   }));
 }
