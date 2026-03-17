@@ -173,4 +173,108 @@ describe('renderCard — person card HTML', () => {
     const html = renderCard(event as any, {});
     expect(html).toContain('href="https://linkedin.com/in/kaitoy"');
   });
+
+  it('renders location in the right column when set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, location: 'Tokyo, Japan', countryFlag: '🇯🇵' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('location-right');
+    expect(html).toContain('Tokyo, Japan');
+    expect(html).toContain('🇯🇵');
+  });
+
+  it('renders stats row with contributions when set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, contributions: 1234 } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('stats-row');
+    expect(html).toContain('1,234');
+    expect(html).toContain('contributions');
+  });
+
+  it('renders stats row with public repos when set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, publicRepos: 42 } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('stats-row');
+    expect(html).toContain('>42<');
+    expect(html).toContain('repos');
+  });
+
+  it('renders stats row with years contributing when set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const currentYear = new Date().getFullYear();
+    const event = { ...baseEvent, person: { ...baseEvent.person, yearsContributing: 5 } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('stats-row');
+    expect(html).toContain(`Since ${currentYear - 5}`);
+    expect(html).toContain('(5y)');
+  });
+
+  it('omits stats row when no stats fields are set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const html = renderCard(baseEvent as any, {});
+    expect(html).not.toContain('stats-row');
+  });
+
+  it('renders projects row with project chips when projects are set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, projects: ['Kubernetes', 'Prometheus'] } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('projects-row');
+    expect(html).toContain('Kubernetes');
+    expect(html).toContain('Prometheus');
+  });
+
+  it('renders changes details when event has changes', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = {
+      ...baseEvent,
+      type: 'updated',
+      changes: [{ field: 'company', from: 'OldCorp', to: 'NewCorp' }],
+    };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('changes-details');
+    expect(html).toContain('1 field changed');
+    expect(html).toContain('OldCorp');
+    expect(html).toContain('NewCorp');
+  });
+
+  it('renders plural "fields changed" for multiple changes', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = {
+      ...baseEvent,
+      type: 'updated',
+      changes: [
+        { field: 'company', from: 'OldCorp', to: 'NewCorp' },
+        { field: 'bio', from: 'Old bio', to: 'New bio' },
+      ],
+    };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('2 fields changed');
+  });
+
+  it('renders Twitter social link when twitter is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, twitter: 'https://twitter.com/kaitoy' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('href="https://twitter.com/kaitoy"');
+    expect(html).toContain('Twitter/X');
+  });
+
+  it('renders Bluesky social link when bluesky is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, bluesky: 'https://bsky.app/profile/kaitoy' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('href="https://bsky.app/profile/kaitoy"');
+    expect(html).toContain('Bluesky');
+  });
+
+  it('renders YouTube social link when youtube is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, youtube: 'https://youtube.com/@kaitoy' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('href="https://youtube.com/@kaitoy"');
+    expect(html).toContain('YouTube');
+  });
 });
