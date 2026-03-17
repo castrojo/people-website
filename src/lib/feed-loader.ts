@@ -71,18 +71,14 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
     return `<span class="badge badge-category" style="background:${ci.color}22;color:${ci.color};border-color:${ci.color}44">${esc(ci.name ?? cat)}</span>`;
   }).join('');
 
-  const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `
-    <div class="stats-row">
-      ${p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" style="width:14px;height:14px;object-fit:contain;flex-shrink:0"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}
-      ${p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect width="16" height="2" rx="1" y="0"/><rect width="16" height="2" rx="1" y="4"/><rect width="16" height="2" rx="1" y="8"/><rect width="10" height="2" rx="1" y="12"/></svg></span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}
-      ${p.publicRepos ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="14" height="14" rx="2"/><path d="M4 8h8M4 5h8M4 11h5"/></svg></span><span class="stat-val">${p.publicRepos}</span><span class="stat-label">repos</span></span>` : ''}
-    </div>` : '';
-
-  const projectsRow = (p.projects?.length) ? `
-    <div class="projects-row">${p.projects.map(proj => {
-      const logo = landscapeLogos[proj] ?? landscapeLogos[proj.toLowerCase()] ?? '';
-      return `<span class="project-chip">${logo ? `<img src="${esc(logo)}" alt="" class="project-logo" aria-hidden="true" loading="lazy" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)" onerror="this.style.display='none'">` : ''}${esc(proj)}</span>`;
-    }).join('')}</div>` : '';
+  const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `<div class="stats-row">${
+    p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" style="width:14px;height:14px;object-fit:contain;flex-shrink:0"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}${
+    p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect width="16" height="2" rx="1" y="0"/><rect width="16" height="2" rx="1" y="4"/><rect width="16" height="2" rx="1" y="8"/><rect width="10" height="2" rx="1" y="12"/></svg></span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}${
+    p.publicRepos ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="14" height="14" rx="2"/><path d="M4 8h8M4 5h8M4 11h5"/></svg></span><span class="stat-val">${p.publicRepos}</span><span class="stat-label">repos</span></span>` : ''}</div>` : '';
+  const projectsRow = (p.projects?.length) ? `<div class="projects-row">${p.projects.map(proj => {
+    const logo = landscapeLogos[proj] ?? landscapeLogos[proj.toLowerCase()] ?? '';
+    return `<span class="project-chip">${logo ? `<img src="${esc(logo)}" alt="" class="project-logo" aria-hidden="true" loading="lazy" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)" onerror="this.style.display='none'">` : ''}${esc(proj)}</span>`;
+  }).join('')}</div>` : '';
 
   const changesHtml = e.changes?.length ? `<details class="changes-details"><summary class="changes-summary">${e.changes.length} field${e.changes.length > 1 ? 's' : ''} changed</summary><ul class="changes-list">${e.changes.map(c =>
     `<li class="change-item"><span class="change-field">${esc(c.field)}</span><span class="change-from">${esc(c.from||'(empty)')}</span><span class="change-arrow">→</span><span class="change-to">${esc(c.to||'(empty)')}</span></li>`
