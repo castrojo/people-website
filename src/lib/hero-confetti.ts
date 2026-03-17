@@ -114,24 +114,12 @@ export function fireFountain(card: Element): void {
 export function fireConfetti(card: Element): void {
   if (!tryDebounce(card)) return;
   const origin = cardOrigin(card);
-
-  const base = {
-    origin,
-    colors: CNCF_COLORS,
-    scalar: 1.4,
-    gravity: 1.1,
-    ticks: 220,
-  };
-
-  // Phase 1: fire INSTANTLY with simple shapes — zero latency, always works.
-  const fastShapes: confetti.Shape[] = ['square', 'circle', 'square'];
-  confetti({ ...base, shapes: fastShapes, particleCount: 50, spread: 100, startVelocity: 50, angle: 90 });
-  confetti({ ...base, shapes: fastShapes, particleCount: 25, spread: 80,  startVelocity: 35, angle: 60 });
-  confetti({ ...base, shapes: fastShapes, particleCount: 25, spread: 80,  startVelocity: 35, angle: 120 });
-
-  // Phase 2: if logos already loaded, add a logo burst on top immediately.
-  if (logoShapes && logoShapes.length > 0) {
-    const mixed = [...logoShapes, 'square'];
-    confetti({ ...base, shapes: mixed, particleCount: 40, spread: 110, startVelocity: 45, angle: 90 });
+  const base = { origin, colors: CNCF_COLORS, scalar: 1.4, gravity: 1.1, ticks: 220 };
+  const fs: confetti.Shape[] = ['square', 'circle', 'square'];
+  confetti({ ...base, shapes: fs, particleCount: 50, spread: 100, startVelocity: 50, angle: 90 });
+  confetti({ ...base, shapes: fs, particleCount: 25, spread:  80, startVelocity: 35, angle: 60 });
+  confetti({ ...base, shapes: fs, particleCount: 25, spread:  80, startVelocity: 35, angle: 120 });
+  if (logoShapes?.length) {
+    confetti({ ...base, shapes: [...logoShapes, 'square'], particleCount: 40, spread: 110, startVelocity: 45, angle: 90 });
   }
 }
