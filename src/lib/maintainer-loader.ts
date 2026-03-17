@@ -141,18 +141,6 @@ export async function initMaintainerLoader(staticCount: number, preloadedLogos?:
   let loading = false;
   let done = false;
 
-  async function loadData() {
-    const [maintainersRes, logosRes] = await Promise.all([
-      fetch(MAINTAINERS_URL),
-      preloadedLogos ? null : fetch(LOGOS_URL).catch(() => null),
-    ]);
-    allMaintainers = await maintainersRes.json() as SafeMaintainer[];
-    if (!preloadedLogos && logosRes?.ok) {
-      logos = await logosRes.json() as Record<string, string>;
-    }
-    done = nextIdx >= allMaintainers.length;
-  }
-
   function appendBatch() {
     if (loading || done) return;
     loading = true;
@@ -173,7 +161,13 @@ export async function initMaintainerLoader(staticCount: number, preloadedLogos?:
   sentinel.id = 'maintainer-sentinel';
   feed.appendChild(sentinel);
 
-  await loadData();
+  const [maintainersRes, logosRes] = await Promise.all([
+    fetch(MAINTAINERS_URL),
+    preloadedLogos ? null : fetch(LOGOS_URL).catch(() => null),
+  ]);
+  allMaintainers = await maintainersRes.json() as SafeMaintainer[];
+  if (!preloadedLogos && logosRes?.ok) logos = await logosRes.json() as Record<string, string>;
+  done = nextIdx >= allMaintainers.length;
 
   const observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) appendBatch();
