@@ -70,9 +70,7 @@ export const getActiveBanner = async (): Promise<BannerConfig | null> =>
   (await getActiveBanners())[0] ?? null;
 /** Get all active KubeCon banners from CNCF configuration. */
 export async function getActiveBanners(): Promise<BannerConfig[]> {
-  const banners = (await fetchBannersConfig()).filter(b =>
-    b.name?.includes('KubeCon') || b.name?.includes('CloudNative')
-  );
+  const banners = (await fetchBannersConfig()).filter(b => b.name?.includes('KubeCon') || b.name?.includes('CloudNative'));
   return banners.flatMap(b => {
     if (!b.name || !b.link || !b.images?.['light-theme'] || !b.images?.['dark-theme']) {
       console.warn('Banner missing required fields, skipping:', b);

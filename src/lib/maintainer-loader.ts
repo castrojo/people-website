@@ -71,8 +71,7 @@ export async function initMaintainerLoader(staticCount: number, preloadedLogos?:
     if (done) observer.disconnect();
   }
   const sentinel = document.createElement('div');
-  sentinel.id = 'maintainer-sentinel';
-  feed.appendChild(sentinel);
+  sentinel.id = 'maintainer-sentinel'; feed.appendChild(sentinel);
   const [maintainersRes, logosRes] = await Promise.all([
     fetch(MAINTAINERS_URL),
     preloadedLogos ? null : fetch(LOGOS_URL).catch(() => null),
