@@ -29,27 +29,21 @@ let loadingLogos = false;
 function loadLogoShapes(): void {
   if (loadingLogos || logoShapes !== null) return;
   loadingLogos = true;
-  Promise.all(
-    CNCF_LOGO_URLS.map(url =>
-      new Promise<confetti.Shape | null>(resolve => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => resolve(confetti.shapeFromImage({ src: url, width: 40, height: 40 }));
-        img.onerror = () => resolve(null);
-        img.src = url;
-        setTimeout(() => resolve(null), 4000);
-      })
-    )
-  ).then(shapes => {
+  Promise.all(CNCF_LOGO_URLS.map(url => new Promise<confetti.Shape | null>(resolve => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(confetti.shapeFromImage({ src: url, width: 40, height: 40 }));
+    img.onerror = () => resolve(null);
+    img.src = url;
+    setTimeout(() => resolve(null), 4000);
+  }))).then(shapes => {
     const valid = shapes.filter((s): s is confetti.Shape => s !== null);
     logoShapes = valid.length > 0 ? valid : ['square'];
   });
 }
 
-// Start loading logos immediately on module import.
 loadLogoShapes();
 
-// Also preload on first hero card hover for faster first-click response.
 export function preloadOnHover(card: Element): void {
   card.addEventListener('mouseenter', loadLogoShapes, { once: true });
   card.addEventListener('touchstart', loadLogoShapes, { once: true, passive: true });
