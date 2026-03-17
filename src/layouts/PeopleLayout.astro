@@ -158,8 +158,6 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
     const maintainerFeed = document.getElementById('maintainer-feed');
     const maintainerSummary = document.getElementById('maintainer-summary');
     const maintainerStats = document.getElementById('sidebar-maintainer-stats');
-    const heroesSection = document.getElementById('heroes-section');
-
     // Show/hide per-tab hero sections (data-tab-heroes) — handles page load restore too.
     document.querySelectorAll<HTMLElement>('[data-tab-heroes]').forEach(el => {
       el.style.display = el.dataset.tabHeroes === tab ? '' : 'none';
@@ -173,18 +171,15 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
       if (memorialFeed) memorialFeed.style.display = '';
       if (maintainerFeed) maintainerFeed.style.display = 'none';
-      if (heroesSection) heroesSection.style.display = 'none';
     } else if (tab === 'maintainers') {
       if (timelineFeed) timelineFeed.style.display = 'none';
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
       if (memorialFeed) memorialFeed.style.display = 'none';
       if (maintainerFeed) maintainerFeed.style.display = '';
-      if (heroesSection) heroesSection.style.display = 'none';
     } else if (ALPHA_TABS.has(tab)) {
       if (timelineFeed) timelineFeed.style.display = 'none';
       if (memorialFeed) memorialFeed.style.display = 'none';
       if (maintainerFeed) maintainerFeed.style.display = 'none';
-      if (heroesSection) heroesSection.style.display = 'none';
       alphaFeeds.forEach(feed => {
         feed.style.display = feed.dataset.alphaTab === tab ? '' : 'none';
       });
@@ -193,7 +188,6 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
       if (maintainerFeed) maintainerFeed.style.display = 'none';
       if (timelineFeed) timelineFeed.style.display = '';
       alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
-      if (heroesSection) heroesSection.style.display = tab === 'everyone' ? '' : 'none';
 
       const cards = timelineFeed?.querySelectorAll<HTMLElement>('.person-card') ?? [];
       const groups = timelineFeed?.querySelectorAll<HTMLElement>('.day-group') ?? [];
