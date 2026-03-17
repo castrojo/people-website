@@ -77,16 +77,10 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
 function dateHeader(ts: string): string {
   return new Date(ts).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric', timeZone:'UTC' });
 }
-
 export async function initFeedLoader(staticCount: number, landscapeLogos: Record<string, string>, onBatchLoaded?: () => void) {
   const feed = document.getElementById('timeline-feed');
   if (!feed) return;
-
-  let allEvents: Event[] = [];
-  let nextIdx = staticCount;
-  let loading = false;
-  let done = false;
-
+  let allEvents: Event[] = [], nextIdx = staticCount, loading = false, done = false;
   function appendBatch() {
     if (loading || done) return;
     loading = true;
