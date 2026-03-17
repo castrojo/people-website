@@ -308,6 +308,7 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
         { text: 'cncf/people on GitHub', url: 'https://github.com/cncf/people', external: true },
         { text: 'castrojo/people-website', url: 'https://github.com/castrojo/people-website', external: true },
         { text: 'CNCF Releases (Firehose)', url: 'https://castrojo.github.io/firehose/', external: true },
+        { text: 'Report an issue', url: 'https://github.com/castrojo/people-website/issues', external: true },
       ]}
     >
       <p slot="description" class="info-description">
@@ -318,6 +319,23 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
     </InfoBox>
 
     {banners.length > 0 && <KubeConBanner banners={banners} />}
+
+    <div class="sidebar-section">
+      <h2 class="sidebar-heading">Filters</h2>
+      <div class="filter-controls">
+        <select id="type-filter" class="filter-select">
+          <option value="">All people</option>
+          <option value="added">Joined</option>
+          <option value="removed">Emeritus</option>
+          <option value="updated">Updated</option>
+        </select>
+        <select id="category-filter" class="filter-select">
+          <option value="">All categories</option>
+          {categories.map(cat => <option value={cat.toLowerCase()}>{cat}</option>)}
+        </select>
+      </div>
+      <p id="filter-count" class="filter-count"></p>
+    </div>
 
     <div class="stats">
       <h2 class="sidebar-heading stats-heading">Community</h2>
@@ -367,23 +385,6 @@ const emeritusSorted = [...emeritusMembers].sort((a, b) => {
         </div>
       </div>
     )}
-
-    <div class="sidebar-section">
-      <h2 class="sidebar-heading">Filters</h2>
-      <div class="filter-controls">
-        <select id="type-filter" class="filter-select">
-          <option value="">All people</option>
-          <option value="added">Joined</option>
-          <option value="removed">Emeritus</option>
-          <option value="updated">Updated</option>
-        </select>
-        <select id="category-filter" class="filter-select">
-          <option value="">All categories</option>
-          {categories.map(cat => <option value={cat.toLowerCase()}>{cat}</option>)}
-        </select>
-      </div>
-      <p id="filter-count" class="filter-count"></p>
-    </div>
 
     <div class="sidebar-section made-with-love">
       <p>Made with <strong>&lt;3</strong> by your CNCF Projects Team</p>
