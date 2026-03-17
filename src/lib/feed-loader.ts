@@ -49,8 +49,7 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
   const accentKey = p.primaryBadge || LOGO_PRIORITY.find(c => cats.includes(c)) || primaryCat;
   const catInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCat] ?? { name: primaryCat, color: '#888' };
   const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : '', typeLabel = ({ added: '+ Joined', removed: '− Left', updated: '✎ Updated' } as Record<string,string>)[e.type] ?? e.type;
-  const date = new Date(e.timestamp), year = new Date().getFullYear();
-  const catBadges = cats.map(cat => { const ci = CATEGORY_MAP[cat] ?? catInfo; return `<span class="badge badge-category" style="background:${ci.color}22;color:${ci.color};border-color:${ci.color}44">${esc(ci.name ?? cat)}</span>`; }).join('');
+  const date = new Date(e.timestamp), year = new Date().getFullYear(), catBadges = cats.map(cat => { const ci = CATEGORY_MAP[cat] ?? catInfo; return `<span class="badge badge-category" style="background:${ci.color}22;color:${ci.color};border-color:${ci.color}44">${esc(ci.name ?? cat)}</span>`; }).join('');
   const statsRow = (p.contributions || p.publicRepos || p.yearsContributing) ? `<div class="stats-row">${
     p.yearsContributing ? `<span class="stat-chip"><img src="${BASE}/program-logos/cncf.svg" alt="" class="stat-cncf-icon" aria-hidden="true" style="width:14px;height:14px;object-fit:contain;flex-shrink:0"><span class="stat-val">Since ${year - p.yearsContributing} (${p.yearsContributing}y)</span></span>` : ''}${
     p.contributions ? `<span class="stat-chip"><span class="stat-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect width="16" height="2" rx="1" y="0"/><rect width="16" height="2" rx="1" y="4"/><rect width="16" height="2" rx="1" y="8"/><rect width="10" height="2" rx="1" y="12"/></svg></span><span class="stat-val">${p.contributions.toLocaleString()}</span><span class="stat-label">contributions</span></span>` : ''}${
@@ -97,8 +96,7 @@ export async function initFeedLoader(staticCount: number, landscapeLogos: Record
     if (done) observer.disconnect();
   }
   const sentinel = document.createElement('div');
-  sentinel.id = 'feed-sentinel';
-  feed.appendChild(sentinel);
+  sentinel.id = 'feed-sentinel'; feed.appendChild(sentinel);
   const res = await fetch(DATA_URL);
   allEvents = await res.json() as Event[];
   done = nextIdx >= allEvents.length;
