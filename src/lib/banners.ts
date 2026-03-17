@@ -1,18 +1,4 @@
-/**
- * CNCF Banner System - Official Integration
- * 
- * Fetches banner configuration from cncf.github.io/banners at build time.
- * 
- * Architecture:
- * - Build-time fetching = zero runtime overhead
- * - Graceful degradation = site works even if banners unavailable
- * - Single source of truth = CNCF controls banner rotation
- * - No date logic needed = CNCF manages active banners
- * 
- * Banner format (500x500px square):
- * - light-theme: For light mode display
- * - dark-theme: For dark mode display
- */
+// banners.ts — fetch and parse CNCF banner config from cncf.github.io/banners at build time.
 
 export interface BannerConfig {
   name: string;
@@ -110,20 +96,14 @@ export function parseBannersYaml(yamlText: string): RawBanner[] {
   return banners;
 }
 
-/**
- * Fetch CNCF banners configuration from official source
- * 
- * Returns empty array on error (graceful degradation)
- */
+/** Fetches banners.yml from CNCF — returns empty array on error. */
 export async function fetchBannersConfig(): Promise<RawBanner[]> {
   try {
     const response = await fetch('https://cncf.github.io/banners/banners.yml');
-    
     if (!response.ok) {
       console.warn(`Failed to fetch banners.yml: ${response.status} ${response.statusText}`);
       return [];
     }
-    
     const yamlText = await response.text();
     return parseBannersYaml(yamlText);
   } catch (error) {
@@ -137,9 +117,7 @@ export const getActiveBanner = async (): Promise<BannerConfig | null> =>
   (await getActiveBanners())[0] ?? null;
 
 /**
- * Get all active KubeCon banners from CNCF configuration
- *
- * Returns all valid KubeCon/CloudNativeCon banners for client-side rotation.
+ * Get all active KubeCon banners from CNCF configuration.
  * Returns empty array if none available.
  */
 export async function getActiveBanners(): Promise<BannerConfig[]> {

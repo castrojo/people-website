@@ -1,7 +1,4 @@
-// maintainer-loader.ts
-// Progressively loads and renders maintainer cards from the static maintainers.json.
-// The first staticCount cards are already in the DOM as server-rendered HTML.
-// This module fetches the rest and appends them in batches via IntersectionObserver.
+// maintainer-loader.ts — progressively loads/renders maintainer cards via IntersectionObserver.
 
 const BASE = (document.documentElement.dataset.base ?? '/people-website').replace(/\/$/, '');
 const MAINTAINERS_URL = `${BASE}/data/maintainers.json`;

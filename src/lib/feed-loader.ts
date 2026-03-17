@@ -1,7 +1,4 @@
-// feed-loader.ts
-// Progressively loads and renders person cards from the static changelog.json.
-// The first STATIC_COUNT cards are already in the DOM as server-rendered HTML.
-// This module fetches the rest and appends them in batches via IntersectionObserver.
+// feed-loader.ts — progressively loads/renders person cards via IntersectionObserver.
 
 const BASE = (document.documentElement.dataset.base ?? '/people-website').replace(/\/$/, '');
 const DATA_URL = `${BASE}/data/changelog.json`;
