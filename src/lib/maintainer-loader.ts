@@ -68,31 +68,7 @@ export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, st
   const statsRow = (m.yearsContributing ?? 0) > 0 ? `<div class="stats-row"><span class="stat-chip"><img src="${esc(cncfLogoUrl)}" class="stat-cncf-icon" alt="" aria-hidden="true"><span class="stat-val">Since ${currentYear - m.yearsContributing!} (${m.yearsContributing}y)</span></span></div>` : '';
   const maintainerBadge = `<span class="badge badge-category" style="background:#88888822; color:#888888; border-color:#88888844">Maintainer</span>`;
 
-  return `<article class="maintainer-card" style="--card-accent: ${accentColor}">
-  <div class="card-accent-bar"></div>
-  <div class="card-body">
-    <a href="${profileUrl}" class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
-      <img class="avatar" src="${avatarUrl}" width="64" height="64" alt="${esc(m.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-      <div class="avatar-placeholder" style="display:none">${esc(m.name.charAt(0).toUpperCase())}</div>
-    </a>
-    <div class="card-main">
-      <div class="card-identity-row">
-        <div class="identity-info">
-          <div class="name-row">
-            <a class="person-name" href="${profileUrl}" target="_blank" rel="noopener noreferrer">${esc(m.name)}</a>
-            <a class="handle" href="${profileUrl}" target="_blank" rel="noopener noreferrer">@${esc(m.handle)}</a>
-          </div>
-          ${company}
-          ${bio}
-          <div class="badges">${maintainerBadge}</div>
-        </div>
-        ${cardRight}
-      </div>
-      ${statsRow}
-      <div class="projects-row">${projectChips}</div>
-    </div>
-  </div>
-</article>`;
+  return `<article class="maintainer-card" style="--card-accent: ${accentColor}"><div class="card-accent-bar"></div><div class="card-body"><a href="${profileUrl}" class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img class="avatar" src="${avatarUrl}" width="64" height="64" alt="${esc(m.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="avatar-placeholder" style="display:none">${esc(m.name.charAt(0).toUpperCase())}</div></a><div class="card-main"><div class="card-identity-row"><div class="identity-info"><div class="name-row"><a class="person-name" href="${profileUrl}" target="_blank" rel="noopener noreferrer">${esc(m.name)}</a><a class="handle" href="${profileUrl}" target="_blank" rel="noopener noreferrer">@${esc(m.handle)}</a></div>${company}${bio}<div class="badges">${maintainerBadge}</div></div>${cardRight}</div>${statsRow}<div class="projects-row">${projectChips}</div></div></div></article>`;
 }
 
 export async function initMaintainerLoader(staticCount: number, preloadedLogos?: Record<string, string>) {
