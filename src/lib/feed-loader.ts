@@ -84,19 +84,10 @@ function renderCard(e: Event, landscapeLogos: Record<string, string>): string {
       return `<span class="project-chip">${logo ? `<img src="${esc(logo)}" alt="" class="project-logo" aria-hidden="true" loading="lazy" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)" onerror="this.style.display='none'">` : ''}${esc(proj)}</span>`;
     }).join('')}</div>` : '';
 
-  const changesHtml = e.changes?.length ? `
-    <details class="changes-details">
-      <summary class="changes-summary">${e.changes.length} field${e.changes.length > 1 ? 's' : ''} changed</summary>
-      <ul class="changes-list">${e.changes.map(c =>
-        `<li class="change-item"><span class="change-field">${esc(c.field)}</span><span class="change-from">${esc(c.from||'(empty)')}</span><span class="change-arrow">→</span><span class="change-to">${esc(c.to||'(empty)')}</span></li>`
-      ).join('')}</ul>
-    </details>` : '';
-
-  const rightCol = (programLogo || p.location) ? `
-    <div class="card-right">
-      ${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy" style="height:48px;width:auto;opacity:0.9">` : ''}
-      ${p.location ? `<span class="location-right">${esc(p.countryFlag ?? '')} ${esc(p.location)}</span>` : ''}
-    </div>` : '';
+  const changesHtml = e.changes?.length ? `<details class="changes-details"><summary class="changes-summary">${e.changes.length} field${e.changes.length > 1 ? 's' : ''} changed</summary><ul class="changes-list">${e.changes.map(c =>
+    `<li class="change-item"><span class="change-field">${esc(c.field)}</span><span class="change-from">${esc(c.from||'(empty)')}</span><span class="change-arrow">→</span><span class="change-to">${esc(c.to||'(empty)')}</span></li>`
+  ).join('')}</ul></details>` : '';
+  const rightCol = (programLogo || p.location) ? `<div class="card-right">${programLogo ? `<img src="${esc(programLogo)}" alt="${esc(logoKey??'')}" class="program-logo" loading="lazy" style="height:48px;width:auto;opacity:0.9">` : ''}${p.location ? `<span class="location-right">${esc(p.countryFlag ?? '')} ${esc(p.location)}</span>` : ''}</div>` : '';
 
   const socialLinks = [
     p.certDirectory ? `<a href="${esc(p.certDirectory)}" target="_blank" rel="noopener noreferrer" class="social-link" title="CNCF Cert Directory" aria-label="CNCF Cert Directory">${CERT_ICON}</a>` : '',
