@@ -37,16 +37,14 @@ export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, st
   const accentColor = MATURITY_COLOR[m.maturity] ?? '#8b949e', cncfLogoUrl = `${BASE}/program-logos/cncf.svg`, currentYear = new Date().getFullYear();
   const chipProjects: ProjectDetail[] = m.projectDetails ?? m.projects.map(p => ({ name: p, maturity: m.maturity }));
   const projectChips = chipProjects.map(({ name: p, maturity: pm }) => {
-    const chipColor = MATURITY_COLOR[pm] ?? '#8b949e';
-    const logo = resolveLogoUrl(p, logos);
+    const chipColor = MATURITY_COLOR[pm] ?? '#8b949e', logo = resolveLogoUrl(p, logos);
     const logoImg = logo ? `<img class="project-logo" src="${esc(logo)}" onerror="this.style.display='none'" loading="lazy" alt="" style="width:13px;height:13px;object-fit:contain;filter:grayscale(100%)">` : '';
     return `<span class="project-chip" style="--chip-accent:${chipColor}; border-color:${chipColor}33; background:${chipColor}11">${logoImg}${esc(p)}</span>`;
   }).join('');
   const logoTopRight = m.logoUrl ? `<img class="program-logo" src="${esc(m.logoUrl)}" alt="" aria-hidden="true" loading="lazy" />` : '';
   const locationHtml = (m.countryFlag || m.location) ? `<span class="location-right">${m.countryFlag ? esc(m.countryFlag) : ''} ${m.location ? esc(m.location) : ''}</span>` : '';
   const cardRight = (logoTopRight || locationHtml) ? `<div class="card-right">${logoTopRight}${locationHtml}</div>` : '';
-  const company = m.company ? `<div class="company-row"><span class="company-chip">${esc(m.company)}</span></div>` : '';
-  const bio = m.bio ? `<p class="bio">${esc(m.bio)}</p>` : '';
+  const company = m.company ? `<div class="company-row"><span class="company-chip">${esc(m.company)}</span></div>` : '', bio = m.bio ? `<p class="bio">${esc(m.bio)}</p>` : '';
   const statsRow = (m.yearsContributing ?? 0) > 0 ? `<div class="stats-row"><span class="stat-chip"><img src="${esc(cncfLogoUrl)}" class="stat-cncf-icon" alt="" aria-hidden="true"><span class="stat-val">Since ${currentYear - m.yearsContributing!} (${m.yearsContributing}y)</span></span></div>` : '';
   const maintainerBadge = `<span class="badge badge-category" style="background:#88888822; color:#888888; border-color:#88888844">Maintainer</span>`;
   return `<article class="maintainer-card" style="--card-accent: ${accentColor}"><div class="card-accent-bar"></div><div class="card-body"><a href="${profileUrl}" class="avatar-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img class="avatar" src="${avatarUrl}" width="64" height="64" alt="${esc(m.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="avatar-placeholder" style="display:none">${esc(m.name.charAt(0).toUpperCase())}</div></a><div class="card-main"><div class="card-identity-row"><div class="identity-info"><div class="name-row"><a class="person-name" href="${profileUrl}" target="_blank" rel="noopener noreferrer">${esc(m.name)}</a><a class="handle" href="${profileUrl}" target="_blank" rel="noopener noreferrer">@${esc(m.handle)}</a></div>${company}${bio}<div class="badges">${maintainerBadge}</div></div>${cardRight}</div>${statsRow}<div class="projects-row">${projectChips}</div></div></div></article>`;
