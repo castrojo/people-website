@@ -89,3 +89,75 @@ describe('cardOrigin', () => {
     expect(origin.y).toBeCloseTo(0.25);
   });
 });
+
+describe('fire functions — confetti calls', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    Object.defineProperty(window, 'innerWidth', { value: 1000, writable: true });
+    Object.defineProperty(window, 'innerHeight', { value: 800, writable: true });
+  });
+
+  function makeCard() {
+    const el = document.createElement('div');
+    vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+      left: 400, top: 300, width: 200, height: 100,
+      right: 600, bottom: 400, x: 400, y: 300, toJSON: () => ({})
+    } as DOMRect);
+    return el;
+  }
+
+  it('fireHearts calls confetti at least once on first invocation', async () => {
+    const confettiModule = await import('canvas-confetti');
+    const mockConfetti = confettiModule.default as unknown as ReturnType<typeof vi.fn>;
+    mockConfetti.mockClear();
+    const { fireHearts } = await import('../../src/lib/hero-confetti');
+    const el = makeCard();
+    fireHearts(el);
+    expect(mockConfetti).toHaveBeenCalled();
+  });
+
+  it('fireHearts does NOT call confetti on immediate second invocation (debounced)', async () => {
+    const confettiModule = await import('canvas-confetti');
+    const mockConfetti = confettiModule.default as unknown as ReturnType<typeof vi.fn>;
+    const { fireHearts } = await import('../../src/lib/hero-confetti');
+    const el = makeCard();
+    fireHearts(el); // prime the debounce
+    mockConfetti.mockClear();
+    fireHearts(el); // should be blocked
+    expect(mockConfetti).not.toHaveBeenCalled();
+  });
+
+  it('fireStarburst calls confetti once on first invocation', async () => {
+    const confettiModule = await import('canvas-confetti');
+    const mockConfetti = confettiModule.default as unknown as ReturnType<typeof vi.fn>;
+    mockConfetti.mockClear();
+    const { fireStarburst } = await import('../../src/lib/hero-confetti');
+    const el = makeCard();
+    fireStarburst(el);
+    expect(mockConfetti).toHaveBeenCalledTimes(1);
+  });
+
+  it('fireFountain calls confetti once on first invocation', async () => {
+    const confettiModule = await import('canvas-confetti');
+    const mockConfetti = confettiModule.default as unknown as ReturnType<typeof vi.fn>;
+    mockConfetti.mockClear();
+    // Need getComputedStyle to return something for --card-accent
+    vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+      getPropertyValue: () => '#D62293',
+    } as unknown as CSSStyleDeclaration);
+    const { fireFountain } = await import('../../src/lib/hero-confetti');
+    const el = makeCard();
+    fireFountain(el);
+    expect(mockConfetti).toHaveBeenCalledTimes(1);
+  });
+
+  it('fireConfetti calls confetti at least 3 times on first invocation', async () => {
+    const confettiModule = await import('canvas-confetti');
+    const mockConfetti = confettiModule.default as unknown as ReturnType<typeof vi.fn>;
+    mockConfetti.mockClear();
+    const { fireConfetti } = await import('../../src/lib/hero-confetti');
+    const el = makeCard();
+    fireConfetti(el);
+    expect(mockConfetti.mock.calls.length).toBeGreaterThanOrEqual(3);
+  });
+});
