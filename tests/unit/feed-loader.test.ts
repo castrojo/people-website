@@ -128,4 +128,49 @@ describe('renderCard — person card HTML', () => {
     const html = renderCard(baseEvent as any, {});
     expect(html).toContain('href="https://github.com/kaitoy"');
   });
+
+  it('renders bio text when person has a bio', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, bio: 'Cloud native enthusiast' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('Cloud native enthusiast');
+  });
+
+  it('renders a company chip when person has a company', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, company: 'Red Hat' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('Red Hat');
+    expect(html).toContain('company-chip');
+  });
+
+  it('renders pronouns when set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, pronouns: 'they/them' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('(they/them)');
+  });
+
+  it('renders avatar-placeholder with first initial when avatarUrl is absent', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const { avatarUrl: _, ...personNoAvatar } = baseEvent.person as any;
+    const event = { ...baseEvent, person: { ...personNoAvatar } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('avatar-placeholder');
+    expect(html).toContain('>K<'); // First initial of "Kaito"
+  });
+
+  it('renders ✎ Updated badge for type "updated"', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, type: 'updated' };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('✎ Updated');
+  });
+
+  it('renders LinkedIn social link when linkedin is set', async () => {
+    const { renderCard } = await import('../../src/lib/feed-loader');
+    const event = { ...baseEvent, person: { ...baseEvent.person, linkedin: 'https://linkedin.com/in/kaitoy' } };
+    const html = renderCard(event as any, {});
+    expect(html).toContain('href="https://linkedin.com/in/kaitoy"');
+  });
 });
