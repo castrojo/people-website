@@ -121,23 +121,14 @@ export const getActiveBanner = async (): Promise<BannerConfig | null> =>
  * Returns empty array if none available.
  */
 export async function getActiveBanners(): Promise<BannerConfig[]> {
-  const kubeconBanners = (await fetchBannersConfig()).filter(banner =>
-    banner.name?.includes('KubeCon') || banner.name?.includes('CloudNative')
+  const banners = (await fetchBannersConfig()).filter(b =>
+    b.name?.includes('KubeCon') || b.name?.includes('CloudNative')
   );
-
-  const configs: BannerConfig[] = [];
-  for (const banner of kubeconBanners) {
-    if (!banner.name || !banner.link || !banner.images?.['light-theme'] || !banner.images?.['dark-theme']) {
-      console.warn('Banner missing required fields, skipping:', banner);
-      continue;
+  return banners.flatMap(b => {
+    if (!b.name || !b.link || !b.images?.['light-theme'] || !b.images?.['dark-theme']) {
+      console.warn('Banner missing required fields, skipping:', b);
+      return [];
     }
-    configs.push({
-      name: banner.name,
-      link: banner.link,
-      lightImage: banner.images['light-theme'],
-      darkImage: banner.images['dark-theme'],
-    });
-  }
-
-  return configs;
+    return [{ name: b.name, link: b.link, lightImage: b.images['light-theme'], darkImage: b.images['dark-theme'] }];
+  });
 }
