@@ -60,30 +60,12 @@ export function renderMaintainerCard(m: SafeMaintainer, logos: Record<string, st
     return `<span class="project-chip" style="--chip-accent:${chipColor}; border-color:${chipColor}33; background:${chipColor}11">${logoImg}${esc(p)}</span>`;
   }).join('');
 
-  const logoTopRight = m.logoUrl
-    ? `<img class="program-logo" src="${esc(m.logoUrl)}" alt="" aria-hidden="true" loading="lazy" />`
-    : '';
-
-  const locationHtml = (m.countryFlag || m.location)
-    ? `<span class="location-right">${m.countryFlag ? esc(m.countryFlag) : ''} ${m.location ? esc(m.location) : ''}</span>`
-    : '';
-
-  const cardRight = (logoTopRight || locationHtml)
-    ? `<div class="card-right">${logoTopRight}${locationHtml}</div>`
-    : '';
-
-  const company = m.company
-    ? `<div class="company-row"><span class="company-chip">${esc(m.company)}</span></div>`
-    : '';
-
-  const bio = m.bio
-    ? `<p class="bio">${esc(m.bio)}</p>`
-    : '';
-
-  const statsRow = (m.yearsContributing ?? 0) > 0
-    ? `<div class="stats-row"><span class="stat-chip"><img src="${esc(cncfLogoUrl)}" class="stat-cncf-icon" alt="" aria-hidden="true"><span class="stat-val">Since ${currentYear - m.yearsContributing!} (${m.yearsContributing}y)</span></span></div>`
-    : '';
-
+  const logoTopRight = m.logoUrl ? `<img class="program-logo" src="${esc(m.logoUrl)}" alt="" aria-hidden="true" loading="lazy" />` : '';
+  const locationHtml = (m.countryFlag || m.location) ? `<span class="location-right">${m.countryFlag ? esc(m.countryFlag) : ''} ${m.location ? esc(m.location) : ''}</span>` : '';
+  const cardRight = (logoTopRight || locationHtml) ? `<div class="card-right">${logoTopRight}${locationHtml}</div>` : '';
+  const company = m.company ? `<div class="company-row"><span class="company-chip">${esc(m.company)}</span></div>` : '';
+  const bio = m.bio ? `<p class="bio">${esc(m.bio)}</p>` : '';
+  const statsRow = (m.yearsContributing ?? 0) > 0 ? `<div class="stats-row"><span class="stat-chip"><img src="${esc(cncfLogoUrl)}" class="stat-cncf-icon" alt="" aria-hidden="true"><span class="stat-val">Since ${currentYear - m.yearsContributing!} (${m.yearsContributing}y)</span></span></div>` : '';
   const maintainerBadge = `<span class="badge badge-category" style="background:#88888822; color:#888888; border-color:#88888844">Maintainer</span>`;
 
   return `<article class="maintainer-card" style="--card-accent: ${accentColor}">
