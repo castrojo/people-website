@@ -1,36 +1,15 @@
 // banners.ts — fetch and parse CNCF banner config from cncf.github.io/banners at build time.
-
-export interface BannerConfig {
-  name: string;
-  link: string;
-  lightImage: string;
-  darkImage: string;
-}
-
-interface RawBanner {
-  name?: string;
-  link?: string;
-  images?: {
-    'light-theme'?: string;
-    'dark-theme'?: string;
-  };
-}
-
-/**
- * Minimal inline YAML parser for banners.yml (no js-yaml dependency).
- * Handles list items with name/link/images keys; strips quotes; ignores blanks and comments.
- */
+export interface BannerConfig { name: string; link: string; lightImage: string; darkImage: string; }
+interface RawBanner { name?: string; link?: string; images?: { 'light-theme'?: string; 'dark-theme'?: string; }; }
+/** Minimal inline YAML parser for banners.yml (no js-yaml dependency). */
 export function parseBannersYaml(yamlText: string): RawBanner[] {
   const banners: RawBanner[] = [];
   let current: RawBanner | null = null;
   let inImages = false;
   const stripQuotes = (s: string): string => s.replace(/^['"]|['"]$/g, '').trim();
-
   for (const rawLine of yamlText.split('\n')) {
     const line = rawLine.trimEnd();
     if (!line.trim() || line.trim().startsWith('#')) continue;
-
-    // New top-level list item
     if (/^- /.test(line)) {
       if (current) banners.push(current);
       current = {};
@@ -44,44 +23,33 @@ export function parseBannersYaml(yamlText: string): RawBanner[] {
       }
       continue;
     }
-
     if (!current) continue;
-
     const trimmed = line.trim();
     const colonIdx = trimmed.indexOf(':');
     if (colonIdx === -1) continue;
-
     const key = trimmed.slice(0, colonIdx).trim();
     const val = trimmed.slice(colonIdx + 1).trim();
-
-    // Entering images block
     if (key === 'images' && !val) {
       inImages = true;
       current.images = {};
       continue;
     }
-
     if (inImages && current.images) {
-      // Detect end of images block: line indented less than image sub-keys
       const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
       if (indent <= 2) {
         inImages = false;
-        // Fall through to handle as top-level key
       } else {
         if (key === 'light-theme') current.images['light-theme'] = stripQuotes(val);
         else if (key === 'dark-theme') current.images['dark-theme'] = stripQuotes(val);
         continue;
       }
     }
-
     if (key === 'name') current.name = stripQuotes(val);
     else if (key === 'link') current.link = stripQuotes(val);
   }
-
   if (current) banners.push(current);
   return banners;
 }
-
 /** Fetches banners.yml from CNCF — returns empty array on error. */
 export async function fetchBannersConfig(): Promise<RawBanner[]> {
   try {
@@ -97,15 +65,10 @@ export async function fetchBannersConfig(): Promise<RawBanner[]> {
     return [];
   }
 }
-
 /** Returns the first active KubeCon banner, or null. */
 export const getActiveBanner = async (): Promise<BannerConfig | null> =>
   (await getActiveBanners())[0] ?? null;
-
-/**
- * Get all active KubeCon banners from CNCF configuration.
- * Returns empty array if none available.
- */
+/** Get all active KubeCon banners from CNCF configuration. */
 export async function getActiveBanners(): Promise<BannerConfig[]> {
   const banners = (await fetchBannersConfig()).filter(b =>
     b.name?.includes('KubeCon') || b.name?.includes('CloudNative')
