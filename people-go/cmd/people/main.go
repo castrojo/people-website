@@ -54,15 +54,10 @@ func main() {
 		ghClient = githubclient.New(ctx, token)
 	}
 
-	// ── Check both upstreams independently ────────────────────────────────
+	// ── Check people upstream ─────────────────────────────────────────────
 	latestPeopleSHA, err := fc.LatestSHA(ctx)
 	if err != nil {
 		log.Fatalf("latest people SHA: %v", err)
-	}
-	latestLandscapeSHA, err := fc.LatestLandscapeSHA(ctx)
-	if err != nil {
-		log.Printf("warn: latest landscape SHA: %v — skipping landscape sync", err)
-		latestLandscapeSHA = cached.LandscapeSHA // treat as unchanged on error
 	}
 
 	latestFoundationSHA, err := fc.LatestFoundationSHA(ctx)
@@ -72,25 +67,20 @@ func main() {
 	}
 
 	syncPeople := latestPeopleSHA != cached.LastSHA
-	syncLandscape := latestLandscapeSHA != cached.LandscapeSHA
 	syncFoundation := latestFoundationSHA != cached.FoundationSHA
 
-	// ── Sync landscape logos ──────────────────────────────────────────────
-	if syncLandscape {
-		log.Printf("cncf/landscape updated: %s → %s — syncing logos",
-			shortSHA(cached.LandscapeSHA), shortSHA(latestLandscapeSHA))
-		logos, err := fc.FetchLandscapeLogos(ctx)
-		if err != nil {
-			log.Printf("warn: fetch landscape logos: %v — keeping existing landscape_logos.json", err)
-		} else {
-			if err := writer.WriteLandscapeLogos(outDir, logos); err != nil {
-				log.Fatalf("write landscape_logos.json: %v", err)
-			}
-			log.Printf("wrote landscape_logos.json (%d entries)", len(logos))
-			cached.LandscapeSHA = latestLandscapeSHA
+	// ── Sync landscape logos (via ETag on full.json) ──────────────────────
+	logos, newLogoETag, logoModified, err := fc.FetchLandscapeLogos(ctx, cached.LandscapeETag)
+	if err != nil {
+		log.Printf("warn: fetch landscape logos: %v — keeping existing landscape_logos.json", err)
+	} else if logoModified {
+		if err := writer.WriteLandscapeLogos(outDir, logos); err != nil {
+			log.Fatalf("write landscape_logos.json: %v", err)
 		}
+		log.Printf("wrote landscape_logos.json (%d entries)", len(logos))
+		cached.LandscapeETag = newLogoETag
 	} else {
-		log.Printf("cncf/landscape unchanged (%s) — skipping logo sync", shortSHA(latestLandscapeSHA))
+		log.Printf("landscape logos unchanged (ETag match) — skipping logo sync")
 	}
 
 	// ── Sync maintainers (cncf/foundation project-maintainers.csv) ───────
@@ -238,20 +228,20 @@ func main() {
 		}
 		if err := stateMgr.SaveState(state.State{
 			LastSHA:        latestPeopleSHA,
-			LandscapeSHA:   cached.LandscapeSHA,
+			LandscapeETag:  cached.LandscapeETag,
 			FoundationSHA:  cached.FoundationSHA,
 			FoundationETag: cached.FoundationETag,
 			UpdatedAt:      now,
 		}); err != nil {
 			log.Fatalf("save state: %v", err)
 		}
-		log.Printf("done — people SHA %s, landscape SHA %s, foundation SHA %s",
-			shortSHA(latestPeopleSHA), shortSHA(cached.LandscapeSHA), shortSHA(cached.FoundationSHA))
+		log.Printf("done — people SHA %s, foundation SHA %s",
+			shortSHA(latestPeopleSHA), shortSHA(cached.FoundationSHA))
 	} else {
 		log.Printf("cncf/people unchanged (%s) — skipping people sync", shortSHA(latestPeopleSHA))
 		if err := stateMgr.SaveState(state.State{
 			LastSHA:        cached.LastSHA,
-			LandscapeSHA:   cached.LandscapeSHA,
+			LandscapeETag:  cached.LandscapeETag,
 			FoundationSHA:  cached.FoundationSHA,
 			FoundationETag: cached.FoundationETag,
 			UpdatedAt:      time.Now().UTC(),

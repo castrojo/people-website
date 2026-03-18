@@ -115,3 +115,58 @@ func TestParseMaintainersCSV_DeduplicatesHandles(t *testing.T) {
 		t.Errorf("expected Maturity = Graduated (highest), got %q", maintainers[0].Maturity)
 	}
 }
+
+func TestParseLandscapeFullJSON_ExtractsLogos(t *testing.T) {
+	body := []byte(`{"items":[
+		{"name":"Kubernetes","logo":"logos/kubernetes.svg"},
+		{"name":"Prometheus","logo":"logos/prometheus.svg"}
+	]}`)
+	logos, err := parseLandscapeFullJSON(body)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if logos["Kubernetes"] != "https://landscape.cncf.io/logos/kubernetes.svg" {
+		t.Errorf("Kubernetes logo = %q, want full URL", logos["Kubernetes"])
+	}
+	if logos["prometheus"] != "https://landscape.cncf.io/logos/prometheus.svg" {
+		t.Errorf("lowercase key missing or wrong: %q", logos["prometheus"])
+	}
+}
+
+func TestParseLandscapeFullJSON_SkipsEmptyNameOrLogo(t *testing.T) {
+	body := []byte(`{"items":[
+		{"name":"","logo":"logos/a.svg"},
+		{"name":"HasLogo","logo":""},
+		{"name":"Valid","logo":"logos/valid.svg"}
+	]}`)
+	logos, err := parseLandscapeFullJSON(body)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if _, ok := logos[""]; ok {
+		t.Error("empty-name entry should be skipped")
+	}
+	if _, ok := logos["HasLogo"]; ok {
+		t.Error("empty-logo entry should be skipped")
+	}
+	if logos["Valid"] != "https://landscape.cncf.io/logos/valid.svg" {
+		t.Errorf("Valid logo = %q", logos["Valid"])
+	}
+}
+
+func TestParseLandscapeFullJSON_InvalidJSON(t *testing.T) {
+	_, err := parseLandscapeFullJSON([]byte("not json"))
+	if err == nil {
+		t.Error("expected error for invalid JSON, got nil")
+	}
+}
+
+func TestParseLandscapeFullJSON_EmptyItems(t *testing.T) {
+	logos, err := parseLandscapeFullJSON([]byte(`{"items":[]}`))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(logos) != 0 {
+		t.Errorf("expected empty map, got %v", logos)
+	}
+}

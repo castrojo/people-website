@@ -84,7 +84,7 @@ These are tracked gaps — not regressions — identified when designing the sim
 
 4. **[DONE] Extract CSS to src/styles/** — `src/styles/people.css` created; all inline styles from PeopleLayout.astro moved there. Extracted 2026-03-18.
 
-5. **[LOW] Switch logo source from landscape.yml to full.json** — logos currently fetched from YAML, same data available in full.json as JSON. Simplifies parsing.
+5. **[DONE] Switch logo source from landscape.yml to full.json** — `FetchLandscapeLogos` now fetches `https://landscape.cncf.io/data/full.json` (JSON) instead of `landscape.yml` (YAML). ETag-based caching replaces GitHub API SHA check. Removed `gopkg.in/yaml.v3` dependency. State uses `LandscapeETag` instead of `LandscapeSHA`. 4 new Go tests added (TDD). Done 2026-03-19.
 
 ## Skills
 

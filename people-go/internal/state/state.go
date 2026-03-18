@@ -17,10 +17,11 @@ const (
 
 // State tracks the last processed commit SHAs for both watched repos and when the sync ran.
 type State struct {
-	LastSHA        string    `json:"lastSha"`        // last processed SHA for cncf/people
-	LandscapeSHA   string    `json:"landscapeSha"`   // last processed SHA for cncf/landscape
-	FoundationSHA  string    `json:"foundationSha"`  // last processed SHA for cncf/foundation project-maintainers.csv
-	FoundationETag string    `json:"foundationETag"` // ETag for conditional HTTP GET
+	LastSHA        string    `json:"lastSha"`                  // last processed SHA for cncf/people
+	LandscapeETag  string    `json:"landscapeETag"`            // ETag for conditional GET on landscape full.json
+	LandscapeSHA   string    `json:"landscapeSha,omitempty"`   // deprecated; was landscape.yml commit SHA
+	FoundationSHA  string    `json:"foundationSha"`            // last processed SHA for cncf/foundation
+	FoundationETag string    `json:"foundationETag"`           // ETag for conditional HTTP GET
 	UpdatedAt      time.Time `json:"updatedAt"`
 }
 

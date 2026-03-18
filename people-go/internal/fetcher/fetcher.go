@@ -12,18 +12,14 @@ import (
 	"github.com/castrojo/people-website/people-go/internal/models"
 	"github.com/google/go-github/v68/github"
 	"golang.org/x/oauth2"
-	"gopkg.in/yaml.v3"
 )
 
 const (
 	cncfOwner         = "cncf"
 	cncfRepo          = "people"
 	peopleFile        = "people.json"
-	landscapeOwner    = "cncf"
-	landscapeRepo     = "landscape"
-	landscapeFile     = "landscape.yml"
-	landscapeRawURL   = "https://raw.githubusercontent.com/cncf/landscape/master/landscape.yml"
-	logoBaseURL       = "https://raw.githubusercontent.com/cncf/landscape/master/hosted_logos/"
+	fullJSONURL       = "https://landscape.cncf.io/data/full.json"
+	landscapeLogoBase = "https://landscape.cncf.io/"
 	foundationOwner   = "cncf"
 	foundationRepo    = "foundation"
 	maintainersFile   = "project-maintainers.csv"
@@ -61,76 +57,71 @@ func (c *Client) LatestSHA(ctx context.Context) (string, error) {
 }
 
 // LatestLandscapeSHA returns the latest commit SHA touching landscape.yml in cncf/landscape.
-func (c *Client) LatestLandscapeSHA(ctx context.Context) (string, error) {
-	commits, _, err := c.gh.Repositories.ListCommits(ctx, landscapeOwner, landscapeRepo, &github.CommitsListOptions{
-		Path:        landscapeFile,
-		ListOptions: github.ListOptions{PerPage: 1},
-	})
-	if err != nil {
-		return "", fmt.Errorf("list landscape commits: %w", err)
-	}
-	if len(commits) == 0 {
-		return "", fmt.Errorf("no commits found for %s", landscapeFile)
-	}
-	return commits[0].GetSHA(), nil
+// fullJSONItem holds the fields we need from each landscape full.json item.
+type fullJSONItem struct {
+	Name string `json:"name"`
+	Logo string `json:"logo"`
 }
 
-// landscapeYAML holds just enough of the landscape.yml structure to extract
-// project names and logo filenames.
-type landscapeYAML struct {
-	Landscape []struct {
-		Subcategories []struct {
-			Items []struct {
-				Name string `yaml:"name"`
-				Logo string `yaml:"logo"`
-			} `yaml:"items"`
-		} `yaml:"subcategories"`
-	} `yaml:"landscape"`
+// fullJSONData is the minimal top-level structure of landscape full.json.
+type fullJSONData struct {
+	Items []fullJSONItem `json:"items"`
 }
 
-// FetchLandscapeLogos downloads landscape.yml from cncf/landscape and returns
-// a normalized map of project name (lowercase) → full logo URL.
-// It uses the raw GitHub URL to avoid API rate limits on large files.
-func (c *Client) FetchLandscapeLogos(ctx context.Context) (map[string]string, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, landscapeRawURL, nil)
+// parseLandscapeFullJSON extracts a name→logo URL map from a full.json body.
+// The map contains both original-case and lowercase keys for fuzzy matching.
+func parseLandscapeFullJSON(body []byte) (map[string]string, error) {
+	var data fullJSONData
+	if err := json.Unmarshal(body, &data); err != nil {
+		return nil, fmt.Errorf("parse full.json: %w", err)
+	}
+	logos := make(map[string]string)
+	for _, item := range data.Items {
+		if item.Name == "" || item.Logo == "" {
+			continue
+		}
+		url := landscapeLogoBase + item.Logo
+		logos[item.Name] = url
+		logos[strings.ToLower(item.Name)] = url
+	}
+	return logos, nil
+}
+
+// FetchLandscapeLogos downloads the CNCF landscape full.json and returns
+// a normalized map of project name → full logo URL.
+// prevETag enables conditional GET (pass "" to always fetch).
+// Returns (logos, newETag, modified, error). When modified is false, logos is nil.
+func (c *Client) FetchLandscapeLogos(ctx context.Context, prevETag string) (map[string]string, string, bool, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fullJSONURL, nil)
 	if err != nil {
-		return nil, fmt.Errorf("build request: %w", err)
+		return nil, "", false, fmt.Errorf("build request: %w", err)
+	}
+	if prevETag != "" {
+		req.Header.Set("If-None-Match", prevETag)
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("download landscape.yml: %w", err)
+		return nil, "", false, fmt.Errorf("fetch full.json: %w", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotModified {
+		return nil, prevETag, false, nil
+	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("download landscape.yml: HTTP %d", resp.StatusCode)
+		return nil, "", false, fmt.Errorf("fetch full.json: HTTP %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("read landscape.yml: %w", err)
+		return nil, "", false, fmt.Errorf("read full.json: %w", err)
 	}
 
-	var parsed landscapeYAML
-	if err := yaml.Unmarshal(body, &parsed); err != nil {
-		return nil, fmt.Errorf("parse landscape.yml: %w", err)
+	logos, err := parseLandscapeFullJSON(body)
+	if err != nil {
+		return nil, "", false, err
 	}
-
-	logos := make(map[string]string)
-	for _, cat := range parsed.Landscape {
-		for _, sub := range cat.Subcategories {
-			for _, item := range sub.Items {
-				if item.Name == "" || item.Logo == "" {
-					continue
-				}
-				// Normalize: strip leading "./" that appears in some landscape.yml entries
-				logo := strings.TrimPrefix(item.Logo, "./")
-				url := logoBaseURL + logo
-				logos[item.Name] = url
-				logos[strings.ToLower(item.Name)] = url
-			}
-		}
-	}
-	return logos, nil
+	return logos, resp.Header.Get("ETag"), true, nil
 }
 
 // FetchPeople downloads people.json at the given commit SHA and returns
