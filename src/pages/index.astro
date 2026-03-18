@@ -13,11 +13,8 @@ import { getActiveBanners } from '../lib/banners';
 import changelogRaw from '../data/changelog.json';
 import landscapeLogosRaw from '../data/landscape_logos.json';
 import memorialList from '../data/memorial.json';
-import tocList from '../data/toc.json';
-import tabList from '../data/tab.json';
 import leadershipList from '../data/leadership.json';
-import gbList from '../data/gb.json';
-import marketingList from '../data/marketing.json';
+import leadershipRoles from '../data/leadership-roles.json';
 import staffSupportData from '../data/staff-support.json';
 import peopleEmeritusList from '../data/people-emeritus.json';
 
@@ -236,11 +233,11 @@ interface OrgMember { handle: string; name: string; title: string; }
 interface FlexOrgMember { handle?: string; name: string; title?: string; }
 // EmeritusMember: people who left CNCF roles
 interface EmeritusMember { handle?: string; name: string; removedDate?: string; category?: string[]; }
-const tocMembers = tocList as OrgMember[];
-const tabMembers = tabList as OrgMember[];
+const tocMembers = (leadershipRoles as any).toc as OrgMember[];
+const tabMembers = (leadershipRoles as any).tab as OrgMember[];
 const leadershipMembers = leadershipList as OrgMember[];
-const gbMembers = gbList as FlexOrgMember[];
-const marketingMembers = marketingList as FlexOrgMember[];
+const gbMembers = ((leadershipRoles as any)['governing-board']) as FlexOrgMember[];
+const marketingMembers = (leadershipRoles as any).marketing as FlexOrgMember[];
 const emeritusMembers = peopleEmeritusList as EmeritusMember[];
 
 // CNCF Staff providing Support — keyed by tab name

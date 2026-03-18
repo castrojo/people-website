@@ -1,6 +1,9 @@
 package writer
 
 import (
+	"encoding/json"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/castrojo/people-website/people-go/internal/models"
@@ -193,5 +196,109 @@ func TestCategoryBalancedPick_DiversityGuaranteed(t *testing.T) {
 	}
 	if !diverseFound {
 		t.Error("expected at least one she/her or they/them person in balanced pick when pool contains one")
+	}
+}
+
+// makeRawPerson builds a minimal RawPerson for testing leadership writers.
+func makeRawPerson(name, github string, categories []string, gbRole, tocRole, tabRole string) models.RawPerson {
+	return models.RawPerson{
+		Name:     name,
+		GitHub:   github,
+		Category: categories,
+		GBRole:   gbRole,
+		TOCRole:  tocRole,
+		TABRole:  tabRole,
+	}
+}
+
+func TestWriteLeadershipRoles_WritesAllSections(t *testing.T) {
+	dir := t.TempDir()
+	orig, _ := os.Getwd()
+	_ = os.Chdir(dir)
+	t.Cleanup(func() { _ = os.Chdir(orig) })
+
+	people := []models.RawPerson{
+		makeRawPerson("Alice Chair", "alicechair", []string{"Technical Oversight Committee"}, "", "Chair", ""),
+		makeRawPerson("Bob Member", "bobmember", []string{"End User TAB"}, "", "", "Member"),
+		makeRawPerson("Carol GB", "carolgb", []string{"Governing Board"}, "Vice Chair", "", ""),
+		makeRawPerson("Dana Marketing", "danamarketing", []string{"Marketing Committee"}, "", "", ""),
+	}
+
+	if err := WriteLeadershipRoles(dir, people); err != nil {
+		t.Fatalf("WriteLeadershipRoles: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(dir, "leadership-roles.json"))
+	if err != nil {
+		t.Fatalf("leadership-roles.json not created: %v", err)
+	}
+
+	var roles LeadershipRoles
+	if err := json.Unmarshal(data, &roles); err != nil {
+		t.Fatalf("unmarshal leadership-roles.json: %v", err)
+	}
+
+	if len(roles.TOC) != 1 || roles.TOC[0].Name != "Alice Chair" {
+		t.Errorf("TOC: expected Alice Chair, got %v", roles.TOC)
+	}
+	if len(roles.TAB) != 1 || roles.TAB[0].Name != "Bob Member" {
+		t.Errorf("TAB: expected Bob Member, got %v", roles.TAB)
+	}
+	if len(roles.GB) != 1 || roles.GB[0].Name != "Carol GB" {
+		t.Errorf("GB: expected Carol GB, got %v", roles.GB)
+	}
+	if len(roles.Marketing) != 1 || roles.Marketing[0].Name != "Dana Marketing" {
+		t.Errorf("Marketing: expected Dana Marketing, got %v", roles.Marketing)
+	}
+}
+
+func TestWriteLeadershipRoles_SortsByRole(t *testing.T) {
+	dir := t.TempDir()
+	orig, _ := os.Getwd()
+	_ = os.Chdir(dir)
+	t.Cleanup(func() { _ = os.Chdir(orig) })
+
+	people := []models.RawPerson{
+		makeRawPerson("Zara Member", "zaramember", []string{"Technical Oversight Committee"}, "", "Member", ""),
+		makeRawPerson("Aaron Chair", "aaronchair", []string{"Technical Oversight Committee"}, "", "Chair", ""),
+	}
+
+	if err := WriteLeadershipRoles(dir, people); err != nil {
+		t.Fatalf("WriteLeadershipRoles: %v", err)
+	}
+
+	data, _ := os.ReadFile(filepath.Join(dir, "leadership-roles.json"))
+	var roles LeadershipRoles
+	json.Unmarshal(data, &roles) //nolint:errcheck
+
+	if len(roles.TOC) < 2 {
+		t.Fatalf("expected 2 TOC entries, got %d", len(roles.TOC))
+	}
+	if roles.TOC[0].Name != "Aaron Chair" {
+		t.Errorf("expected Chair to sort first, got %q", roles.TOC[0].Name)
+	}
+}
+
+func TestWriteLeadershipRoles_EmptyPeopleProducesEmptySections(t *testing.T) {
+	dir := t.TempDir()
+	orig, _ := os.Getwd()
+	_ = os.Chdir(dir)
+	t.Cleanup(func() { _ = os.Chdir(orig) })
+
+	if err := WriteLeadershipRoles(dir, nil); err != nil {
+		t.Fatalf("WriteLeadershipRoles: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(dir, "leadership-roles.json"))
+	if err != nil {
+		t.Fatalf("leadership-roles.json not created: %v", err)
+	}
+
+	var roles LeadershipRoles
+	if err := json.Unmarshal(data, &roles); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if len(roles.TOC)+len(roles.TAB)+len(roles.GB)+len(roles.Marketing) != 0 {
+		t.Errorf("expected all sections empty, got %+v", roles)
 	}
 }

@@ -198,20 +198,11 @@ func main() {
 		}
 
 		// Auto-generate leadership JSON files from live cncf/people data.
-		if err := writer.WriteTOC(outDir, people); err != nil {
-			log.Printf("warn: write toc.json: %v", err)
+		if err := writer.WriteLeadershipRoles(outDir, people); err != nil {
+			log.Printf("warn: write leadership-roles.json: %v", err)
 		}
 		if err := writer.WriteStaffSupport(outDir, people); err != nil {
 			log.Printf("WriteStaffSupport: %v", err)
-		}
-		if err := writer.WriteTAB(outDir, people); err != nil {
-			log.Printf("warn: write tab.json: %v", err)
-		}
-		if err := writer.WriteGB(outDir, people); err != nil {
-			log.Printf("warn: write gb.json: %v", err)
-		}
-		if err := writer.WriteMarketing(outDir, people); err != nil {
-			log.Printf("warn: write marketing.json: %v", err)
 		}
 
 		// Append removed people to the emeritus list before writing hero rotations.

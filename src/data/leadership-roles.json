@@ -1,0 +1,255 @@
+{
+  "toc": [
+    {
+      "handle": "angellk",
+      "name": "Karena Angell",
+      "title": "Chair"
+    },
+    {
+      "handle": "kevin-wangzefeng",
+      "name": "Kevin (Zefeng) Wang",
+      "title": "Vice Chair"
+    },
+    {
+      "handle": "chira001",
+      "name": "Alex Chircop",
+      "title": "Member"
+    },
+    {
+      "handle": "chadbeaudin",
+      "name": "Chad Beaudin",
+      "title": "Member"
+    },
+    {
+      "handle": "dims",
+      "name": "Davanum Srinivas",
+      "title": "Member"
+    },
+    {
+      "handle": "TheFoxAtWork",
+      "name": "Emily Fox",
+      "title": "Member"
+    },
+    {
+      "handle": "kfaseela",
+      "name": "Faseela K",
+      "title": "Member"
+    },
+    {
+      "handle": "jeremyrickard",
+      "name": "Jeremy Rickard",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Katie Gamanji",
+      "title": "Member"
+    },
+    {
+      "handle": "linsun",
+      "name": "Lin Sun",
+      "title": "Member"
+    },
+    {
+      "handle": "raravena80",
+      "name": "Ricardo Aravena",
+      "title": "Shadow (GB)"
+    },
+    {
+      "handle": "rochaporto",
+      "name": "Ricardo Rocha",
+      "title": "Member"
+    }
+  ],
+  "tab": [
+    {
+      "handle": "abebars",
+      "name": "Ahmed Bebars",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Alolita Sharma",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Ben Somogyi",
+      "title": "Member"
+    },
+    {
+      "handle": "chadbeaudin",
+      "name": "Chad Beaudin",
+      "title": "Member"
+    },
+    {
+      "handle": "jrsapi",
+      "name": "Joseph Sandoval",
+      "title": "TAB Vice Chair"
+    },
+    {
+      "handle": "",
+      "name": "Katie Gamanji",
+      "title": "Member"
+    },
+    {
+      "handle": "KentaTada",
+      "name": "Kenta Tada",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Michael Amundson",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Mike Bowen",
+      "title": "Member"
+    },
+    {
+      "handle": "rochaporto",
+      "name": "Ricardo Rocha",
+      "title": "TAB Chair"
+    },
+    {
+      "handle": "gnawux",
+      "name": "Xu Wang",
+      "title": "Member"
+    }
+  ],
+  "governing-board": [
+    {
+      "handle": "cblecker",
+      "name": "Christoph Blecker",
+      "title": "Chair, Kubernetes Rep"
+    },
+    {
+      "handle": "",
+      "name": "Jan Mel\u00e9n",
+      "title": "Vice Chair, Gold Member Rep"
+    },
+    {
+      "handle": "lachie83",
+      "name": "Lachlan Evenson",
+      "title": "Vice Chair"
+    },
+    {
+      "handle": "alena1108",
+      "name": "Alena Prokharchyk",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Betty Junod",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Bill Ren (Ren Xudong)",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Chris Wright",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Jeremy Garcia",
+      "title": "Silver Member Rep"
+    },
+    {
+      "handle": "jimternet",
+      "name": "Jim Beyers",
+      "title": "Member"
+    },
+    {
+      "handle": "angellk",
+      "name": "Karena Angell",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Li Yi",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Liz Rice",
+      "title": "Developer Seat Rep"
+    },
+    {
+      "handle": "mkorbi",
+      "name": "Max K\u00f6rb\u00e4cher",
+      "title": "Silver Member Rep"
+    },
+    {
+      "handle": "maximilianbraun",
+      "name": "Maximilian Braun",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Mike Bufano",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Mike Stefaniak",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Naresh Duddu",
+      "title": "Member"
+    },
+    {
+      "handle": "rochaporto",
+      "name": "Ricardo Rocha",
+      "title": "Member"
+    },
+    {
+      "handle": "scheeles",
+      "name": "Sebastian Scheele",
+      "title": "Silver Member Rep"
+    },
+    {
+      "handle": "",
+      "name": "Sudha Raghavan",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Takao Indoh",
+      "title": "Member"
+    },
+    {
+      "handle": "gnawux",
+      "name": "Xu Wang",
+      "title": "Gold Member Rep"
+    },
+    {
+      "handle": "yuichi-nakamura",
+      "name": "Yuichi Nakamura",
+      "title": "Gold Member Rep"
+    }
+  ],
+  "marketing": [
+    {
+      "handle": "",
+      "name": "Ariel Jatib",
+      "title": "Member"
+    },
+    {
+      "handle": "",
+      "name": "Jiayao (Julia) Han",
+      "title": "Member"
+    },
+    {
+      "handle": "yaronha",
+      "name": "Yaron Haviv",
+      "title": "Member"
+    }
+  ]
+}

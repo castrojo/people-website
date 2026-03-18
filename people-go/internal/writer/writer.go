@@ -487,6 +487,81 @@ func WriteMarketing(outDir string, people []models.RawPerson) error {
 		func(p models.RawPerson) string { return "" })
 }
 
+// LeadershipRoles is the unified output format for leadership-roles.json.
+// It combines TOC, TAB, Governing Board, and Marketing Committee into one file,
+// replacing the separate toc.json, tab.json, gb.json, and marketing.json files.
+type LeadershipRoles struct {
+	TOC       []LeadershipEntry `json:"toc"`
+	TAB       []LeadershipEntry `json:"tab"`
+	GB        []LeadershipEntry `json:"governing-board"`
+	Marketing []LeadershipEntry `json:"marketing"`
+}
+
+// buildLeadershipEntries is the shared logic for building sorted leadership entry lists.
+func buildLeadershipEntries(category string, people []models.RawPerson, roleFunc func(models.RawPerson) string) []LeadershipEntry {
+	var entries []LeadershipEntry
+	for _, p := range people {
+		hasCat := false
+		for _, c := range p.Category {
+			if c == category {
+				hasCat = true
+				break
+			}
+		}
+		if !hasCat {
+			continue
+		}
+		handle := p.GitHubHandle()
+		if handle == "" {
+			log.Printf("warn: %s member %q has no GitHub handle", category, p.Name)
+		}
+		title := roleFunc(p)
+		if title == "" {
+			title = "Member"
+		}
+		entries = append(entries, LeadershipEntry{Handle: handle, Name: p.Name, Title: title})
+	}
+	sort.Slice(entries, func(i, j int) bool {
+		ki, kj := leadershipSortKey(entries[i].Title), leadershipSortKey(entries[j].Title)
+		if ki != kj {
+			return ki < kj
+		}
+		return entries[i].Name < entries[j].Name
+	})
+	return entries
+}
+
+// WriteLeadershipRoles writes a unified leadership-roles.json combining TOC, TAB,
+// Governing Board, and Marketing Committee sections. Replaces the four separate files.
+func WriteLeadershipRoles(outDir string, people []models.RawPerson) error {
+	roles := LeadershipRoles{
+		TOC:       buildLeadershipEntries("Technical Oversight Committee", people, func(p models.RawPerson) string { return p.TOCRole }),
+		TAB:       buildLeadershipEntries("End User TAB", people, func(p models.RawPerson) string { return p.TABRole }),
+		GB:        buildLeadershipEntries("Governing Board", people, func(p models.RawPerson) string { return p.GBRole }),
+		Marketing: buildLeadershipEntries("Marketing Committee", people, func(models.RawPerson) string { return "" }),
+	}
+	if roles.TOC == nil {
+		roles.TOC = []LeadershipEntry{}
+	}
+	if roles.TAB == nil {
+		roles.TAB = []LeadershipEntry{}
+	}
+	if roles.GB == nil {
+		roles.GB = []LeadershipEntry{}
+	}
+	if roles.Marketing == nil {
+		roles.Marketing = []LeadershipEntry{}
+	}
+	data, err := json.MarshalIndent(roles, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		return err
+	}
+	return os.WriteFile(filepath.Join(outDir, "leadership-roles.json"), data, 0o644)
+}
+
 // EmeritusEntry records a former CNCF community member.
 type EmeritusEntry struct {
 	Handle      string   `json:"handle"`
