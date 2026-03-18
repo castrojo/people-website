@@ -76,13 +76,13 @@ Committed (manually maintained):
 
 These are tracked gaps — not regressions — identified when designing the simpler projects/endusers architecture:
 
-1. **[HIGH] Extract person-renderer.ts** — `PersonCard.astro` + `feed-loader.ts` duplicate ~765 lines of card HTML. Any card change must be made in BOTH files or they drift. This is the #1 source of bugs. Extract to single `src/lib/person-renderer.ts` mirroring `project-renderer.ts` pattern.
+1. **[DONE] Extract person-renderer.ts** — `PersonCard.astro` + `feed-loader.ts` now share `src/lib/person-renderer.ts`. Fixed divergence bug: lazy-loaded cards were showing '− Left' for removed people while static cards showed 'Emeritus'. Extracted 2026-03-18.
 
-2. **[HIGH] Extract keyboard.ts and tabs.ts** — Unlike projects/endusers which have `src/lib/keyboard.ts` and `src/lib/tabs.ts` as standalone modules with unit tests, people-website embeds this logic in `PeopleLayout.astro`. Extract to separate files, add Vitest unit tests.
+2. **[DONE] Extract keyboard.ts and tabs.ts** — `src/lib/keyboard.ts` (initSearchClear, initHelpButton) and `src/lib/tabs.ts` (TAB_CATEGORY_MAP, ALPHA_TABS, applyTab, initTabs) extracted from PeopleLayout.astro. Unit tests added. Extracted 2026-03-18.
 
-3. **[MEDIUM] Consolidate JSON data files** — 20+ data files in `src/data/`. Many role-specific files (`gb.json`, `toc.json`, `tab.json`, `marketing.json`, `staff-assignments.json`) could be unified into one `leadership.json`. The changelog sharding (0-3) is a workaround for file size — evaluate if still needed.
+3. **[MEDIUM] Consolidate JSON data files** — 20+ data files in `src/data/`. Many role-specific files (`gb.json`, `toc.json`, `tab.json`, `marketing.json`, `staff-assignments.json`) could be unified into one `leadership.json`. The changelog sharding (0-7) is a workaround for file size — evaluate if still needed.
 
-4. **[MEDIUM] Extract CSS to src/styles/** — Unlike projects-website which has `variables.css` + `layout.css` + `cards.css` as separate importable files, people-website has all CSS inline in `PeopleLayout.astro`. Extract to `src/styles/` directory.
+4. **[DONE] Extract CSS to src/styles/** — `src/styles/people.css` created; all inline styles from PeopleLayout.astro moved there. Extracted 2026-03-18.
 
 5. **[LOW] Switch logo source from landscape.yml to full.json** — logos currently fetched from YAML, same data available in full.json as JSON. Simplifies parsing.
 
@@ -151,7 +151,15 @@ Branch is `main`. Push directly (castrojo-owned, no fork workflow).
 
 ---
 
-## Header Migration (PENDING — canonical design from projects-website)
+## Header Migration (COMPLETE — 2026-03-16)
+
+The canonical header was finalized on 2026-03-16. All CSS values are correct:
+- Logo: 42×42 ✅
+- No slogan ✅
+- nav-group sibling to header-left ✅
+- `flex: 0 0 240px` on `.header-left` ✅
+- `white-space: nowrap` on `.site-title` ✅
+- `width: 42px` explicit on `.cncf-logo-wrapper img` ✅
 
 > **Status:** Not yet implemented. projects-website is the reference. Implement this section exactly.
 
