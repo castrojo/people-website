@@ -1,0 +1,51 @@
+/* people.css — people-website-specific styles extracted from PeopleLayout.astro */
+
+/* SVG logo dark/light toggle (layout.css handles .cncf-logo-wrapper img; this handles SVG components) */
+.cncf-logo-wrapper .logo-dark { display: none; }
+[data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
+[data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
+.cncf-logo-wrapper svg { width: 42px; height: 42px; }
+
+/* Memorial tab — pushed to the right end, muted style */
+.tab-memorial { margin-left: auto; color: #9ca3af; }
+.tab-memorial:hover { color: var(--color-text-primary); }
+.tab-memorial.active { color: var(--color-text-primary); border-bottom-color: #6b7280; }
+
+/* Sidebar gap (people uses 1.5rem; layout.css default is 1rem) */
+.sidebar { gap: 1.5rem; }
+
+/* Footer */
+.site-footer {
+  background: var(--color-bg-default);
+  border-top: 1px solid var(--color-border-default);
+  padding: 2rem 0;
+  margin-top: 3rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+.site-footer a { color: var(--color-text-link); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border-width: 0;
+}
+
+/* Sidebar card and heading styles (used by slot content) */
+.sidebar-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border-default);
+}
+.sidebar-section {
+  background: var(--color-bg-default);
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  padding: 1.5rem;
+}

@@ -6,6 +6,7 @@ import SiteSwitcher from '../components/SiteSwitcher.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import '../styles/variables.css';
 import '../styles/layout.css';
+import '../styles/people.css';
 
 interface Props {
   pageTitle?: string;
@@ -120,165 +121,23 @@ const baseUrl = (import.meta.env.BASE_URL as string).replace(/\/*$/, '/');
 </html>
 
 <script>
+  import { initSearchClear, initHelpButton } from '../lib/keyboard';
+  import { initTabs } from '../lib/tabs';
+
   const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const searchClear = document.getElementById('search-clear') as HTMLButtonElement | null;
-  if (searchInput && searchClear) {
-    searchInput.addEventListener('input', () => {
-      searchClear.style.display = searchInput.value ? 'flex' : 'none';
-    });
-    searchClear.addEventListener('click', () => {
-      searchInput.value = '';
-      searchClear.style.display = 'none';
-      searchInput.dispatchEvent(new Event('input'));
-      searchInput.focus();
-    });
+  if (searchInput && searchClear) initSearchClear(searchInput, searchClear);
+
+  const helpBtn = document.getElementById('help-button');
+  if (helpBtn) {
+    initHelpButton(
+      helpBtn,
+      document.getElementById('keyboard-help-modal'),
+      document.getElementById('keyboard-help-backdrop'),
+    );
   }
 
-  document.getElementById('help-button')?.addEventListener('click', () => {
-    document.getElementById('keyboard-help-modal')?.classList.add('visible');
-    document.getElementById('keyboard-help-backdrop')?.classList.add('visible');
-  });
-
-  // Category tab filtering
-  const TAB_CATEGORY_MAP: Record<string, string> = {
-    'ambassadors':          'ambassadors',
-    'kubestronauts':        'kubestronaut',
-    'toc':                  'technical oversight committee',
-    'tab':                  'end user tab',
-    'governing-board':      'governing board',
-    'staff':                'staff',
-  };
-
-  const ALPHA_TABS = new Set(['toc', 'tab', 'governing-board', 'staff', 'maintainers', 'marketing', 'emeritus']);
-
-  function applyTab(tab: string) {
-    const timelineFeed = document.getElementById('timeline-feed');
-    const alphaFeeds = document.querySelectorAll<HTMLElement>('.alpha-feed');
-    const memorialFeed = document.getElementById('memorial-feed');
-    const maintainerFeed = document.getElementById('maintainer-feed');
-    const maintainerSummary = document.getElementById('maintainer-summary');
-    const maintainerStats = document.getElementById('sidebar-maintainer-stats');
-    // Show/hide per-tab hero sections (data-tab-heroes) — handles page load restore too.
-    document.querySelectorAll<HTMLElement>('[data-tab-heroes]').forEach(el => {
-      el.style.display = el.dataset.tabHeroes === tab ? '' : 'none';
-    });
-
-    const isMaintainersTab = tab === 'maintainers';
-    if (maintainerSummary) maintainerSummary.style.display = isMaintainersTab ? '' : 'none';
-
-    if (tab === 'memorial') {
-      if (timelineFeed) timelineFeed.style.display = 'none';
-      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
-      if (memorialFeed) memorialFeed.style.display = '';
-      if (maintainerFeed) maintainerFeed.style.display = 'none';
-    } else if (tab === 'maintainers') {
-      if (timelineFeed) timelineFeed.style.display = 'none';
-      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
-      if (memorialFeed) memorialFeed.style.display = 'none';
-      if (maintainerFeed) maintainerFeed.style.display = '';
-    } else if (ALPHA_TABS.has(tab)) {
-      if (timelineFeed) timelineFeed.style.display = 'none';
-      if (memorialFeed) memorialFeed.style.display = 'none';
-      if (maintainerFeed) maintainerFeed.style.display = 'none';
-      alphaFeeds.forEach(feed => {
-        feed.style.display = feed.dataset.alphaTab === tab ? '' : 'none';
-      });
-    } else {
-      if (memorialFeed) memorialFeed.style.display = 'none';
-      if (maintainerFeed) maintainerFeed.style.display = 'none';
-      if (timelineFeed) timelineFeed.style.display = '';
-      alphaFeeds.forEach(feed => { feed.style.display = 'none'; });
-
-      const cards = timelineFeed?.querySelectorAll<HTMLElement>('.person-card') ?? [];
-      const groups = timelineFeed?.querySelectorAll<HTMLElement>('.day-group') ?? [];
-
-      cards.forEach(card => {
-        if (tab === 'everyone') {
-          card.style.display = '';
-        } else {
-          const cats = (card.dataset.categories ?? '').split('|');
-          const tabCat = TAB_CATEGORY_MAP[tab] ?? tab;
-          card.style.display = cats.includes(tabCat) ? '' : 'none';
-        }
-      });
-
-      groups.forEach(group => {
-        const visible = Array.from(group.querySelectorAll<HTMLElement>('.person-card'))
-          .some(c => c.style.display !== 'none');
-        group.style.display = visible ? '' : 'none';
-      });
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('.section-link[data-tab]');
-
-    function activateTab(tab: string) {
-      buttons.forEach(b => b.classList.remove('active'));
-      const target = Array.from(buttons).find(b => b.dataset.tab === tab);
-      if (target) target.classList.add('active');
-      applyTab(tab);
-      document.querySelectorAll<HTMLElement>('[data-tab-summary]').forEach(el => {
-        el.style.display = el.dataset.tabSummary === tab ? '' : 'none';
-      });
-      localStorage.setItem('active-tab', tab);
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => activateTab(btn.dataset.tab ?? 'everyone'));
-    });
-
-    // Restore last active tab on load, falling back to 'everyone'.
-    const saved = localStorage.getItem('active-tab') ?? 'everyone';
-    activateTab(saved);
-  });
+  initTabs();
 </script>
 
-<style>
-  /* SVG logo dark/light toggle (people uses SVG components; layout.css covers img only) */
-  .cncf-logo-wrapper .logo-dark { display: none; }
-  [data-theme="dark"] .cncf-logo-wrapper .logo-light { display: none; }
-  [data-theme="dark"] .cncf-logo-wrapper .logo-dark  { display: block; }
-  .cncf-logo-wrapper svg { width: 42px; height: 42px; }
 
-  /* Memorial tab — pushed right, muted style */
-  .tab-memorial { margin-left: auto; color: #9ca3af; }
-  .tab-memorial:hover { color: var(--color-text-primary); }
-  .tab-memorial.active { color: var(--color-text-primary); border-bottom-color: #6b7280; }
-
-  /* Sidebar gap override (people uses 1.5rem; layout.css default is 1rem) */
-  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-
-  .site-footer {
-    background: var(--color-bg-default);
-    border-top: 1px solid var(--color-border-default);
-    padding: 2rem 0;
-    margin-top: 3rem;
-    text-align: center;
-    color: var(--color-text-secondary);
-    font-size: 0.875rem;
-  }
-  .site-footer a { color: var(--color-text-link); text-decoration: none; }
-  .site-footer a:hover { text-decoration: underline; }
-
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0;
-    margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
-    white-space: nowrap; border-width: 0;
-  }
-
-  :global(.sidebar-heading) {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border-default);
-  }
-  :global(.sidebar-section) {
-    background: var(--color-bg-default);
-    border: 1px solid var(--color-border-default);
-    border-radius: 6px;
-    padding: 1.5rem;
-  }
-</style>

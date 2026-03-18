@@ -1,28 +1,5 @@
 ---
-interface Category {
-  name: string;
-  color: string;
-}
-
-const CATEGORY_MAP: Record<string, Category> = {
-  'Kubestronaut': { name: 'Kubestronaut', color: 'var(--color-kubestronaut, #D62293)' },
-  'Golden-Kubestronaut': { name: '⭐ Golden Kubestronaut', color: 'var(--color-golden, #D4AF37)' },
-  'Ambassadors': { name: 'Ambassador', color: 'var(--color-ambassador, #0086FF)' },
-  'Technical Oversight Committee': { name: 'TOC', color: 'var(--color-toc, #D62293)' },
-  'End User TAB': { name: 'End User TAB', color: 'var(--color-tab, #D62293)' },
-  'Staff': { name: 'Staff', color: 'var(--color-staff, #00A86B)' },
-  'Governing Board': { name: 'Governing Board', color: 'var(--color-board, #E65100)' },
-  'Marketing Committee': { name: 'Marketing Committee', color: 'var(--color-board, #E65100)' },
-};
-
-const PROGRAM_LOGOS: Record<string, string> = {
-  'Kubestronaut':                  '/people-website/program-logos/kubestronaut.svg',
-  'Golden-Kubestronaut':           '/people-website/program-logos/golden-kubestronaut.svg',
-  'Ambassadors':                   '/people-website/program-logos/ambassador.svg',
-  'Technical Oversight Committee': '/people-website/program-logos/cncf.svg',
-  'End User TAB':                  '/people-website/program-logos/cncf.svg',
-  'Staff':                         '/people-website/program-logos/cncf.svg',
-};
+import { CATEGORY_MAP, PROGRAM_LOGOS, LOGO_PRIORITY, TYPE_LABEL } from '../lib/person-renderer';
 
 interface Change {
   field: string;
@@ -79,7 +56,6 @@ const profileUrl = person.github || (person.handle ? `https://github.com/${perso
 const primaryCategory = person.category?.[0] ?? '';
 
 // Use pre-computed primaryBadge from backend; fall back to category scan for older events
-const LOGO_PRIORITY = ['Golden-Kubestronaut','Kubestronaut','Ambassadors','Technical Oversight Committee','End User TAB','Staff'];
 const logoKey = person.primaryBadge
   ? (PROGRAM_LOGOS[person.primaryBadge] ? person.primaryBadge : undefined)
   : LOGO_PRIORITY.find(c => person.category?.includes(c));
@@ -87,7 +63,7 @@ const accentKey = person.primaryBadge || LOGO_PRIORITY.find(c => person.category
 const categoryInfo = CATEGORY_MAP[accentKey] ?? CATEGORY_MAP[primaryCategory] ?? { name: primaryCategory, color: '#888' };
 const programLogo = logoKey ? PROGRAM_LOGOS[logoKey] : null;
 
-const typeLabel = { added: '+ Joined', removed: 'Emeritus', updated: '✎ Updated' }[type];
+const typeLabel = TYPE_LABEL[type];
 const typeBadgeClass = `badge-${type}`;
 
 const date = new Date(timestamp);

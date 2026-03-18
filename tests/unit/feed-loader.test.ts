@@ -104,11 +104,12 @@ describe('renderCard — person card HTML', () => {
     expect(html).toContain('+ Joined');
   });
 
-  it('renders the − Left badge for type "removed"', async () => {
+  it('renders the Emeritus badge for type "removed"', async () => {
     const { renderCard } = await import('../../src/lib/feed-loader');
     const event = { ...baseEvent, type: 'removed' };
     const html = renderCard(event as any, {});
-    expect(html).toContain('− Left');
+    expect(html).toContain('Emeritus');
+    expect(html).not.toContain('− Left');
   });
 
   it('renders the Kubestronaut category badge', async () => {

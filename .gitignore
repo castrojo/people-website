@@ -27,3 +27,4 @@ pnpm-debug.log*
 people-go/people
 .sync-cache/
 public/data/
+autoresearch-results.tsv
